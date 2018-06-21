@@ -18,10 +18,10 @@ export class EvaluacionIdiomaParteDosComponent implements OnInit {
 
   ngOnInit() {
   }
-  verificarPregunta(p: any, r: any): boolean {
-    let ret = false;
-    if (sessionStorage.getItem("respuesta" + p) === r) {
-      ret = true;
+  verificarPregunta(p:any,r:any):boolean{
+    var ret=false;
+    if(sessionStorage.getItem("respuesta"+p)==r){
+      ret=true;
       switch (p) {
         case 5: case "5": this.cambioRadio5(r); break;
         case 6: case "6": this.cambioRadio6(r); break;
@@ -34,33 +34,34 @@ export class EvaluacionIdiomaParteDosComponent implements OnInit {
     return ret;
   }
 
-  cambioRadio5(valor: any): void {
+  cambioRadio5(valor:any):void{
     ////console.log(valor);
-    this.pregunta5 = valor;
+    this.pregunta5=valor;
   }
-  cambioRadio6(valor: any): void {
+  cambioRadio6(valor:any):void{
     ////console.log(valor);
-    this.pregunta6 = valor;
+    this.pregunta6=valor;
   }
-  cambioRadio7(valor: any): void {
+  cambioRadio7(valor:any):void{
     ////console.log(valor);
-    this.pregunta7 = valor;
+    this.pregunta7=valor;
   }
-  cambioRadio8(valor: any): void {
+  cambioRadio8(valor:any):void{
     ////console.log(valor);
-    this.pregunta8 = valor;
+    this.pregunta8=valor;
   }
   getForm(): any {
     return this.jsonFormulario;
   }
   nextMethod(): boolean {
-    if (this.pregunta5 && this.pregunta6 && this.pregunta7 && this.pregunta8) {
-      sessionStorage.setItem("respuesta5", this.pregunta5);
-      sessionStorage.setItem("respuesta6", this.pregunta6);
-      sessionStorage.setItem("respuesta7", this.pregunta7);
-      sessionStorage.setItem("respuesta8", this.pregunta8);
+    if (this.pregunta5&&this.pregunta6&&this.pregunta7&&this.pregunta8) {
+      sessionStorage.setItem("respuesta5",this.pregunta5);
+      sessionStorage.setItem("respuesta6",this.pregunta6);
+      sessionStorage.setItem("respuesta7",this.pregunta7);
+      sessionStorage.setItem("respuesta8",this.pregunta8);
       return true;
-    } else {
+    }
+    else{
       return false;
     }
   }

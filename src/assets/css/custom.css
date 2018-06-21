@@ -902,7 +902,7 @@ a.thumbnail {
     background: #edf0f1;
 }
   .theme-colsan #main-navbar .widget-notifications a {
-    color: #dd7733 !important;
+    color: !important;
   }
   .theme-colsan #main-navbar .widget-notifications .notification,
   .theme-colsan #main-navbar .widget-notifications .notifications-link {
@@ -922,7 +922,7 @@ a.thumbnail {
     background: #f1f1f1;
   }
   .theme-colsan #main-navbar .widget-messages-alt a {
-    color: #dd7733 !important;
+    color: !important;
   }
   .theme-colsan #main-navbar .widget-messages-alt .message,
   .theme-colsan #main-navbar .widget-messages-alt .messages-link {

@@ -1,9 +1,9 @@
-import {Component, ViewEncapsulation, ViewChild} from '@angular/core';
-import {Router} from '@angular/router';
-import {AuthService} from '../auth.service';
-import {Codes} from '../../utils/Codes';
-import {ModalComponent} from 'ng2-bs3-modal/components/modal';
-import {SpinnerService} from '../../services/spinner/spinner/spinner.service';
+import {Component, ViewEncapsulation, ViewChild} from "@angular/core";
+import {Router} from "@angular/router";
+import {AuthService} from "../auth.service";
+import {Codes} from "../../utils/Codes";
+import {ModalComponent} from "ng2-bs3-modal/components/modal";
+import {SpinnerService} from "../../services/spinner/spinner/spinner.service";
 @Component({
   templateUrl: './login.component.html',
   encapsulation: ViewEncapsulation.None
@@ -40,7 +40,7 @@ export class LoginComponent {
     let idSpinner = 'loginIntento';
     this.spinnerService.start(idSpinner);
 
-    this.authService.login(usuario, contrasenia, '/ldap/login_check')
+    this.authService.login(usuario,contrasenia, '/ldap/login_check')
       .subscribe(
         response => {
           console.log('response', response);
@@ -52,7 +52,7 @@ export class LoginComponent {
         },
         error => {
           console.log('error', error);
-          this.authService.login(usuario, contrasenia, '/auth/login_check')
+          this.authService.login(usuario,contrasenia, '/auth/login_check')
             .subscribe(
               response => {
                 let jsonResponse = response.json();
@@ -75,9 +75,9 @@ export class LoginComponent {
                     this.modalLoginError(Codes.CONNECTION_ERROR);
                     break;
                 }
-                // reject(error);
+                //reject(error);
               },
-              () => {
+              () =>{
                 this.spinnerService.stop(idSpinner);
               }
             );

@@ -140,12 +140,12 @@ export class EvaluacionIdiomaStepsComponent implements OnInit {
     sessionStorage.removeItem("nombreMateria");
     sessionStorage.removeItem("nombreProfesor");
     sessionStorage.clear();
-    // let link = ['./EvaluacionProfesores'];
-    // this._router.parent.navigate(link);
+    //let link = ['./EvaluacionProfesores'];
+    //this._router.parent.navigate(link);
     this.router.navigate(['alumno', 'evaluacion-docente']);
   }
   confirmar():void{
-    // let link = ['./EvaluacionProfesores'];
+    //let link = ['./EvaluacionProfesores'];
     let jsonFormulario;
     let obs=sessionStorage.getItem("respuesta11");
     if(obs===undefined||obs==="undefined"){

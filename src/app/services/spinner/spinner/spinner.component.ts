@@ -1,9 +1,9 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Subscription} from 'rxjs';
-import {SpinnerService, SpinnerEvent} from './spinner.service';
+import {Component, OnInit, OnDestroy} from "@angular/core";
+import {Subscription} from "rxjs";
+import {SpinnerService, SpinnerEvent} from "./spinner.service";
 
 @Component({
-  selector: 'app-spinner-overflow',
+  selector: 'spinner-overflow',
   templateUrl: './spinner.component.html',
   styleUrls: ['./spinner.component.css']
 })
@@ -11,7 +11,7 @@ export class SpinnerComponent implements OnDestroy, OnInit {
   state = {
     message: 'Por favor espere...'
   };
-  id: string;
+  id:string;
   loading: boolean = false;
   subscribers: Array<Subscription> = [];
   constructor(private spinnerService: SpinnerService) {

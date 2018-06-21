@@ -1,14 +1,14 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Http, Headers, RequestOptions, Response} from '@angular/http';
-import {tokenNotExpired, JwtHelper} from 'angular2-jwt';
-import {UsuarioSesion} from '../services/usuario/usuario-sesion';
-import {Router} from '@angular/router';
-import {ConfigService} from '../services/core/config.service';
-import {SpinnerService} from '../services/spinner/spinner/spinner.service';
-import {ErrorCatalogo} from '../services/core/error.model';
-import {Usuarios} from '../services/usuario/usuario.model';
-import {UsuarioServices} from '../services/usuario/usuario.service';
+import {Injectable} from "@angular/core";
+import {Observable} from "rxjs/Observable";
+import {Http, Headers, RequestOptions, Response} from "@angular/http";
+import {tokenNotExpired, JwtHelper} from "angular2-jwt";
+import {UsuarioSesion} from "../services/usuario/usuario-sesion";
+import {Router} from "@angular/router";
+import {ConfigService} from "../services/core/config.service";
+import {SpinnerService} from "../services/spinner/spinner/spinner.service";
+import {ErrorCatalogo} from "../services/core/error.model";
+import {Usuarios} from "../services/usuario/usuario.model";
+import {UsuarioServices} from "../services/usuario/usuario.service";
 
 @Injectable()
 export class AuthService {
@@ -105,7 +105,7 @@ export class AuthService {
       let token = this.jwtHelper.decodeToken(tokenObject);
       usuario = new UsuarioSesion(token);
       if (this.usuario) {
-        usuario.setImagenUrl(this.apiUrl + '/api/v1/imagenperfil/' + this.usuario.foto.id);
+        usuario.setImagenUrl(this.apiUrl + "/api/v1/imagenperfil/" + this.usuario.foto.id);
       }
     }
     return usuario;

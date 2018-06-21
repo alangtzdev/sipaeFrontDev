@@ -8,7 +8,7 @@ export class ConfigService {
   private static devEnv: string = 'https://sipae1.colsan.edu.mx:8002';
   private static testEnv: string = 'https://sipae1.colsan.edu.mx:8001';
   private static prodEnv = 'https://sipae1.colsan.edu.mx:8006';
-   private static prodEnvOpt: string = 'http://192.168.192.54:8001';
+   private static prodEnvOpt: string = 'http://192.168.192.71:8000';
   private static authHttp: AuthHttp;
   private static http: Http;
   private static router: Router;

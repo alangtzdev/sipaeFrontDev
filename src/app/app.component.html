@@ -1,6 +1,6 @@
 <div cass="container">
   <div class="row padding">
-    <app-spinner-overflow></app-spinner-overflow>
+    <spinner-overflow></spinner-overflow>
     <barra-navegacion *ngIf="authService.getUsuarioLogueado()" [usuarioLogueado]=authService.getUsuarioLogueado() [isOn]=!isOn id="main-navbar" class="navbar navbar-inverse" role="navigation" (isOnChange)="changeState($event)">
     </barra-navegacion>
     <div *ngIf="authService.getUsuarioLogueado()" class="main-menu sidebar" [ngClass]="{'active-menu': !isOn, 'inactive-menu': isOn}">
