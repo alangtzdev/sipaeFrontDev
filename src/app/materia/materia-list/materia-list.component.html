@@ -1,0 +1,167 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12 text-center text-left-sm">
+      <h1>Gesti&oacute;n de cargas acad&eacute;micas</h1>
+      <p><small></small></p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel ">
+      <div class="panel-body">
+        <alert
+          *ngFor="let alerta of alertas;let i = index"
+          [type]="alerta.type"
+          dismissible="true"
+          (close)="cerrarAlerta(i)">
+          {{ alerta?.msg }}
+        </alert>
+        <div class="row">
+          <form [formGroup]="formulario">
+            <div class="col-md-8">
+              <div class="row">
+
+                <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                  <label >Programa Docente:</label>
+                  <select #programaDocente class="form-control" (change)="borrarVariablesSession(programaDocente.value)" ngControl="idProgramaDocente">
+                    <option selected disabled value="">Selecciona...</option>
+                    <option *ngFor="let catalogoProgramaDocente of opcionesCatalogoProgramaDocente" value="{{catalogoProgramaDocente.id}}">
+                      {{catalogoProgramaDocente.text}}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                  <label >Promoción:</label>
+                  <select #promocion class="form-control" (change)="cambiosPeriodoEscolarFiltro(promocion.value)" ngControl="idPromocion">
+                    <option selected disabled value="">Selecciona...</option>
+                    <option *ngFor="let opcionCatalogoPromocion of opcionesCatalogoPromocion" value="{{opcionCatalogoPromocion.id}}">{{opcionCatalogoPromocion.abreviatura}} - {{opcionCatalogoPromocion.consecutivo}}° ({{opcionCatalogoPromocion?.idPeriodoEscolarInicio?.anio}} - {{opcionCatalogoPromocion?.idPeriodoEscolarFin?.anio}})</option>
+                  </select>
+                  <!--control-mensaje-- class="col-lg-12" control="idPromocion"></control-mensaje-->
+                </div>
+
+                <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                  <label >Per&iacute;odo escolar:</label>
+                  <select #peridoEscolar class="form-control" (change)="mostrarBotonBuscar(peridoEscolar.value)" ngControl="idPeriodoEscolar">
+                    <option selected disabled value="">Selecciona...</option>
+                    <option *ngFor="let opcionCatalogoPeriodo of opcionesCatalogoPeriodo; let i=index" value="{{i}}" >
+                      {{opcionCatalogoPeriodo.idPeriodoEscolar.anio +' - '+ opcionCatalogoPeriodo.idPeriodoEscolar.periodo}}
+                    </option>
+                  </select>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+              <button *ngIf="botonBuscar === true" class="btn btn-default" (click)="buscarCriteriosCabezera(peridoEscolar.value)"
+              > Buscar <span class="fa fa-search"></span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="panel">
+      <div class="panel-body">
+
+        <div class="row">
+          <div class="col-md-12">
+
+            <div class="text-right">
+              <!--a *ngIf="registroSeleccionado" class="btn btn-labeled btn-default form-group-margin"><span class="btn-label icon fa fa-eye"></span>Ver detalle</a-->
+              <a *ngIf="registroSeleccionado?.materia?.tipoMateria?.id === 4 && registroSeleccionado?.materiaImpartida?.id" class="btn btn-labeled btn-default form-group-margin" (click)="materiasBaseDetalle()"><span class="btn-label icon fa fa-plus"></span>Detalle curso base</a>
+              <!--<a *ngIf="registroSeleccionado?.materia?.tipoMateria?.id === 1" class="btn btn-labeled btn-success form-group-margin" (click)="materiasLgac()"><span class="btn-label icon fa fa-plus"></span>Asignar LGAC</a>-->
+              <a *ngIf="registroSeleccionado?.materia?.tipoMateria?.id === 2 || registroSeleccionado?.materia?.tipoMateria?.id === 1" class="btn btn-labeled btn-success form-group-margin" (click)="materiasOptativas()"><span class="btn-label icon fa fa-plus"></span>Asignar cursos espec&iacute;ficos</a>
+              <a *ngIf="registroSeleccionado?.materia?.tipoMateria?.id === 4 && registroSeleccionado?.materiaImpartida?.id" class="btn btn-labeled btn-info form-group-margin" (click)="materiasBase()"><span class="btn-label icon fa fa-plus"></span>&nbsp;&nbsp;Actualizar curso base</a>
+              <a *ngIf="registroSeleccionado?.materia?.tipoMateria?.id === 4 && !registroSeleccionado?.materiaImpartida?.id" class="btn btn-labeled btn-success form-group-margin" (click)="materiasBase()"><span class="btn-label icon fa fa-plus"></span>&nbsp;&nbsp;Asignar curso base</a>
+              <a *ngIf="registroSeleccionado?.materia?.tipoMateria?.id === 3 && !registroSeleccionado?.materiaImpartida?.id" class="btn btn-labeled btn-success form-group-margin" (click)="modalConfirmacionTutorial('¿Está seguro de abrir este curso?')"><span class="btn-label icon fa fa-plus"></span>&nbsp;&nbsp;Abrir curso</a>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="table-default">
+          <div role="grid" class="dataTables_wrapper form-inline">
+            <div class="table-header clearfix">
+              <div class="table-caption">Lista de materias</div>
+            </div>
+            <div class="table-responsive">
+              <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                <thead>
+                <tr role="row">
+                  <th
+                    *ngFor="let columna of columnas"
+                    [ngClass]="{
+                                  'sorting_desc': columna.sort === 'desc',
+                                  'sorting_asc': columna.sort === 'asc',
+                                  'sorting': columna.sort !== false
+                                }"
+                    (click)="sortChanged(columna)"
+                  >
+                    {{columna.titulo}}
+                  </th>
+                </tr>
+                </thead>
+                <tbody *ngIf = "registros.length === 0">
+                <tr class="gradeA odd">
+                  <th class="text-center" colspan="4">
+                    Cambie sus criterios de b&uacute;squeda
+                  </th>
+                </tr>
+                </tbody>
+                <tbody *ngIf = "registrosMostrar.length !== 0">
+                <tr
+                  *ngFor="let registro of registrosMostrar"
+                  class="gradeA odd"
+                  [ngClass]="{
+                              'seleccionado': rowSeleccionado(registro)
+                              }"
+                  (click) = "rowSeleccion(registro)"
+                >
+                  <td class="text-center">{{registro?.materia?.clave}}</td>
+                  <td class="text-center">{{registro?.materia?.descripcion}}</td>
+                  <!--    <td class="text-center">{{registro?.profesor?.getNombreCompleto()}}</td>  -->
+                  <td class="text-center">{{registro?.materia?.creditos}}</td>
+                  <td class="text-center">{{registro.materiaImpartida ? (registro?.materiaImpartida?.getProfesorTitular() ? registro?.materiaImpartida?.getProfesorTitular() : '-----------' ) : ''}}</td>
+
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-alert modal-success" #modalTutoria >
+  <modal-header>
+    <i class="fa fa-check-circle"></i>
+
+  </modal-header>
+  <modal-body>
+    <div class="col-md-12 text-center form-group-margin">
+      <div class="text-center">
+        <span>{{mensajeAdvertencia}}</span>
+      </div>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <button class="btn btn-danger" type="button" (click)="cerrarModal()">No
+    </button>
+    <button class="btn btn-success" type="button" (click)="guardarMateriaImpartidaTutorial()"> Si
+    </button>
+  </modal-footer>
+</modal>
+
+
+

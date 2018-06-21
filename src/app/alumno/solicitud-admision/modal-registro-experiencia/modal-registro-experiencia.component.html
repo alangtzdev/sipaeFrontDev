@@ -1,0 +1,204 @@
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalRegistroExp>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModal()" aria-hidden="true">×</button>
+    <h4 class="modal-title">{{edicionFormulario ? 'Editar experiencia' : 'Registro de experiencia'}}</h4>
+  </modal-header>
+  <modal-body>
+
+    <form class="form-horizontal" [formGroup]="formularioExperienciaProfesional">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12 text-right-lg text-right-md text-left-sm text-left-xs">
+              <div class="row">
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <div [ngClass]="{'has-error': getControlErrors('idTipoExperiencia')}"
+                         class="">
+
+                      <label class="col-md-6" >
+                        Experiencia: *
+                      </label>
+                      <div class="col-md-6">
+                        <select class="form-control" ngControl="idTipoExperiencia" formControlName="idTipoExperiencia">
+                          <option value="" selected>Selecciona...</option>
+                          <option
+                            *ngFor="let catalogoTipoExperiencia of opcionesSelectTipoExperiencia"
+                            value="{{catalogoTipoExperiencia.id}}"
+                          >
+                            {{catalogoTipoExperiencia.text}}
+                          </option>
+                        </select>
+                        <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idTipoExperiencia'))" >
+                                                        {{errorMessage(getControl('idTipoExperiencia'))}}
+                                                </span>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="form-heading"></div>
+            </div>
+
+            <div class="col-md-12" *ngIf="!filtrarCamposAMostrar()">
+              <h6 class="text-center">Indique las investigaciones en que ha participado durante su vida de estudiante o como  profesional.
+              </h6>
+            </div>
+
+            <div class="text-right-lg text-right-md text-left-sm text-left-xs">
+
+
+              <div class="col-md-12 padding-xs-vr" *ngIf="!filtrarCamposAMostrar()">
+                <div class="row">
+                  <div  [ngClass]="{ 'has-error': getControlErrors('titulo')  }" >
+                    <label class="col-md-3" for="titulo">
+                      T&iacute;tulo o tema:*
+                    </label>
+                    <div class="col-md-9">
+                                                <textarea id="titulo" class="form-control"
+                                                          placeholder="T&iacute;tulo"
+                                                          value=""
+                                                          ngControl="titulo" formControlName="titulo" maxlength="500"></textarea>
+                      <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('titulo'))" >
+                                                        {{errorMessage(getControl('titulo'))}}
+                                                </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12 padding-xs-vr">
+                <div class="row">
+                  <div   [ngClass]="{  'has-error': getControlErrors('institucion')  }"  >
+                    <label class="col-md-3" for="institucion">
+                      Instituci&oacute;n:*
+                    </label>
+                    <div class="col-md-9">
+                                                <textarea id="institucion" class="form-control"
+                                                          placeholder="Instituci&oacute;n"
+                                                          value=""
+                                                          ngControl="institucion" formControlName="institucion" maxlength="500"></textarea>
+                      <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('institucion'))" >
+                                                        {{errorMessage(getControl('institucion'))}}
+                                                </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="col-md-12 padding-xs-vr">
+                <div class="row">
+                  <div [ngClass]="{'has-error': getControlErrors('responsabilidad') }">
+                    <label class="col-md-3" for="responsabilidad">
+                      {{filtrarCamposAMostrar() ? 'Cargo ocupado' : 'Responsabilidad'}}:*
+                    </label>
+                    <div class="col-md-9 ">
+                                                <textarea id="responsabilidad" type="text" class="form-control"
+                                                          placeholder="Responsabilidad"
+                                                          value=""
+                                                          ngControl="responsabilidad" formControlName="responsabilidad" maxlength="200"></textarea>
+                      <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('responsabilidad'))" >
+                                                        {{errorMessage(getControl('responsabilidad'))}}
+                                                </span>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12 text-right-lg text-right-md text-left-sm text-left-xs">
+              <div class="row">
+
+                <div class="col-md-6 padding-xs-vr" (click)="$event.preventDefault()">
+                  <div class="row">
+                    <label class="col-md-6" >Desde: </label>
+                    <div dropdown autoClose="outsideClick" class="col-md-6" keyboardNav="true">
+                      <div class="input-group text-right">
+                        <input type="text" class="form-control" disabled
+                               value="{{ getFechaInicio()}}" id="fi">
+                        <span class="input-group-btn">
+                                                    <button (click)="elegirFechaInicio()" id="simple-btn-keyboard-nav" type="button" class="btn fa fa-calendar" dropdownToggle></button>
+                                                </span>
+                      </div>
+                      <ul class="dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                        <li>
+                          <div style="display:inline-block;">
+                            <datepicker [(ngModel)]="fi" [maxDate]="fechaMaxima" [showWeeks]="true" [ngModelOptions]="{standalone: true}"></datepicker>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="ocultarFechaFin()" class="col-md-6 padding-xs-vr" (click)="$event.preventDefault()">
+                  <div class="row">
+                    <label class="col-md-6">Hasta: </label>
+                    <div dropdown autoClose="outsideClick" class="col-md-6" keyboardNav="true">
+                      <div class="input-group text-right">
+                        <input type="text" class="form-control" disabled value="{{ getFechaFin()}}" id="ff">
+                        <span class="input-group-btn">
+                                                    <button id="simple-btn-keyboard-nav1" type="button" class="btn fa fa-calendar" dropdownToggle></button>
+                                                </span>
+                      </div>
+                      <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                        <li>
+                          <div style="display:inline-block;">
+                            <datepicker [(ngModel)]="ff" [maxDate]="fechaMaxima" [minDate]="fechaMinima" [showWeeks]="true" (click)="elegirFechaFin()"  [ngModelOptions]="{standalone: true}"></datepicker>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12 text-right-lg text-right-md text-left-sm text-left-xs ">
+              <div class="row">
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6"></div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <label for="actualmente" class="col-md-6">Actualmente:</label>
+                    <div class="col-md-6">
+                      <div class="checkbox text-right" style="width:20px;height:20px;">
+                        <input id="actualmente" type="checkbox"
+                               placeholder=""
+                               value="" #valorActividad
+                               ngControl="actualmente" formControlName="actualmente" (change)="cambiaActividad(valorActividad.checked)" style="position: absolute; top: 0px;"
+                        >
+                        <!--control-mensaje control="actualmente"></control-mensaje-->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div><!--row-->
+        </div><!--col-md-12-->
+      </div><!--row-->
+    </form>
+
+  </modal-body>
+  <modal-footer>
+    <button class="btn btn-default" type="button" (click)="cerrarModal()"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+    <button type="submit" class="btn btn-success" (click)="enviarFormulario()"><span class="fa fa-floppy-o"></span> Guardar</button>
+  </modal-footer>
+</modal>

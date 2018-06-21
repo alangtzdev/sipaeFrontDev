@@ -1,0 +1,71 @@
+<form class="form-horizontal" [formGroup]="formulario">
+  <div class="row">
+
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-6">
+          <h6 class="form-heading text-muted text-semibold text-sm">CLASIFICACIÓN</h6>
+
+          <div [ngClass]="{'has-error': getControlErrors('idClasificacion')}"
+               class="form-group">
+            <label for="idClasificacion"
+                   class="col-lg-6 col-md-6 control-label text-right">Clasificaci&oacute;n: *</label>
+            <div class="col-lg-6 col-md-6">
+              <select #clasificacionProfesor name="idClasificacion" id="idClasificacion" ngControl="idClasificacion"
+                      #idClasificacion formControlName="idClasificacion"
+                      (change)="cambioClasificacionEspecificaFiltro(clasificacionProfesor.value)" class="form-control">
+                <option value="" disabled selected>Selecciona...</option>
+                <option *ngFor="let clasificacion of opcionesClasificacionProfesor"
+                        value="{{clasificacion.id}}">{{clasificacion.text}}
+                </option>
+              </select>
+              <span id="helpBlock1" class="help-block" *ngIf="(getControlErrors('idClasificacion'))">
+                            {{errorMessage(getControl('idClasificacion'))}}
+                        </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="idClasificacionEspecifica" class="col-lg-6 col-md-6 control-label text-right">Clasificaci&oacute;n
+              espec&iacute;fica:</label>
+            <div class="col-lg-6 col-md-6">
+              <select name="idClasificacionEspecifica" id="idClasificacionEspecifica" #idClasificacionEspecifica formControlName="idClasificacionEspecifica"
+                      ngControl="idClasificacionEspecifica" class="form-control">
+                <option value="" disabled selected>Selecciona...</option>
+                <option *ngFor="let tipoProfesor of opcionesClasificacionEspecifica"
+                        value="{{tipoProfesor.id}}">{{tipoProfesor.text}}
+                </option>
+              </select>
+              <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idClasificacionEspecifica'))">
+                            {{errorMessage(getControl('idClasificacionEspecifica'))}}
+                        </span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-md-6">
+          <h6 class="form-heading text-muted text-semibold text-sm">TIPO</h6>
+
+          <div [ngClass]="{'has-error': getControlErrors('idTipo')}"
+               class="form-group">
+            <label for="idTipo" class="col-lg-5 col-md-5 control-label text-right">Tipo: *</label>
+            <div class="col-lg-7 col-md-7">
+              <select name="idTipo" id="idTipo" ngControl="idTipo" class="form-control" #idTipo formControlName="idTipo">
+                <option value="" disabled selected>Selecciona...</option>
+                <option *ngFor="let tipoProfesor of opcionesTipoProfesor" value="{{tipoProfesor.id}}">
+                  {{tipoProfesor.text}}
+                </option>
+              </select>
+              <span id="helpBlock3" class="help-block" *ngIf="(getControlErrors('idTipo'))">
+                            {{errorMessage(getControl('idTipo'))}}
+                        </span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</form>

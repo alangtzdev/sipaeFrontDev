@@ -1,0 +1,104 @@
+<div class="navbar navbar-inverse" id="main-navbar" role="navigation">
+  <div class="navbar-inner">
+    <div class="navbar-header blanco">
+      <a class="navbar-brand blanco" href="#">
+        <div><img alt="Colsan Logo" src="assets/images/login/colsan_logo.png"></div>
+      </a>
+      <div class="navbar-toggle collapsed pull-right">
+        <img class="img-conacyt" alt="conacyt" src="assets/images/conacyt.jpg">
+      </div>
+    </div>
+    <div class="collapse navbar-collapse azul main-navbar-collapse" id="main-navbar-collapse">
+      <div class="right clearfix">
+        <div class="nav navbar-nav pull-right right-navbar-nav">
+          <img class="img-conacyt" alt="conacyt" src="assets/images/conacyt.jpg">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="inactive-content">
+  <div class="page-header">
+    <div class="row">
+      <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+        <h1 >Preguntas frecuentes</h1>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 padding-sm-vr no-padding-t">
+    <div class="col-md-6 text-left">
+      <a  href="http://www.colsan.edu.mx/"><u>Regresar a COLSAN (página web)</u></a>
+    </div>
+    <div class="col-md-6 text-right">
+      <a  (click)="abrir()" ><u>Registro de interesados</u></a>
+    </div>
+  </div>
+  <!--
+  <div class="col-md-12 panel colourable" style="height: 450px; overflow: scroll; border:2px #e4e4e4 solid; text-align:justify;">
+      <div class="row">
+          <div class="col-md-6" *ngFor="let registro of generales">
+              <h3 >{{registro.pregunta}}</h3>
+              <p >{{registro.respuesta}}</p>
+          </div>
+      </div>
+  </div>
+  -->
+
+
+  <div class="panel" style="width:100%;height: 370px; overflow-y: scroll;">
+    <div class="panel-body">
+      <accordion [closeOthers]="true" class="panel-group">
+        <div class="col-md-6 form-group-margin" *ngFor="let registro of generales">
+          <accordion-group [isOpen]="false">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" accordion-heading>
+              <h5><strong class="text-danger">Pregunta:</strong> {{registro.pregunta}}</h5>
+            </a>
+
+            <h5 class="text-justify"><strong class="text-info">Respuesta:</strong> {{registro.respuesta}}</h5>
+          </accordion-group>
+        </div>
+      </accordion>
+    </div>
+  </div>
+
+
+<!--  <form class="form-horizontal" [(ngFormModel)]="formulario">-->
+    <div class="col-md-12 panel">
+      <div class="panel-body">
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+            <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Tema:</label>
+            <div class="col-md-6">
+              <select #opcion class="form-control" (change)="getPreguntas(opcion.value)" ngControl="opcion">
+                <option value="-1">Movilidad</option>
+                <option *ngFor="let programa of programas" value="{{programa.id}}">{{programa.descripcion}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 padding-xs-vr text-center">
+          <h4><font color="#{{rgb}}">{{programa_descripcion}}</font></h4>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="panel" style="width:100%;height: 370px; overflow-y: scroll; ">
+      <div class="panel-body">
+        <accordion [closeOthers]="true" class="panel-group">
+          <div class="col-md-6 form-group-margin" *ngFor="let registro of registros">
+            <accordion-group [isOpen]="false">
+              <a class="accordion-toggle collapsed" data-toggle="collapse" accordion-heading>
+                <h5><strong class="text-danger">Pregunta:</strong>{{registro.pregunta}}</h5>
+              </a>
+
+              <h5 class="text-justify"><strong class="text-info">Respuesta:</strong> {{registro.respuesta}}</h5>
+            </accordion-group>
+          </div>
+        </accordion>
+      </div>
+    </div>
+
+<!--  </form>-->
+</div>

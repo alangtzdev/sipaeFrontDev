@@ -1,0 +1,229 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-6 text-center text-left-sm">
+      <h1>Documentos</h1>
+      <p><small>Lista de documentos</small></p>
+    </div>
+    <div class="col-md-6">
+      <hr class="visible-xs no-grid-gutter-h">
+      <button class="btn btn-labeled btn-success col-md-5 col-sm-5 col-xs-5 pull-right"
+              (click)="modalAgregarDocumento()">
+        <span class="btn-label icon fa fa-plus"></span>Adjuntar documento
+      </button>
+    </div>
+  </div>
+</div>
+<form [formGroup]="controlGroup">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel ">
+        <div class="panel-body">
+          <div class="col-md-6 col-sm-6" style="padding: 0">
+            <h5 class="form-heading text-muted text-semibold text-sm">MATR&Iacute;CULA: {{entidadEstudiante?.matricula?.matriculaCompleta}}</h5>
+          </div>
+          <div class="col-md-6  col-sm-6 text-left" style="padding: 0">
+            <h5 class="form-heading text-muted text-semibold text-sm text-right-sm">ESTUDIANTE: {{entidadEstudiante?.datosPersonales?.getNombreCompleto()}}</h5>
+          </div>
+
+          <div class="row">
+            <div class="col-md-8">
+              <div class="row">
+
+                <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                  <label >Tipo documento:</label>
+                  <select id="programaDocente" #idSelectPrograma class="form-control"
+                          (change)="cambioTipoDocumento(idSelectPrograma.value)"
+                          formControlName="tipoDocumento">
+                    <option value="0" selected disabled>Selecciona...</option>
+                    <option value="1" *ngIf="!idEstudianteMovilidad">Documentos</option>
+                    <option value="2" *ngIf="idEstudianteMovilidad">Movilidad academica</option>
+                    <option value="3" *ngIf="!idEstudianteMovilidad">Interprogramas</option>
+                    <option value="4" *ngIf="!idEstudianteMovilidad">Acreditaci&oacute;n Idioma</option>
+                    <option value="5" *ngIf="!idEstudianteMovilidad">Servicio social</option>
+                    <option value="6" *ngIf="!idEstudianteMovilidad">Movilidad curricular</option>
+                    <option value="7" *ngIf="!idEstudianteMovilidad">Titulaci&oacute;n</option>
+                    <option value="8" *ngIf="!idEstudianteMovilidad">Baja</option>
+                  </select>
+                </div>
+
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+              <button class="btn" (click)="buscarDocumentos(idSelectPrograma.value)" [disabled]="!habilitarBoton">Buscar <span class="fa fa-search"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div class="row">
+  <div class="col-md-12">
+    <alert
+            *ngFor="let alerta of alertas;let i = index"
+            [type]="alerta.type"
+            dismissible="true"
+            (close)="cerrarAlerta(i)">
+      {{ alerta?.msg }}
+    </alert>
+  </div>
+</div>
+
+<div class="row" *ngIf="registroDocuemntos.length !== 0">
+  <div class="col-md-12">
+    <div class="panel colourable">
+      <div class="panel-body">
+        <div class="row" style="display: flex;flex-wrap: wrap;">
+          <div *ngFor="let registroDocumento of registroDocuemntos"
+               [ngClass]="{'seleccionado': rowSeleccionado(registroDocumento)}"
+               (click)="rowSeleccion(registroDocumento)"
+               class="col-md-3 text-center">
+            <div class="thumbnail">
+              <i class="fa fa-file-text-o fa-5x"></i>
+              <h5 class="">{{!deTitulacion ?
+                registroDocumento?.tipoDocumento?.valor :
+                registroDocumento?.archivoVoto?.nombre}}</h5>
+              <h5 class="">{{deTitulacion ?
+                'Voto aprovatorio' :
+                (registroDocumento?.tipoDocumento.id != 35) ?
+                registroDocumento?.tipoDocumento?.idAreaDocumento?.valor :
+                registroDocumento?.otroTipoDocumento}}</h5>
+              <hr>
+
+              <div class="btn-tumbnail btn-group">
+                <button class="btn  btn-warning fa fa-download"
+                        (click)="descargarArchivo(!deTitulacion ?
+                                    registroDocumento?.archivo?.id :
+                                    registroDocumento?.archivoVoto?.id)"></button>
+                <button class="btn  btn-default fa fa-eye" title="Validar documento"
+                        (click)="verArchivo(!deTitulacion ?
+                                    registroDocumento?.archivo?.id :
+                                    registroDocumento?.archivoVoto?.id)"></button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalAgregar>
+  <modal-header>
+    <button (click)="cerrarModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" style="">Agregar documento</h4>
+  </modal-header>
+  <modal-body>
+    <div class="col-md-12">
+      <alert
+              *ngFor="let alerta of alertas;let i = index"
+              [type]="alerta.type"
+              dismissible="true"
+              (close)="cerrarAlerta(i)">
+        {{ alerta?.msg }}
+      </alert>
+    </div>
+
+    <form [formGroup]="formularioDocumentacion">
+      <div class="row">
+
+        <div class=" col-md-12 padding-xs-vr">
+          <div class="row">
+            <div [ngClass]="{'has-error': getControlErrors('idTipoDocumento')}">
+              <label class="col-md-3 control-label text-right-lg text-right-md text-left-sm text-left-xs" for="idTipoDocumento">Documento:*</label>
+              <div class="col-md-9">
+                <select #opcionesDocumentos class="form-control" id="idTipoDocumento"
+                        name="idTipoDocumento" formControlName="idTipoDocumento"
+                        (change)="habilitarOtro(opcionesDocumentos.value)">
+                  <option value="" selected disabled>Selecciona...</option>
+                  <option *ngFor="let opcioneTipoDocumento of opcionesCatTipoDocumento"
+                          [value]="opcioneTipoDocumento.id">
+                    {{opcioneTipoDocumento.text}}
+                  </option>
+                </select>
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idTipoDocumento'))">
+                                    {{errorMessage(getControl('idTipoDocumento'))}}
+                                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 padding-xs-vr">
+          <div class="row">
+            <div *ngIf="!otro" class="form-group">
+              <div [ngClass]="{ 'has-error': getControlErrors('auxiliar') }">
+
+                <label for="otroTipoDocumento" class="col-md-3 control-label text-right-lg text-right-md text-left-sm text-left-xs">Otro:
+                  *</label>
+                <div class="col-md-9">
+                  <input type="text" class="form-control" placeholder="Por favor especifique" id="otroTipoDocumento"
+                         formControlName="otroTipoDocumento" (keyup)="cambiarAuxiliar()" maxlength="50">
+                  <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('auxiliar'))">
+                                        {{errorMessage(getControl('auxiliar'))}}
+                                </span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class=" col-md-12 padding-xs-vr">
+          <div style="overflow:hidden; word-wrap:break-word">{{nombreArchivo}}</div>
+
+          <div class="my-drop-zone text-center" rows="10">
+            <div id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome">
+              <div class="dz-default dz-message " [options]="options" ngFileSelect
+                   (onUpload)="handleDropUpload($event)">
+                <i class="fa fa-cloud-upload"></i>
+                Suelte el archivo aqu&iacute;<br><span class="dz-text-small">o da clic para subir manualmente</span>
+              </div>
+              <input class="col-md-12" type="file" name="file" accept="application/pdf"
+                     [options]="options" ngFileSelect
+                     (onUpload)="handleBasicUpload($event)">
+            </div>
+            <div class="progress">
+              <div
+                      *ngIf="enableBasic()"
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="basicProgress"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      [style.width]="basicProgress + '%'">
+                {{basicProgress}}%
+              </div>
+              <div
+                      *ngIf="enableDrop()"
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="dropProgress"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      [style.width]="dropProgress + '%'">
+                {{dropProgress}}%
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <div class="text-right">
+      <button (click)="cerrarModal()" class="btn btn-default" type="button" data-dismiss="modal"><span
+              class="glyphicon glyphicon-remove"></span> Cancelar
+      </button>
+      <button (click)="enviarFormulario()" [disabled]="habilitarBotonAgregar" type="submit"
+              class="btn btn-success"><span
+              class="glyphicon glyphicon-plus"></span> Agregar
+      </button>
+    </div>
+  </modal-footer>
+</modal>

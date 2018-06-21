@@ -1,0 +1,168 @@
+<div class="tab-pane fade active in" id="tab1">
+  <div class="col-md-12" *ngIf="erroresConsultas.lenght !== 0">
+    <alert
+      *ngFor="let alerta of erroresConsultas"
+      [type]="alerta.tipo"
+      dismissible="true">
+      {{ alerta?.mensaje }}
+    </alert>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h5 class="form-heading text-muted text-semibold text-sm">Datos Generales</h5>
+
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Clave:</dt>
+                <dd class="col-md-6">{{entidadPlanEstudios?.clave}}</dd>
+              </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Descripci&oacute;n:</dt>
+                <dd class="col-md-6">{{entidadPlanEstudios?.descripcion}}</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa
+                  docente:
+                </dt>
+                <dd class="col-md-6">{{entidadPlanEstudios?.programaDocente?.abreviatura}}</dd>
+              </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha de
+                  aprobación:
+                </dt>
+                <dd class="col-md-6">{{obtenerFecha(entidadPlanEstudios?.fechaAprobacion)}}</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Año de
+                  inicio:
+                </dt>
+                <dd class="col-md-6">{{entidadPlanEstudios?.anioInicio}}</dd>
+              </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Año de fin:
+                </dt>
+                <dd class="col-md-6">{{entidadPlanEstudios?.anioFin ? entidadPlanEstudios?.anioFin :
+                  '---'}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Modalidad:
+                </dt>
+                <dd class="col-md-6">{{entidadPlanEstudios?.modalidad}}</dd>
+              </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Duración del
+                  ciclo:
+                </dt>
+                <dd class="col-md-6">{{entidadPlanEstudios?.duracionCiclo}}</dd>
+              </dl>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Créditos de
+                  tesis:
+                </dt>
+                <dd class="col-md-6">{{entidadPlanEstudios?.creditosTesis}}</dd>
+              </dl>
+            </div>
+          </div>
+          <!--<div class="col-md-6 form-group-margin">
+              <div class="row">
+                  <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Calificación
+                          m&iacute;nima <br>
+                          aprobatoria:
+                      </dt>
+                      <dd class="col-md-6">{{entidadPlanEstudios?.minimaAprobatoria}}</dd>
+                  </dl>
+              </div>
+          </div>-->
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estatus:</dt>
+                <dd class="col-md-6">{{entidadPlanEstudios?.estatus?.valor}}</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 form-group-margin">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Objetivos:
+            </dt>
+            <dd class="col-md-9">{{entidadPlanEstudios?.objectivos}}</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="col-md-12 form-group-margin">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Perfil del
+              egresado:
+            </dt>
+            <dd class="col-md-9">{{entidadPlanEstudios?.perfilEgresado}}</dd>
+          </dl>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+</div> <!-- / .tab-pane -->

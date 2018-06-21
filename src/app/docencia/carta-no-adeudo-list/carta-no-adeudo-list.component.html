@@ -1,0 +1,173 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12 text-center text-left-sm">
+      <h1>Carta de no adeudo</h1>
+      <p><small>Lista de alumnos.</small></p>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel">
+      <div class="panel-body">
+        <div class="row">
+
+          <div class="col-md-8">
+            <div class="row">
+
+              <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                <label >Programa docente:</label>
+                <select #programa class="form-control" (change)="cargarPromocion(programa.value)">
+                  <option value="" disabled selected>Selecciona...</option>
+                  <option *ngFor="let opcionCatalogoProgramaDocente of opcionesCatalogoProgramaDocente" value="{{opcionCatalogoProgramaDocente.id}}">{{opcionCatalogoProgramaDocente.text}}</option>
+                </select>
+              </div>
+
+              <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                <label >Promoción:</label>
+                <select #promocion class="form-control">
+                  <option value="" disabled selected>Selecciona...</option>
+                  <option *ngFor="let opcionCatalogoPromocion of opcionesCatalogoPromocion" value="{{opcionCatalogoPromocion.id}}">{{opcionCatalogoPromocion.text}}</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+            <button class="btn btn-default" (click)="agregarCriteriosBusqueda(promocion.value)">
+              Buscar
+              <span class="fa fa-search"></span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="panel">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="col-md-10"><!-- cont-botones-->
+              <div class="text-right">
+                <button (click)="formatoCarta()" class="btn btn-labeled btn-success form-group-margin" [disabled]="validarBotonFormato()"><span class="btn-label icon fa fa-plus"></span>Formato carta de no adeudos</button>
+              </div>
+            </div> <!-- cont-botones-->
+            ​
+            <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+              <div class="row">
+                <div class="col-md-12 pull-right text-right">
+                  <div class="row">
+                    <input   #filtro
+                             type="text"
+                             class="form-control"
+                             id="buscar"
+                             placeholder="Buscar..."
+                             (keyup.enter)="filtroChanged(filtro.value)"
+                    >
+                  </div>
+                </div>
+              </div>
+            </div> <!-- cont-buscar-->
+          </div>
+        </div>
+
+
+        <div class="table-default">
+          <div role="grid" class="dataTables_wrapper form-inline">
+            <div class="table-header clearfix">
+              <div class="table-caption">Lista de no adeudos</div>
+
+              <div class="DT-lf-right">
+                <div class="DT-per-page">
+                  <div class="dataTables_length" id="jq-datatables-example_length">
+                    <label>Registros por página:
+                      <select #limiteControl
+                              name="jq-datatables-example_length"
+                              aria-controls="jq-datatables-example"
+                              class="form-control input-sm"
+                              (change) = "setLimite(limiteControl.value)"
+                      >
+                        <option value="20">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="table-responsive" >
+              <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                <thead>
+                <tr role="row">
+                  <th
+                    *ngFor="let columna of columnas"
+                    [ngClass]="{
+                                      'sorting_desc': columna.sort === 'desc',
+                                      'sorting_asc': columna.sort === 'asc',
+                                      'sorting': columna.sort !== false
+                                    }"
+
+                    (click)="sortChanged(columna)">
+                    {{columna.titulo}}
+                  </th>
+                </tr>
+                </thead>
+                <tbody *ngIf = "registros.length === 0">
+                <tr class="gradeA odd">
+                  <th class="text-center" colspan="8">
+                    No hay Registros
+                  </th>
+                </tr>
+                </tbody>
+                <tbody *ngIf = "registros.length !== 0">
+                <tr
+                  *ngFor="let registro of registros"
+                  class="gradeA odd"
+                  [ngClass]="{
+                                  'seleccionado': rowSeleccionado(registro)
+                                }"
+                  (click) = "rowSeleccion(registro)"
+                >
+                  <td class="text-center">{{registro?.solicitud?.estudiante?.datosPersonales?.getNombreCompleto()}}</td>
+                  <td class="text-center">{{registro?.solicitud?.estudiante?.promocion?.programaDocente?.descripcion}}</td>
+                  <td class="text-center">{{registro?.solicitud?.getFechaConFormato()}}</td>
+                  <td class="text-center"><dl class="col-xs-12 col-sm-9 col-md-9 text-center"><input type="checkbox" disabled class="px" [checked]="registro?.solicitud?.biblioteca"></dl></td>
+                  <td class="text-center"><dl class="col-xs-12 col-sm-9 col-md-9 text-center"><input type="checkbox" disabled class="px" [checked]="registro?.solicitud?.utic"></dl></td>
+                  <td class="text-center"><dl class="col-xs-12 col-sm-9 col-md-9 text-center"><input type="checkbox" disabled class="px" [checked]="registro?.solicitud?.finanzas"></dl></td>
+                  <td class="text-center"><dl class="col-xs-12 col-sm-9 col-md-9 text-center"><input type="checkbox" disabled class="px" [checked]="registro?.solicitud?.rms"></dl></td>
+                  <td class="text-center"><dl class="col-xs-12 col-sm-9 col-md-9 text-center"><input type="checkbox" disabled class="px" [checked]="registro?.solicitud?.docencia"></dl></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-footer clearfix">
+              <div class="DT-pagination" *ngIf="isSetPaginacion()">
+                <div class="dataTables_paginate paging_simple_numbers">
+                  <pagination
+                    class="pagination"
+                    [totalItems] = "paginacion.registrosTotales"
+                    [itemsPerPage] = "limite"
+                    [(ngModel)] = "paginaActual"
+                    (pageChanged) = "cambiarPagina($event)"
+                    previousText = "Anterior"
+                    nextText = "Siguiente"
+                  >
+                  </pagination>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>

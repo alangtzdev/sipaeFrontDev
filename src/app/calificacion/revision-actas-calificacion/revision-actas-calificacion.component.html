@@ -1,0 +1,203 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12 text-left">
+      <h1>Actas</h1>
+      <p><small>Revisi&oacute;n de actas.</small></p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel ">
+      <div class="panel-body">
+        <div class="row">
+
+          <div class="col-md-8">
+            <div class="row">
+
+              <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                <label >Promoción:</label>
+                <select id="promocion" #idPromocion class="form-control"
+                        (change)="listarPeriodos(idPromocion.value)">
+                  <option value="" selected>Selecciona...</option>
+                  <option *ngFor="let promocion of listaPromociones" [value]="promocion?.id">
+                    {{promocion?.getClavePromocion()}}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                <label >Per&iacute;odo escolar:</label>
+                <select id="periodo" #idPeriodo class="form-control"
+                        (change)="getIdPeriodo(idPeriodo.value)">
+                  <option value="" selected>Selecciona...</option>
+                  <option *ngFor="let periodo of listaPeriodos" [value]="periodo?.idPeriodoEscolar?.id">
+                    {{periodo?.idPeriodoEscolar?.getPeriodoAnioConsecutivo()}}
+                  </option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+            <button class="btn" (click)="onCambiosTabla()">Buscar <span class="fa fa-search"></span></button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-12">
+
+            <div class="col-md-10"><!-- cont-botones-->
+              <div class="text-right">
+                <button *ngIf="habilidarBotonDescargarActa()" class="btn btn-labeled btn-warning form-group-margin" (click)="descargarActaCalificaciones()"><span class="btn-label icon fa fa-download"></span>Descargar acta</button>
+                <button *ngIf="registroSeleccionado" class="btn btn-labeled btn-default form-group-margin" (click)="modalDetalleActaTabs()"><span class="btn-label icon fa fa-eye"></span>Detalle de acta</button>
+              </div>
+            </div> <!-- cont-botones-->
+            ​
+            <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+              <div class="row">
+                <div class="col-md-12 pull-right text-right">
+                  <div class="row">
+                    <input 
+                      #filtro 
+                      type="text"
+                      class="form-control"
+                      id="buscar"
+                      placeholder="Buscar..."
+                      (keyup.enter)="filtroChanged(filtro.value)"
+                      (blur)="limpiarInput(); filtro.value=''"
+                    >
+                  </div>
+                </div>
+              </div>
+            </div> <!-- cont-buscar-->
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <!--=================================
+            =            DATA-TABLES            =
+            ==================================-->
+            <div role="grid" id="jq-datatables-example_wrapper" class="dataTables_wrapper form-inline no-footer table-responsive">
+              <div class="table-header clearfix">
+                <div class="table-caption">Lista de materias</div>
+                <div class="DT-lf-right">
+                  <div class="DT-per-page">
+                    <div class="dataTables_length" id="jq-datatables-example_length">
+                      <label>Registros por página:
+                        <select #limiteControl name="jq-datatables-example_length" aria-controls="jq-datatables-example"
+                                class="form-control input-sm" (change)="setLimite(limiteControl.value)">
+                          <option value="10">10</option>
+                          <option value="25">25</option>
+                          <option value="50">50</option>
+                          <option value="100">100</option>
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                <thead>
+                <tr role="row">
+                  <th *ngFor="let columna of columnas"
+                      [ngClass]="{
+                                            'sorting_desc': columna.sort === 'desc',
+                                            'sorting_asc': columna.sort === 'asc',
+                                            'sorting': columna.sort !== false
+                                        }"
+                      (click)="sortChanged(columna)">
+                    {{columna.titulo}}
+                  </th>
+                </tr>
+                </thead>
+                <tbody *ngIf = "listaMateriaImpartida.length === 0">
+                <tr class="gradeA odd">
+                  <th class="text-center" colspan="8">
+                    Cambie sus criterios de b&uacute;squeda
+                  </th>
+                </tr>
+                </tbody>
+                <tbody *ngIf = "listaMateriaImpartida.length !== 0">
+                <tr
+                  *ngFor="let registro of listaMateriaImpartida"
+                  class="gradeA odd"
+                  [ngClass]="{
+                                    'seleccionado': rowSeleccionado(registro)
+                                  }"
+                  (click) = "rowSeleccion(registro)"
+                >
+                  <td class="center">{{registro?.cursoOptativo?.clave ? registro?.cursoOptativo?.clave : registro?.materia?.clave}}</td>
+                  <td class="center">{{registro?.cursoOptativo?.descripcion ? registro?.cursoOptativo?.descripcion : registro?.materia?.descripcion}}</td>
+                  <td class="center">{{registro?.getProfesorTitular()}}</td>
+                  <td class="text-center"><dl class="col-xs-12 col-sm-9 col-md-9 text-center"><input type="checkbox" disabled class="px" [checked]="registro?.actaCalificacion?.profesor"></dl></td>
+                  <td class="text-center"><dl class="col-xs-12 col-sm-9 col-md-9 text-center"><input type="checkbox" disabled class="px" [checked]="registro?.actaCalificacion?.coordinador"></dl></td>
+                  <td class="text-center"><dl class="col-xs-12 col-sm-9 col-md-9 text-center"><input type="checkbox" disabled class="px" [checked]="registro?.actaCalificacion?.docencia"></dl></td>
+                  <td class="text-center"><dl class="col-xs-12 col-sm-9 col-md-9 text-center"><input type="checkbox" disabled class="px" [checked]="registro?.actaCalificacion?.secAcademica"></dl></td>
+                  <td class="center">{{registro?.actaCalificacion?.consecutivo ? 'Acta generada' : 'Sin acta'}}</td>
+                </tr>
+                </tbody>
+              </table>
+              <div class="table-footer clearfix">
+                <div class="DT-pagination">
+                  <div class="dataTables_paginate paging_simple_numbers">
+                    <pagination
+                      class="pagination"
+                      [totalItems] = "paginacion.registrosTotales"
+                      [itemsPerPage] = "limite"
+                      [maxSize] = "maxSizePags"
+                      [rotate]="false"
+                      [(ngModel)] = "paginaActual"
+                      (pageChanged) = "cambiarPagina($event)"
+                      previousText = "Anterior"
+                      nextText = "Siguiente"
+                    >
+                    </pagination>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--====  End of DATA-TABLES  ====-->
+          </div>
+        </div>
+        <!--====  End of DATA-TABLE-TABLE  ====-->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-->INICIA MODAL DE DETALLE ACTA TABAS</!-->
+<modal [animation]="animation" [keyboard]="keyboard" 
+  [backdrop]="backdrop" #modalTabsDetalle>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalDetalleActaTabs()">×</button>
+    <h4 class="modal-title"> Detalle de actas</h4>
+  </modal-header>
+  <modal-body>
+    <tabset *ngIf="idMateriaImpartidaSeleccionada">
+      <tab heading="Detalle de acta">
+        <app-detalle-acta materiaImpartidaId="{{idMateriaImpartidaSeleccionada}}" profesor="{{profesorTitularDetalleActa}}"></app-detalle-acta>
+      </tab>
+      <tab heading="Lista de estudiantes">
+        <lista-estudiantes-acta materiaImpartidaId="{{idMateriaImpartidaSeleccionada}}"></lista-estudiantes-acta>
+      </tab>
+    </tabset>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModalDetalleActaTabs()"><i class="fa fa-close"></i> Cerrar</button>
+  </modal-footer>
+</modal>
+<!-->TERMINA MODAL DE DETALLE ACTA TABAS</!-->

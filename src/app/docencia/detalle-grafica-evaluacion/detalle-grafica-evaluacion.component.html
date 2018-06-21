@@ -1,0 +1,104 @@
+<div class="panel-body tab-content tab-content-bordered" *ngIf="dataset">
+
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <h1>{{cursoOptativo?.promocion?.programaDocente?.descripcion}} {{cursoOptativo?.promocion?.consecutivo}}°</h1>
+        <h3>{{nombreProfesor}}</h3>
+        <h4>"{{cursoOptativo?.materia?.descripcion}}"</h4>
+        <h5 *ngIf="cursoOptativo?.cursoOptativo?.id">{{cursoOptativo?.cursoOptativo?.descripcion}}</h5>
+        <h5> {{cursoOptativo?.periodoEscolar?.getPeriodo()}}</h5>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <h6>ESTUDIANTES</h6>
+        </div>
+      </div>
+      <div class="col-md-12 no-margin">
+        <div class="row">
+          <div>
+            <div style="display: block">
+              <canvas baseChart
+                      [datasets]="dataset"
+                      [labels]="barChartLabels"
+                      [options]="barChartOptions"
+                      [legend]="barChartLegend"
+                      [chartType]="barChartType"
+                      [colors]="barChartColors"
+                      (chartHover)="chartHovered($event)"
+                      (chartClick)="chartClicked($event)"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 no-padding-t">
+        <h6 class="text-light-gray text-semibold text-xs">Respuestas</h6>
+        <label class="label label-success label-tag">Excelente</label>
+        <label class="label label-primary label-tag">Muy Bien</label>
+        <label class="label label-tag">Bien</label>
+        <label class="label label-warning label-tag">Regular</label>
+        <label class="label label-danger label-tag">Mal</label>
+        <hr class="panel-wide">
+      </div>
+    </div>
+  </div>
+
+
+  <h5 class="form-heading text-muted text-semibold text-sm">Listado de preguntas</h5>
+
+  <div class="col-md-12">
+    <div class="row">
+      <div class="panel" style="width:100%;height: 150px; overflow-y: scroll; margin: auto">
+        <ul class="list-group">
+          <li class="list-group-item">
+            1. Conocimiento de la materia.
+          </li>
+          <li class="list-group-item">
+            2. Presentó el programa de estudios al inicio del curso.
+          </li>
+          <li class="list-group-item">
+            3. Dio a conocer los criterios e instrumentos que utilizaría para evaluar a los alumnos.
+          </li>
+          <li class="list-group-item">
+            4. Present&oacute; los objetivos de cada unidad o tema al inicio del curso.
+          </li>
+          <li class="list-group-item">
+            5. Explicó en lenguaje claro y entendible los conceptos.
+          </li>
+          <li class="list-group-item">
+            6. Utilizó recursos didácticos.
+          </li>
+          <li class="list-group-item">
+            7. Motivó la reflexión y el análisis.
+          </li>
+          <li class="list-group-item">
+            8. Estableció un ambiente de confianza, que permitió la expresión de ideas y el intercambio de estas con el profesor y otros alumnos.
+          </li>
+          <li class="list-group-item">
+            9. Usó ejemplos adecuados al tema.
+          </li>
+          <li class="list-group-item">
+            10. La calidad de las lecturas y de la bibliografía asignadas fue:
+          </li>
+          <li class="list-group-item">
+            11. El profesor cubri&oacute; la totalidad de horas establecidas en el plan de estudios.
+          </li>
+          <li class="list-group-item">
+            12. Durante el curso, se revisaron todos los contenidos previstos en el programa de estudios.
+          </li>
+          <li class="list-group-item">
+            13. Revis&oacute; y coment&oacute; verbalmente o por escrito los aciertos y errores que tuvo en sus tareas.
+          </li>
+          <li class="list-group-item">
+            14. Respet&oacute; los criterios de evaluaci&oacute;n establecidos al inicio del curso.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

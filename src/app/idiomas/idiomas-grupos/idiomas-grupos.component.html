@@ -1,0 +1,447 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+      <h1>Grupos de idioma</h1>
+      <p><small>Listado de grupos de idioma</small></p>
+    </div>
+    <div class="col-xs-12 col-sm-8">
+      <div class="row">
+        <hr class="visible-xs">
+        <div class="pull-right col-xs-12 col-sm-auto">
+          <button class="btn btn-labeled btn-success pull-right col-xs-12 col-sm-auto" (click)="agregarGrupo()"><span class="btn-label icon fa fa-plus"></span>Agregar grupo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="panel">
+  <div class="panel-body">
+    <form [formGroup]="formulario">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+              <div [ngClass]="{'has-error': getControlErrors('idPeriodo')}">
+                <label >Per&iacute;odo Escolar:</label>
+                <select #periodo class="form-control" ngControl="idPeriodo" formControlName="idPeriodo">
+                  <option value="" disabled selected>Selecciona...</option>
+                  <option *ngFor="let periodo of opcionesPeriodo" value="{{periodo.id}}">{{periodo.text}}</option>
+                </select>
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idPeriodo'))" >
+                                        {{errorMessage(getControl('idPeriodo'))}}
+                                        </span>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+              <div [ngClass]="{'has-error': getControlErrors('idIdioma')}">
+                <label >Idioma:</label>
+                <select #idioma class="form-control" ngControl="idIdioma" formControlName="idIdioma">
+                  <option value="" selected>Selecciona...</option>
+                  <option *ngFor="let idioma of opcionesIdioma" value="{{idioma.id}}">{{idioma.text}}</option>
+                </select>
+                <span id="helpBlock3" class="help-block" *ngIf="(getControlErrors('idIdioma'))" >
+                                          {{errorMessage(getControl('idIdioma'))}}
+                                        </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+          <button class="btn btn-default" (click)="filtrarRegistros(periodo.value, idioma.value)">
+            Buscar
+            <span class="fa fa-search"></span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-body">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-10"><!-- cont-botones-->
+          <div class="text-right">
+            <button *ngIf="registroSeleccionado" class="btn btn-labeled btn-default form-group-margin"
+              (click)="modaldetalleEvaluacionGrupoIdioma()">
+                <span class="btn-label icon fa fa-eye"></span>Evaluación a profesores
+            </button>
+            <div class="btn-group form-group-margin" dropdown>
+              <button class="btn btn-conacyt dropdown-toggle" type="button" data-toggle="dropdown">Lista de grupos
+                <span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li role="menuitem"><a class="dropdown-item" (click)="exportar('Excel')" >Exportar a Excel</a></li>
+                <li class="divider dropdown-divider"></li>
+                <li role="menuitem" ><a class="dropdown-item" (click)="exportar('PDF')" >Exportar a PDF</a></li>
+              </ul>
+            </div>
+
+            <div class="btn-group form-group-margin" *ngIf="registroSeleccionado" dropdown>
+              <button class="btn btn-conacyt dropdown-toggle" type="button" data-toggle="dropdown">Lista de asistencia
+                <span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li role="menuitem"><a class="dropdown-item" (click)="listaAlumnosGrupoIdioma('Excel')" >Exportar a Excel</a></li>
+                <li class="divider dropdown-divider"></li>
+                <li role="menuitem" ><a class="dropdown-item" (click)="listaAlumnosGrupoIdioma('PDF')" >Exportar a PDF</a></li>
+              </ul>
+            </div>
+
+            <button *ngIf="registroSeleccionado" class="btn btn-labeled btn-warning form-group-margin" (click)="editarGrupo()"><span class="btn-label icon fa fa-pencil-square-o"></span>Editar</button>
+            <button *ngIf="registroSeleccionado" class="btn btn-labeled btn-success form-group-margin" (click)="descargarActaCalificaciones()"><span class="btn-label icon fa fa-plus"></span>Acta de calificaciones</button>
+
+            <button *ngIf="registroSeleccionado" class="btn btn-labeled btn-default form-group-margin" (click)="modaldetalleGrupoIdioma()"><span class="btn-label icon fa fa-eye"></span>Detalle</button>
+
+          </div>
+        </div> <!-- cont-botones-->
+        ​
+        <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+          <div class="row">
+            <div class="col-md-12 pull-right text-right">
+              <div class="row">
+                <input
+                  #filtro
+                  type="text"
+                  class="form-control"
+                  id="buscar"
+                  placeholder="Buscar..."
+                  (keyup.enter)="filtroChanged(filtro.value)"
+                  (blur)="limpiarFiltroBusqueda(); filtro.value=''"
+                >
+              </div>
+            </div>
+          </div>
+        </div> <!-- cont-buscar-->
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="row">
+        <alert *ngFor="let alerta of alertas;let i = index"
+               [type]="alerta.type"
+               dismissible="true"
+               (close)="cerrarAlerta(i)">
+          {{ alerta?.msg }}
+        </alert>
+        <div class="table-default">
+          <div role="grid" class="dataTables_wrapper form-inline">
+            <div class="table-header clearfix">
+              <div class="table-caption">Lista de grupos</div>
+              <div class="DT-lf-right">
+                <div class="DT-per-page">
+                  <div class="dataTables_length" id="jq-datatables-example_length">
+                    <label>Registros por página:
+                      <select name="jq-datatables-example_length"
+                              #limiteControl
+                              (change)="setLimite(limiteControl.value)"
+                              aria-controls="jq-datatables-example"
+                              class="form-control input-sm">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                <thead>
+                <tr role="row">
+                  <th  *ngFor="let columna of columnas"
+                       [ngClass]="{
+                                            'sorting_desc': columna.sort === 'desc',
+                                            'sorting_asc': columna.sort === 'asc',
+                                            'sorting': columna.sort !== false
+                                            }"
+                       (click)="sortChanged(columna)">
+                    {{columna.titulo}}
+                  </th>
+                </tr>
+                </thead>
+                <tbody *ngIf = "registros.length === 0">
+                <tr class="gradeA odd">
+                  <th class="text-center" colspan="8">
+                    No hay Registros
+                  </th>
+                </tr>
+                </tbody>
+
+                <tbody *ngIf = "registros.length !== 0">
+                <tr *ngFor="let grupoIdioma of registros"
+                    class="gradeA odd"
+                    [ngClass]="{'seleccionado': rowSeleccionado(grupoIdioma)}"
+                    (click) = "rowSeleccion(grupoIdioma)">
+                  <td class="text-center">{{grupoIdioma?.idioma?.descripcion}}</td>
+                  <td class="text-center">{{grupoIdioma?.nivel?.valor}}</td>
+                  <td class="text-center">{{grupoIdioma?.profesor}}
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-footer clearfix">
+              <div class="DT-pagination" *ngIf="isSetPaginacion()">
+                <div class="dataTables_paginate paging_simple_numbers">
+                  <pagination
+                    class="pagination"
+                    [totalItems] = "paginacion.registrosTotales"
+                    [itemsPerPage] = "limite"
+                    [maxSize] = "maxSizePags"
+                    [rotate]="false"
+                    [(ngModel)] = "paginaActual"
+                    (pageChanged) = "cambiarPagina($event)"
+                    previousText = "Anterior"
+                    nextText = "Siguiente">
+                  </pagination>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!--INICIA MODAL DETALLE GRUPO DE IDIOMAS-->
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalDetalleGrupo  >
+  <modal-header>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cerrrarModalDetalleGrupo()">×</button>
+    <h4 class="modal-title">Detalle grupo de idioma</h4>
+  </modal-header>
+  <modal-body>
+    <tabset>
+      <tab heading="Datos del curso">
+        <div class="panel-body tab-content tab-content-bordered">
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Idioma: </dt>
+                                    <dd class="col-md-6">{{grupoIdioma?.idioma?.descripcion}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="form-heading text-muted text-semibold text-sm">DATOS DEL CURSO</h5>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Instituci&oacute;n Acreditadora: </dt>
+                                    <dd class="col-md-6">{{grupoIdioma?.institucion}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Per&iacute;odo: </dt>
+                                    <dd class="col-md-6">{{grupoIdioma?.periodo?.getPeriodo()}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Profesor: </dt>
+                                    <dd class="col-md-6">{{grupoIdioma?.profesor}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nivel: </dt>
+                                    <dd class="col-md-6">{{grupoIdioma?.nivel?.valor}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Horario: </dt>
+                                    <dd class="col-md-6">{{grupoIdioma?.horario}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Inicio de curso: </dt>
+                                    <dd class="col-md-6">{{grupoIdioma?.getFechaInicioCurso()}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fin de curso: </dt>
+                                    <dd class="col-md-6">{{grupoIdioma?.getFechaFinCurso()}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">D&iacute;as que se imparte: </dt>
+                                    <dd class="col-md-6">{{grupoIdioma?.diasSemana}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa Particular: </dt>
+                                    <dd class="col-md-6">
+                                    <button class="btn btn-labeled btn-warning" (click)="descargarArchivo(grupoIdioma?.archivoPrograma?.id)">
+                                    <span class="btn-label icon fa fa-download left"></span>Descargar</button>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+      </tab>
+      <tab heading="Estudiantes">
+        <div class="panel-body tab-content tab-content-bordered">
+          <div class="col-md-12">
+            <div class="row">
+            <div class="table-default">
+              <div role="grid" class="dataTables_wrapper form-inline">
+              <div class="table-header clearfix">
+                  <div class="table-caption">Lista de Estudiantes</div>
+              </div>
+              <div class="table-responsive">
+                  <table cellpadding="0" cellspacing="0" border="0"
+                          class="table table-striped table-bordered dataTable no-footer"
+                                   id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                      <thead>
+                      <tr role="row">
+                          <th *ngFor="let columna of columnasTablaDetalleGrupoIdioma"
+                              [ngClass]="{
+                                  'sorting_desc': columna.sort === 'desc',
+                                  'sorting_asc': columna.sort === 'asc',
+                                  'sorting': columna.sort !== false
+                                  }"
+                              (click)="sortChanged(columna)">
+                              {{columna.titulo}}
+                          </th>
+                      </tr>
+                      </thead>
+                      <tbody *ngIf="registrosGrupoIdioma.length === 0">
+                        <tr class="gradeA odd">
+                          <th class="text-center" colspan="8">
+                              No hay Registros
+                          </th>
+                      </tr>
+                      </tbody>
+
+                      <tbody *ngIf="registrosGrupoIdioma.length !== 0">
+                          <tr *ngFor="let estGrupoIdioma of registrosGrupoIdioma"
+                              class="gradeA odd">
+                              <td class="center">
+                                  {{estGrupoIdioma?.estudiante?.promocion?.abreviatura}}{{estGrupoIdioma?.estudiante?.matricula?.anio}}{{estGrupoIdioma?.estudiante?.matricula?.consecutivo}}
+                              </td>
+                              <td class="center">
+                                  {{estGrupoIdioma?.estudiante?.getNombreCompleto()}}
+                              </td>
+                              <td class="center">
+                                  {{estGrupoIdioma?.estudiante?.promocion?.programaDocente?.descripcion}}
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+              <div class="table-footer clearfix">
+                  <div class="DT-pagination" *ngIf="isSetPaginacionDetalleGrupoIdioma()">
+                      <div class="dataTables_paginate paging_simple_numbers">
+                          <pagination
+                                   class="pagination"
+                                  [totalItems] = "paginacionDetalleGrupoIdioma.registrosTotales"
+                                  [itemsPerPage] = "limiteDetalleGrupoIdioma"
+                                  [maxSize] = "maxSizePagsDetalleGrupoIdioma"
+                                  [rotate]="false"
+                                  [(ngModel)] = "paginaActualDetalleGrupoIdioma"
+                                  (pageChanged) = "cambiarPaginaDetalleGrupoIdioma($event)"
+                                   previousText = "Anterior"
+                                  nextText = "Siguiente">
+                          </pagination>
+                      </div>
+                   </div>
+               </div>
+          </div>
+          </div>
+          </div>
+          </div>
+        </div>
+      </tab>
+    </tabset>
+
+  </modal-body>
+  <modal-footer>
+    <button class="btn btn-default" type="button" (click)="cerrrarModalDetalleGrupo()"><i
+      class="fa fa-close"></i> Cerrar
+    </button>
+  </modal-footer>
+</modal>
+<!--TERMINA MODAL DETALLE GRUPO DE IDIOMAS-->
+
+<!-->INICIA MODAL DE GRAFICAS EVALUACION DOCENTE</!-->
+<modal [animation]="animation" [keyboard]="keyboard"
+ [backdrop]="backdrop" #modalDetalleEvaluacionProfor>
+ <modal-header>
+   <button type="button" class="close" (click)="cerrarModalEvaluacionProfesor()" aria-hidden="true">×</button>
+        <h4 class="modal-title">{{materNombre + " - " + profesorNombre}}</h4>
+ </modal-header>
+ <modal-body>
+   <button class="btn btn-labeled btn-conacyt form-group-margin" (click)="descargarResultados()"><span class="btn-label icon fa fa-download"></span>Exportar</button>
+   <tabset>
+      <tab (select)="seleccionarTab(1)" heading="Gráfica Evaluación">
+          <app-grafica-evaluacion-idiomas *ngIf="resultados && (tabSeleccionada==1) && idGrupoIdioma" [resultados]="resultados"
+            [idGrupoIdioma]="idGrupoIdioma" [nombreProfesor]="profesorNombre">Gráfica evaluación...</app-grafica-evaluacion-idiomas>
+      </tab>
+      <tab (select)="seleccionarTab(2)" heading="Gráfica Aceptación">
+          <app-grafica-aceptacion-idiomas *ngIf="resultados && tabSeleccionada==2 && idGrupoIdioma" [resultados]="resultados"
+          [idGrupoIdioma]="idGrupoIdioma">Gráfica aceptación</app-grafica-aceptacion-idiomas>
+      </tab>
+      <tab (select)="seleccionarTab(3)" heading="Comentarios Adicionales">
+          <app-comentarios-adicionales-idiomas *ngIf="resultados && tabSeleccionada==3" [resultados]="resultados">Comentarios adicionales</app-comentarios-adicionales-idiomas>
+      </tab>
+    </tabset>
+ </modal-body>
+ <modal-footer>
+   <button class="btn " (click)="cerrarModalEvaluacionProfesor()"><i class="fa fa-times"></i> Cerrar</button>
+ </modal-footer>
+</modal>
+<!-->TERMINA MODAL DE GRAFICAS EVALUACION DOCENTE</!-->
+

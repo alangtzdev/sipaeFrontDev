@@ -1,0 +1,221 @@
+<form class="form-horizontal" [formGroup]="formulario">
+
+  <h5 class="form-heading text-muted text-semibold text-sm">Materias Plan de estudios</h5>
+
+  <div class="col-md-12">
+    <div class="row">
+
+      <div class="col-md-4 padding-xs-vr">
+        <div class="row">
+          <div [ngClass]="{'has-error': getControlErrors('numeroPeriodo')}">
+            <label for="numeroPeriodo" class="col-md-8 control-label text-left">N&uacute;mero de
+              período:*</label>
+            <div class="col-md-4">
+              <input id="numeroPeriodo" type="number" min="1" class="form-control" #numeroPeriodo
+                     formControlName="numeroPeriodo"
+                     maxlength="2">
+              <span id="helpBlock3" class="help-block" *ngIf="(getControlErrors('numeroPeriodo'))">
+                                {{errorMessage(getControl('numeroPeriodo'))}}
+                            </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-5 padding-xs-vr">
+        <div class="row">
+          <div [ngClass]="{'has-error': getControlErrors('idMateria')}">
+            <label for="idMateria" class="col-md-6 control-label text-left">Materia: *</label>
+            <div class="col-md-6">
+              <select #idMateria name="idMateria" id="idMateria" class="form-control"
+                      formControlName="idMateria"
+                      (change)="getIdMateria(idMateria.value)">
+                <option value="" disabled selected>Selecciona...</option>
+                <option *ngFor="let materia of opcionesCatMaterias" value="{{materia.id}}">{{materia.text}}
+                </option>
+              </select>
+              <span id="helpBlock3" class="help-block" *ngIf="(getControlErrors('idMateria'))">
+                                {{errorMessage(getControl('idMateria'))}}
+                            </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 padding-xs-vr">
+        <div class="row">
+          <div class="text-right">
+            <button type="button" class="btn btn-success" *ngIf="mostrarBotonAgregar()"
+                    (click)="agregarMateriaPlanEstudios()"><i
+              class="fa fa-plus"></i> Agregar
+            </button>
+            <button type="button" *ngIf="registroSeleccionadoMateria" class="btn btn-danger"
+                    (click)="eliminarMateria()"><i class="fa fa-times"></i>
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+  </div>
+  <div class="col-md-12 padding-xs-vr">
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover table-striped table-condensed">
+        <thead>
+        <tr role="row">
+          <th *ngFor="let columna of columnas" class="text-center">
+            {{columna.titulo}}
+          </th>
+        </tr>
+        </thead>
+        <tbody *ngIf="registrosMaterias.length === 0">
+        <tr class="gradeA odd">
+          <th class="text-center" colspan="7">
+            No hay Registros
+          </th>
+        </tr>
+        </tbody>
+        <tbody *ngIf="registrosMaterias.length !== 0">
+        <tr
+          *ngFor="let registro of registrosMaterias"
+          class="gradeA odd"
+          [ngClass]="{
+                                 'seleccionado': rowSeleccionado(registro)
+                               }"
+          (click)="rowSeleccion(registro)"
+        >
+          <td class="text-center">{{registro.numeroPeriodo}}</td>
+          <td class="center">{{registro.materia?.descripcion}}</td>
+          <td class="center">{{registro.materia?.clave}}</td>
+          <td class="center">{{registro.materia?.seriacion?.clave}}</td>
+          <td class="text-center">{{registro.materia.horasDocente}}</td>
+          <td class="text-center">{{registro.materia.horasIndependiente}}</td>
+          <td class="text-center">{{registro.materia.creditos}}</td>
+
+        </tr>
+        <tr>
+          <td class="center"></td>
+          <td class="center"></td>
+          <td class="center"></td>
+          <td class="center"></td>
+          <td class="text-center">
+            <input id="horasDocente" type="number" class="form-control text-center" #horasDocente formControlName="horasDocente"
+                   maxlength="5" disabled>
+          </td>
+          <td class="text-center">
+            <input id="horasIndependiente" type="number" class="form-control text-center" #horasIndependiente formControlName="horasIndependiente"
+                   maxlength="5" disabled>
+          </td>
+          <td class="text-center">
+            <input id="sumaCreditos" type="number" class="form-control text-center" #sumaCreditos formControlName="sumaCreditos"
+                   maxlength="5" disabled>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  <div class="col-md-12 padding-xs-vr">
+    <div class="row">
+      <div class="text-right">
+        <button type="button" *ngIf="registroSeleccionadoCursoOptativo" class="btn btn-danger"
+                (click)="eliminarMateriaCursoOptativo()"><i class="fa fa-times"></i>
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 padding-xs-vr">
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-hover table-striped table-condensed">
+        <thead>
+        <tr role="row">
+          <th *ngFor="let columna of columnasMateriasOptativas" class="text-center">
+            {{columna.titulo}}
+          </th>
+        </tr>
+        </thead>
+        <tbody *ngIf="registrosCursosOptativos.length === 0">
+        <tr class="gradeA odd">
+          <th class="text-center" colspan="7">
+            No hay Registros
+          </th>
+        </tr>
+        </tbody>
+        <tbody *ngIf="registrosCursosOptativos.length !== 0">
+        <tr
+          *ngFor="let registro of registrosCursosOptativos"
+          class="gradeA odd"
+          [ngClass]="{
+                                 'seleccionado': rowSeleccionadoCursoOptativo(registro)
+                               }"
+          (click)="rowSeleccionCursoOptativo(registro)"
+        >
+          <td class="text-center">{{registro.numeroPeriodo}}</td>
+          <td class="center">{{registro.materia?.descripcion}}</td>
+          <td class="center">{{registro.materia?.clave}}</td>
+          <td class="center">{{registro.materia?.seriacion?.clave}}</td>
+          <td class="text-center">{{registro.materia.horasDocente}}</td>
+          <td class="text-center">{{registro.materia.horasIndependiente}}</td>
+          <td class="text-center">{{registro.materia.creditos}}</td>
+
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-6 form-group-margin">
+        <div class="row">
+          <label for="numeroAsignaturas" class="col-md-6 control-label text-left">N&uacute;mero de materias:</label>
+          <div class="col-md-6">
+            <input id="numeroAsignaturas" type="number" class="form-control text-right" #numeroAsignaturas formControlName="numeroAsignaturas"
+                   maxlength="5" disabled>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 form-group-margin">
+        <div class="row">
+          <label for="sumaCreditos" class="col-md-6 control-label text-left">Suma de cr&eacute;ditos:</label>
+          <div class="col-md-6">
+            <input id="sumaCreditos" type="number" class="form-control text-right" #sumaCreditos formControlName="sumaCreditos"
+                   maxlength="5" disabled>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="row">
+
+      <div class="col-md-6 form-group-margin">
+        <div class="row">
+          <label for="creditosTesis" class="col-md-6 control-label text-left">Créditos de tesis:</label>
+          <div class="col-md-6">
+            <input id="creditosTesis" type="number" class="form-control text-right" #creditosTesis formControlName="creditosTesis"
+                   maxlength="5" disabled>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 form-group-margin">
+        <div class="row">
+          <label for="totalCreditos" class="col-md-6 control-label text-left">Total de cr&eacute;ditos:</label>
+          <div class="col-md-6">
+            <input id="totalCreditos" type="number" class="form-control text-right" #totalCreditos formControlName="totalCreditos"
+                   maxlength="5" disabled>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</form>

@@ -1,0 +1,441 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12 text-center text-left-sm">
+      <h1>Solicitud de movilidad</h1>
+      <p>
+        <small>Lista de solicitudes a movilidad.</small>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="panel ">
+  <div class="panel-body">
+    <div class="row">
+
+      <div class="col-md-8">
+        <div class="row">
+
+          <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+            <label >Programa docente:</label>
+            <select #programaDocenteSelection class="form-control"
+                    (change)="activarBotonBusqueda(2)"
+                    (change)="cambioProgramaDocenteFiltro(programaDocenteSelection.value)"
+            >
+              <option value="" disabled selected> Selecciona...</option>
+              <option *ngFor="let programaDocenteItem of opcionesSelectProgramaDocente" [value]="programaDocenteItem.id">
+                {{programaDocenteItem.text}}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+            <label >Promoción:</label>
+            <select #promocion class="form-control"
+                    (change)="activarBotonBusqueda(1)">
+              <option value="" selected>Selecciona...</option>
+              <option *ngFor="let promocionItem of opcionesPromociones" [value]="promocionItem.id">
+                {{promocionItem.text}}
+              </option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+        <button
+          class="btn btn-default" (click)="buscarCriteriosCabezera(
+                                programaDocenteSelection.value,
+                promocion.value
+              )" [disabled]="!botonBuscar">
+          Buscar <span class="fa fa-search"></span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="panel">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="col-md-10">
+          <div class="text-right">
+
+
+            <button *ngIf="mostrarBotonesActivas()" class="btn btn-labeled btn-success form-group-margin"
+                    (click)="generarOficioPresentacion()"><span
+              class="btn-label icon fa fa-plus"></span> Generar oficio de presentaci&oacute;n
+            </button>
+            <button *ngIf="mostrarBotones()" class="btn btn-labeled btn-default form-group-margin" (click)="modalDetalleRegistro()"><span
+              class="btn-label icon fa fa-eye"></span> Detalle
+            </button>
+            <div class="btn-group form-group-margin" dropdown>
+              <button class="btn btn-conacyt dropdown-toggle" type="button" data-toggle="dropdown">
+               <span class="btn-label icon fa fa-download"></span> Exportar </button>  
+               <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                    <i class="fa fa-caret-down"></i>
+                  </button>            
+               <ul class="dropdown-menu">
+                <li role="menuitem"><a class="dropdown-item" (click)="exportar('Excel')">Exportar a Excel</a></li>
+                <li class="divider dropdown-divider"></li>
+                <li role="menuitem" ><a class="dropdown-item" (click)="exportar('PDF')">Exportar a PDF</a></li>
+              </ul>
+            </div>
+            <!--<div class="btn-group form-group-margin" dropdown>
+              <button id="split-button" type="button" class="btn btn-conacyt"><span class="btn-label icon fa fa-download"></span> Exportar</button>
+              <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                <i class="fa fa-caret-down"></i>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+                <li role="menuitem">
+                  <a
+                    class="dropdown-item"
+                    (click)="exportar('Excel')"
+                  >
+                    Exportar a Excel
+                  </a>
+                </li>
+                <li class="divider dropdown-divider"></li>
+                <li role="menuitem">
+                  <a
+                    class="dropdown-item"
+                    (click)="exportar('PDF')"
+                  >
+                    Exportar a PDF
+                  </a>
+                </li>
+              </ul>
+            </div>-->
+          </div>
+        </div>
+
+        <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+          <div class="row">
+            <div class="col-md-12 pull-right text-right">
+              <div class="row">
+                <input
+                  #filtro
+                  type="text"
+                  class="form-control"
+                  id="buscar"
+                  placeholder="Buscar..."
+                  (keyup.enter)="filtroChanged(filtro.value)"
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="table-default">
+      <div role="grid" class="dataTables_wrapper form-inline table-responsive">
+        <div class="table-header clearfix">
+          <div class="table-caption">Lista de solicitudes</div>
+
+          <div class="DT-lf-right">
+            <div class="DT-per-page">
+              <div class="dataTables_length" id="jq-datatables-example_length">
+                <label>Registros por página: <select name="jq-datatables-example_length"
+                                                     aria-controls="jq-datatables-example"
+                                                     class="form-control input-sm">
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table cellpadding="0" cellspacing="0" border="0"
+                 class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example"
+                 aria-describedby="jq-datatables-example_info">
+            <thead>
+            <tr role="row">
+              <th
+                *ngFor="let columna of columnas"
+                [ngClass]="{
+							        		'sorting_desc': columna.sort === 'desc',
+							        		'sorting_asc': columna.sort === 'asc',
+							        		'sorting': columna.sort !== false
+							        	}"
+                (click)="sortChanged(columna)"
+              >
+                {{columna.titulo}}
+              </th>
+            </tr>
+            </thead>
+            <tbody *ngIf = "registros.length === 0">
+            <tr class="gradeA odd">
+              <th class="text-center" colspan="4">
+                Cambie sus criterios de búsqueda
+              </th>
+            </tr>
+            </tbody>
+            <tbody *ngIf = "registros.length !== 0">
+            <tr
+              *ngFor="let registro of registros"
+              class="gradeA odd"
+              [ngClass]="{
+                        'seleccionado': rowSeleccionado(registro)
+                      }"
+              (click) = "rowSeleccion(registro)"
+            >
+              <td class="center">{{registro?.estudiante?.matricula?.matriculaCompleta}}</td>
+              <td class="center">{{registro?.estudiante?.datosPersonales?.getNombreCompleto()}}</td>
+              <td class="center">{{registro?.estudiante?.promocion?.programaDocente?.descripcion}}</td>
+              <td class="center">{{registro?.estatus?.valor}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-footer clearfix">
+          <div class="DT-pagination" *ngIf="isSetPaginacion()">
+            <div class="dataTables_paginate paging_simple_numbers">
+              <pagination
+                class="pagination"
+                [totalItems] = "paginacion.registrosTotales"
+                [itemsPerPage] = "limite"
+                [maxSize] = "maxSizePags"
+                [rotate]="false"
+                [(ngModel)] = "paginaActual"
+                (pageChanged) = "cambiarPagina($event)"
+                previousText = "Anterior"
+                nextText = "Siguiente"
+              >
+              </pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-default" #modalDetalle>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalDetalle()">×</button>
+    <div  *ngIf="movilidad?.tipoMovilidad?.id == 1">
+      <h4 class="modal-title">Detalle del registro de movilidad curricular</h4>
+    </div>
+    <div  *ngIf="movilidad?.tipoMovilidad?.id == 2">
+      <h4 class="modal-title">Detalle del registro de movilidad en estancia de investigación</h4>
+    </div>
+    <div  *ngIf="movilidad?.tipoMovilidad?.id == 3">
+      <h4 class="modal-title">Detalle del registro de movilidad por trabajo de campo</h4>
+    </div>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Alumno:</dt>
+                <dd class="col-md-6">{{movilidad?.estudiante?.datosPersonales?.getNombreCompleto()}}</dd>
+              </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente:</dt>
+                <dd class="col-md-6">{{movilidad?.estudiante?.promocion?.programaDocente?.descripcion}}</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div  *ngIf="movilidad?.tipoMovilidad?.id == 1">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Convenio:</dt>
+                  <dd class="col-md-6">{{movilidad?.convenio?.descripcion}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">País:</dt>
+                  <dd class="col-md-6">{{movilidad?.pais?.valor}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Institución en la que está interesado:</dt>
+                  <dd class="col-md-6">{{movilidad?.institucionInteres ? movilidad?.institucionInteres : movilidad?.convenio?.institucion?.nombre ? movilidad?.convenio?.institucion?.nombre : movilidad?.lugar }}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Materia:</dt>
+                  <dd class="col-md-6">{{movilidad?.materiaCursar}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre del contacto:</dt>
+                  <dd class="col-md-6">{{movilidad?.nombreContacto}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Puesto del contacto:</dt>
+                  <dd class="col-md-6">{{movilidad?.puestoContacto}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div  *ngIf="movilidad?.tipoMovilidad?.id == 2">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estancia:</dt>
+                  <dd class="col-md-6">{{movilidad?.estancia}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Convenio institucional:</dt>
+                  <dd class="col-md-6">{{movilidad?.convenio?.descripcion}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Institución en la que está interesado:</dt>
+                  <dd class="col-md-6">{{movilidad?.institucionInteres ? movilidad?.institucionInteres : movilidad?.convenio?.institucion?.nombre ? movilidad?.convenio?.institucion?.nombre : movilidad?.lugar }}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Profesor anfitrión:</dt>
+                  <dd class="col-md-6">{{movilidad?.nombreContacto}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div  *ngIf="movilidad?.tipoMovilidad?.id == 3">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Trabajo de campo:</dt>
+                  <dd class="col-md-6">{{movilidad?.trabajoCampo}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Lugar:</dt>
+                  <dd class="col-md-6">{{movilidad?.lugar}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div  *ngIf="movilidad?.tipoMovilidad?.id == 2 || movilidad?.tipoMovilidad?.id == 3 || movilidad?.tipoMovilidad?.id == 1">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Inicio:</dt>
+                  <dd class="col-md-6">{{movilidad?.getFechaInicioFormato()}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fin:</dt>
+                  <dd class="col-md-6">{{movilidad?.getFechaFinFormato()}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <h6 class="form-heading text-muted text-semibold text-sm">DOCUMENTOS</h6>
+    <div class="row">
+      <div class="col-md-12 form-group-margin">
+        <div class="panel" style="width:100%;height: 200px; overflow-y: scroll; margin: auto">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-3 text-center"  *ngFor="let doc of documentos">
+                <div class="thumbnail">
+                  <i class="fa fa-file-text-o fa-5x"></i>
+                  <h5 class="">{{(doc?.tipoDocumento?.valor == 'Otro') ? doc?.otroTipoDocumento : doc?.tipoDocumento?.valor}}</h5>
+                  <hr>
+                  <button class="btn  btn-warning fa fa-download" (click)="descargarArchivo(doc?.archivo?.id)"></button>
+                  <button class="btn  btn-default fa fa-eye" (click)="verArchivo(doc?.archivo?.id)"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- col-md-12 -->
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModalDetalle()">
+      <i class="fa fa-close"></i>&nbsp;&nbsp;Cerrar
+    </button>
+  </modal-footer>
+</modal>

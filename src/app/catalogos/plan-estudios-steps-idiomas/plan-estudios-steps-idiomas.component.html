@@ -1,0 +1,87 @@
+<form class="form-horizontal" [formGroup]="formulario">
+  <div class="col-xs-12 col-sm-12 col-md-12 form-horizontal">
+    <h5 class="form-heading text-muted text-semibold text-sm">Idiomas de acreditación</h5>
+  </div>
+  <div class="col-md-12">
+    <div class="row">
+
+      <div class="col-md-12">
+
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+            <label class="col-md-6 control-label text-left">Idiomas:</label>
+            <div class="col-md-6">
+
+              <select #idIdioma class="form-control" id="idiomaPlan" name="idiomaPlan" #idiomaPlan formControlName="idiomaPlan"
+                      (change)="getIdIdioma(idIdioma.value)">
+                <option value="" disabled selected>Selecciona...</option>
+                <option
+                  *ngFor="let catalogoItem of opcionesCatIdiomas"
+                  value="{{catalogoItem.id}}"
+                >
+                  {{catalogoItem.text}}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 padding-xs-vr">
+          <div class="text-right">
+
+            <button type="button" class="btn btn-success" *ngIf="mostrarBotonAgregar()" (click)="agregarIdiomaPlanEstudios()">
+              <i class="fa fa-plus"></i> Agregar
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="text-right">
+
+      <button *ngIf="mostarBotonEliminar()" type="button" class="btn btn-danger" (click)="eliminarIdioma()"><i
+        class="fa fa-times"></i> Eliminar
+      </button>
+    </div>
+
+    <div class="table-default">
+      <table cellpadding="0" cellspacing="0" border="0"
+             class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example2"
+             aria-describedby="jq-datatables-example_info">
+        <thead>
+        <tr role="row">
+        <tr role="row">
+          <th *ngFor="let columna of columnas" class="text-center">
+            {{columna.titulo}}
+          </th>
+        </tr>
+        </thead>
+        <tbody *ngIf="registrosIdiomas.length === 0">
+        <tr class="gradeA odd">
+          <th class="text-center" colspan="4">
+            No hay Registros
+          </th>
+        </tr>
+        </tbody>
+        <tbody *ngIf="registrosIdiomas.length !== 0">
+        <tr
+          *ngFor="let registro of registrosIdiomas"
+          class="gradeA odd"
+          [ngClass]="{
+                              'seleccionado': rowSeleccionado(registro)
+                            }"
+          (click)="rowSeleccion(registro)"
+        >
+          <td class="text-center">{{registro.idiomaPlan.descripcion}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+</form>

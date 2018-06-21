@@ -1,0 +1,67 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 text-center text-left-sm">
+      <h1>Solicitantes</h1>
+      <p><small>Detalle solicitante.</small></p>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+      <hr class="visible-xs no-grid-gutter-h">
+      <button *ngIf="habilitarBotonValidarSolicitud(registroDoc, entidadAspirante?.estatus?.id, registroDocTrue?.length)" (click)="modalValidarSolicitud()"
+              [disabled]="habilitarBoton" class="btn btn-labeled btn-success pull-right col-xs-12 col-sm-auto">
+        <span class="btn-label icon fa fa-check"></span>
+        Validar solicitud
+      </button>
+    </div>
+
+    <div class="col-md-12">
+      <alert
+              *ngFor="let alerta of alertas;let i = index"
+              [type]="alerta.type"
+              dismissible="true"
+              (close)="cerrarAlerta(i)">
+        {{ alerta?.msg }}
+      </alert>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-body">
+    <tabset>
+      <tab heading="Datos personales">
+        <datos-personales [entidadAspirante] = "aspirante" [idEstudiante] = "idAspirante" [soloLicenciatura] = "vistaLicenciatura" [entidadadUsuario] = "usuarioEntidad" [fotoAspirante] = "fotoEstudiante">Datos Personales</datos-personales>
+      </tab>
+      <tab heading="Antecedentes acad&eacute;micos">
+        <antecedentes-academicos [idEstudiante] = "idAspirante" [soloLicenciatura] = "vistaLicenciatura">Antecedentes acad&eacute;micos</antecedentes-academicos>
+      </tab>
+      <tab heading="Experiencia">
+        <experiencia [entidadAspirante] = "aspirante" [idEstudiante] = "idAspirante" [soloLicenciatura] = "vistaLicenciatura">Experiencia</experiencia>
+      </tab>
+      <tab heading="Información complementaria">
+        <informacion-complementaria [entidadAspirante] = "aspirante">Informaci&oacute;n complementaria</informacion-complementaria>
+      </tab>
+      <tab heading="Documentaci&oacute;n" *ngIf="esVistaSolicitante != undefined">
+        <documentacion [entidadAspirante] = "aspirante" [idEstudiante] = "idAspirante" [esVistaSolicitante] = "esVistaSolicitante">Documentación</documentacion>
+      </tab>
+    </tabset>
+  </div>
+  <div class="panel-footer">
+    <div class="text-right">
+      <button class="btn btn-default" type="button" (click)="regresarListaSolicitantes()"><i class="fa fa-arrow-circle-o-left"></i> Regresar
+      </button>
+    </div>
+  </div>
+</div>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalValidaSolicitud class="modal-alert modal-success">
+  <modal-header>
+    <i class="fa fa-check-circle"></i>
+  </modal-header>
+  <modal-body>
+    <h4 class="modal-title">¿Est&aacute;s seguro que deseas validar la solicitud?</h4>
+  </modal-body>
+  <modal-footer>
+    <button (click)="cerrarModal()" type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+    <button (click)="validarSolicitud()" type="button" class="btn btn-success" data-dismiss="modal">Sí</button>
+  </modal-footer>
+</modal>

@@ -1,0 +1,133 @@
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalRegDependiente>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModal()" aria-hidden="true">×</button>
+    <h4 class="modal-title"> {{edicionFormulario ? 'Editar dependiente econ&oacute;mico' : 'Registro de dependientes econ&oacute;micos'}}</h4>
+  </modal-header>
+  <modal-body>
+
+    <form class="form-horizontal" [formGroup]="formularioDependientes">
+      <div class="row">
+        <div class="col-md-12 text-right-lg text-right-md text-left-sm text-left-xs">
+          <div class="row">
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <div [ngClass]="{'has-error': getControlErrors('nombreCompleto')}"
+                         class="">
+                      <label class="col-md-6 control-label">Nombre completo:*</label>
+                      <div class="col-md-6">
+                        <input type="text" class="form-control" name="nombreCompleto" id="nombreCompleto"
+                               placeholder="Nombre Completo" ngControl="nombreCompleto" formControlName="nombreCompleto" maxlength="100">
+                        <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('nombreCompleto'))" >
+                                                          {{errorMessage(getControl('nombreCompleto'))}}
+                                                  </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <label class="col-md-6">Fecha de nacimiento:</label>
+                    <div class="col-md-6">
+                      <div class="dropdown" dropdown autoClose="outsideClick">
+                        <div class="input-group">
+                          <input type="text" class="form-control" value="{{getFechaEjemplo()}}" disabled>
+                          <span class="input-group-btn">
+                                          <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                        </span>
+                        </div>
+                        ​
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1" dropdownMenu >
+                          <li>
+                            <div style="display:inline-block;">
+                              <datepicker [(ngModel)]="dt" [maxDate]="fechaMaxima" [showWeeks]="true" [ngModelOptions]="{standalone: true}"></datepicker>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <div  [ngClass]="{
+                                       'has-error': getControlErrors('idParentesco')}">
+
+                      <label class="col-md-6 control-label" for="idParentesco">Parentesco:*</label>
+                      <div class="col-md-6">
+                        <select class="form-control" required name="idParentesco" id="idParentesco" ngControl="idParentesco" formControlName="idParentesco">
+                          <option value="" disabled selected>Selecciona...</option>
+                          <option *ngFor="let opcionCatalogoParentesco of opcionesCatalogoParentesco" value="{{opcionCatalogoParentesco.id}}">{{opcionCatalogoParentesco.text}}</option>
+                        </select>
+                        <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idParentesco'))" >
+                                                   {{errorMessage(getControl('idParentesco'))}}
+                                           </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <div [ngClass]="{
+                                     'has-error': getControlErrors('idSexo')}"
+                         class="">
+                      <label class="col-md-6 control-label">Sexo:*</label>
+                      <div class="col-md-6">
+                        <select class="form-control " required name="idSexo" id="idSexo" ngControl="idSexo" formControlName="idSexo">
+                          <option value="" disabled selected>Selecciona...</option>
+                          <option *ngFor="let opcionCatalogoSexo of opcionesCatalogoSexo" value="{{opcionCatalogoSexo.id}}">{{opcionCatalogoSexo.text}}</option>
+                        </select>
+                        <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idSexo'))" >
+                                                   {{errorMessage(getControl('idSexo'))}}
+                                           </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <div *ngIf="validarCampoOtro()" class="">
+                      <div [ngClass]="{'has-error': getControlErrors('otroParentesco')}"
+                           class="">
+
+                        <label class="col-md-6 control-label">Otro:*</label>
+                        <div class="col-md-6">
+                          <input type="text" class="form-control"
+                                 placeholder="Por favor especifique"  ngControl="otroParentesco" formControlName="otroParentesco">
+                          <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('otroParentesco'))" >
+                                                               {{errorMessage(getControl('otroParentesco'))}}
+                                                       </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div><!--row-->
+        </div><!--col-md-12-->
+      </div><!--row-->
+    </form>
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModal()"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+    <button type="button" class="btn btn-success" (click)="enviarFormulario()"><span class="glyphicon glyphicon-plus"></span> {{edicionFormulario ? 'Editar' : 'Agregar'}}</button>
+  </modal-footer>
+</modal>

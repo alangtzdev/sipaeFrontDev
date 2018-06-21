@@ -1,0 +1,60 @@
+<style>.card-footer { display: none!important;}</style>
+<div class="page-header">
+  <div class="row">
+    <div class="col-xs-12 text-center text-left-sm">
+      <h1>Editar profesor</h1>
+      <p><small>{{entidadProfesor}}</small></p>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel">
+      <div class="panel-body">
+        <alert
+          *ngFor="let alerta of alertas;let i = index"
+          [type]="alerta.type"
+          dismissible="true"
+          (close)="cerrarAlerta(i)">
+          {{ alerta?.msg }}
+        </alert>
+        <div class="col-lg-12">
+
+          <form-wizard #wizard [isHidden]="true">
+            <wizard-step [title]="'1 Clasificación'" (onNext)="onStep1Next($event)" >
+              <app-profesor-steps-clasificacion #clasificacion></app-profesor-steps-clasificacion>
+            </wizard-step>
+            <wizard-step [title]="'2 Datos Generales'" (onNext)="onStep2Next($event)">
+              <app-profesor-steps-datos-generales #datosGenerales></app-profesor-steps-datos-generales>
+            </wizard-step>
+            <wizard-step [title]="'3 Datos Acad\u00e9micos'" (onNext)="onStep3Next($event)">
+              <app-profesor-steps-datos-academicos #datosAcademicos></app-profesor-steps-datos-academicos>
+            </wizard-step>
+            <wizard-step [title]="'4 Datos Complementarios'" (onNext)="onStep4Next($event)">
+              <app-profesor-steps-datos-complementarios #datosComplementarios></app-profesor-steps-datos-complementarios>
+            </wizard-step>
+
+
+          </form-wizard>
+
+          <div class="card-footer2" [hidden]="isCompleted">
+            <button type="button" class="btn btn-secondary float-left" (click)="previous()" *ngIf="!isFirst">Atr&aacute;s</button>
+            <button type="button" class="btn btn-secondary float-right" (click)="next()"  >
+              <span *ngIf="!isLast">Siguiente</span><span *ngIf="isLast">Finalizar</span></button>
+          </div>
+
+        </div>
+        <div class="col-lg-12">
+
+            <button
+              class="btn btn-default pull-right"
+              (click)="cancelar()">
+              <i class="btn-label icon fa fa-arrow-circle-o-left"></i>
+              Regresar
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>

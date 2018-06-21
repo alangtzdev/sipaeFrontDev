@@ -1,0 +1,151 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+      <h1>Solicitud de inscripción para movilidad externa</h1>
+      <!--<p><small>{{estudiante?.usuario?.programaDocente?.descripcion}}</small></p>-->
+    </div>
+    <div class="col-xs-12 col-sm-8">
+      <div class="row">
+        <hr class="visible-xs no-grid-gutter-h">
+        <div class="pull-right col-xs-12 col-sm-auto">
+          <button class="btn btn-labeled btn-success pull-right col-xs-12 col-sm-auto" [disabled]="validarBotonEnviar()" (click)="modalEnviarSolicitud()"><span class="btn-label icon fa fa-plus"></span>Enviar solicitud</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel">
+      <div class="panel-body">
+        <alert
+                *ngFor="let alerta of alertas;let i = index"
+                [type]="alerta.type"
+                dismissible="true"
+                (close)="cerrarAlerta(i)">
+          {{ alerta?.msg }}
+        </alert>
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="panel">
+              <div class="col-lg-12">
+                <form-wizard #wizard [isHidden]="true">
+                  <wizard-step [title]="'Datos personales'" (onNext)="onStep1Next($event)">
+                    <app-registro-admision-step-uno #datosPersonales></app-registro-admision-step-uno>
+                  </wizard-step>
+                  <wizard-step [title]="'Antecedentes acad\u00e9micos'" (onNext)="onStep2Next($event)">
+                    <app-registro-admision-step-dos #antecedentesAcademicos></app-registro-admision-step-dos>
+                  </wizard-step>
+                  <wizard-step [title]="'Investigador anfitri\u00f3n'" (onNext)="onStep3Next($event)">
+                    <app-registro-admision-step-tres #investigadorAnfitrion></app-registro-admision-step-tres>
+                  </wizard-step>
+                  <wizard-step [title]="'Documentaci\u00f3n'" (onNext)="onStep4Next($event)">
+                    <app-registro-admision-step-cuatro #documentacion></app-registro-admision-step-cuatro>
+                  </wizard-step>
+                </form-wizard>
+                <div class="card-footer2" [hidden]="isCompleted">
+                  <button type="button" class="btn btn-secondary float-left" (click)="previous()"
+                    *ngIf="!isFirst">Atras</button>
+                  <button type="button" class="btn btn-secondary float-right" (click)="next()"
+                    *ngIf="!isLast">Siguiente</button>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <button class="btn btn-default pull-right" (click)="cancelar()">
+                  <i class="btn-label icon fa fa-arrow-circle-o-left"></i>Regresar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--<div class="col-lg-12">
+          <div class="row">
+            <div class="panel">
+              <div class="panel-heading">
+                <div class="wizard-wrapper no-border">
+                  <ul class="wizard-steps" style="left: 0px; width: 100%;">
+                    <li
+                            *ngFor="#step of steps"
+
+                            class = "{{step.estado}}"
+                            (click) = "enableGoStep(step)"
+                    >
+                      <span class="wizard-step-number"> {{step.orden}}</span>
+                      <span class="wizard-step-caption">
+                                                {{step.titulo}}
+                                                <span class="wizard-step-description">
+                                                    {{step.descripcion}}
+                                                </span>
+                                            </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div
+                      *ngIf="currentStep"
+                      class="
+                                    wizard-content
+                                    panel no-margin
+                                    no-border-hr
+                                    no-border-b
+                                    no-padding-hr
+                                "
+              >
+                <div class="panel-body">
+                  <router-outlet></router-outlet>
+                </div>
+              </div>
+              <div *ngIf="currentStep" class="" >
+                <div class="modal-footer">
+                  <button
+                          *ngIf="enablePreviusButton(currentStep)"
+                          class="btn btn-primary pull-left"
+                          (click)=previusStep()>
+                    Anterior
+                  </button>
+                  <button
+                          *ngIf="enableNextButton(currentStep)"
+                          class="btn btn-primary pull-right"
+                          (click)="nextStep()">
+                    Siguiente
+                  </button>
+                  &lt;!&ndash;<button
+                      *ngIf="!enableNextButton(currentStep)"
+                      class="btn btn-success pull-right"
+                      (click)="finishStep()">
+                          Finalizar
+                  </button>&ndash;&gt;
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>-->
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #enviarSolicitud class="modal-alert modal-success">
+  <modal-header>
+    <div class="modal-header text-left">
+      <i class="fa fa-check-circle"></i>
+    </div>
+  </modal-header>
+  <modal-body>
+    <div class="col-md-12 text-center">
+      <br>
+      <span><strong>¿Est&aacute;s seguro que deseas enviar la solicitud de admisi&oacute;n como movilidad y documentos
+            anexos para su evaluaci&oacute;n?
+            </strong></span>
+      <br><br>
+      <div class="col-md-12 text-center">
+        <button data-dismiss="modal" class="btn btn-danger" type="button"  (click)="cerrarModal()">&nbsp;&nbsp;No</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button class="btn btn-success" type="submit" (click)="enviarFormulario()">&nbsp;&nbsp;Sí</button>
+      </div>
+      <br><br><br>
+    </div>
+  </modal-body>
+  <modal-footer></modal-footer>
+</modal>

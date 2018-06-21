@@ -1,0 +1,115 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12 text-center text-left-sm">
+      <h1>Bit&aacute;cora de movimiento</h1>
+      <p><small></small></p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="panel colourable">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-12">
+            <alert
+              *ngFor="let alerta of alertas;let i = index"
+              [type]="alerta.type">
+              {{ alerta?.msg }}
+            </alert>
+          </div>
+        </div>
+        <h5 class="form-heading text-muted text-semibold text-sm">Seleccionar rango</h5>
+        <div class="col-md-5 col-xs-5">
+          <div class="row form-group text-left">
+            <label  class="col-sm-12 control-label">Fecha inicio: </label>
+
+            <div class="col-md-12 text-left">
+              <div class="input-group date" id="bs-datepicker-component">
+                <div class="dropdown" dropdown autoClose="outsideClick">
+                  <div class="input-group">
+                    <input type="text" class="form-control" 
+                    value="{{getFechaInicio()}}" readonly="readonly" *ngIf="dti">
+                    <span class="input-group-btn">
+                      <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                    </span>
+                  </div>
+                  ​
+                  <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1" dropdownMenu >
+                    <li>
+                      <div style="display:inline-block;">
+                        <datepicker [(ngModel)]="dti" [minDate]="minDate" [showWeeks]="true"
+                        [ngModelOptions]="{standalone: true}" [dateDisabled]="dateDisabled"></datepicker>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-5 col-xs-5">
+          <div class="row form-group text-left">
+            <label  class="col-sm-12 control-label">Fecha final: </label>
+
+            <div class="col-md-12 text-left">
+              <div class="input-group date" id="bs-datepicker-component">
+                <div class="dropdown" dropdown autoClose="outsideClick">
+                  <div class="input-group">
+                    <input type="text" class="form-control" value="{{getFechaFin()}}" 
+                    readonly="readonly" *ngIf="dtf">
+                    <span class="input-group-btn">
+                      <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu2" data-toggle="dropdown" dropdownToggle></button>
+                    </span>
+                  </div>
+                  ​
+                  <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1" dropdownMenu >
+                    <li>
+                      <div style="display:inline-block;">
+                        <datepicker [(ngModel)]="dtf" [minDate]="minDate" [maxDate]="hoy" [showWeeks]="true"
+                        [ngModelOptions]="{standalone: true}" [dateDisabled]="dateDisabled"></datepicker>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2 col-xs-5">
+          <div class="row form-group text-left">
+          
+                 <div class="btn-group form-group-margin" dropdown>
+                  <button id="split-button" type="button" class="btn btn-conacyt">
+                    <span class="btn-label icon fa fa-download"></span> Exportar</button>
+                  <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                    <i class="fa fa-caret-down"></i>
+                  </button>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+                    <li role="menuitem">
+                      <a
+                        class="dropdown-item"
+                        (click)="exportar('Excel')"
+                      >
+                        Exportar a Excel
+                      </a>
+                    </li>
+                    <li class="divider dropdown-divider"></li>
+                    <li role="menuitem">
+                      <a
+                        class="dropdown-item"
+                        (click)="exportar('PDF')"
+                      >
+                        Exportar a PDF
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!--fin del row-->
+</div>

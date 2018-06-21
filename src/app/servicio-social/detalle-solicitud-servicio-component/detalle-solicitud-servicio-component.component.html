@@ -1,0 +1,127 @@
+<div class="panel">
+    <div class="panel-body tab-content tab-content-bordered">
+        <div class="tab-pane fade active in" id="tabDatosDelServicio">
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha de inicio:</dt>
+                                    <dd class="col-md-6">{{servicioSocial?.getStrFechaInicio()}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha fin:</dt>
+                                    <dd class="col-md-6">{{servicioSocial?.getStrFechaFin()}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">El Servicio Social se cumplirá en el horario de:</dt>
+                                    <dd class="col-md-6">{{servicioSocial?.getStrHorario()}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">los d&iacute;as:</dt>
+                                    <dd class="col-md-6">{{servicioSocial?.getStrDias()}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">N&uacute;mero de horas:</dt>                                                
+                                    <dd class="col-md-6">{{horasTotales}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <!-- termino row-->
+            <!-- inicio de row-->
+            <div class="col-md-12">
+                <div class="row">
+                    <h5 class="form-heading text-muted text-semibold text-sm">
+                        Evidencia de Pr&aacute;cticas Profesionales Anteriores al
+                        Servicio Social
+                    </h5>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="row">
+
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-default form-group-margin" (click)="descargarArchivo()">
+                            <i class="fa fa-eye"></i>&nbsp;&nbsp;Detalle
+                        </button>
+                    </div>
+                    <div class="table-default table-responsive table-scroll-modal" *ngIf="registros">
+                        <div role="grid" class="dataTables_wrapper form-inline">
+                            <table class="table table-striped table-bordered dataTable no-footer">
+                                <thead>
+                                    <tr>
+                                        <th class="sorting text-center" tabindex="0" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending"
+                                            style="">Nombre</th>
+                                        <th class="sorting text-center" tabindex="0" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending"
+                                            style="">Fecha de actualizaci&oacute;n</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="registros.length === 0">
+                                    <tr class="gradeA odd">
+                                        <th class="text-center" colspan="3">
+                                            No hay Registros
+                                        </th>
+                                    </tr>
+                                </tbody>
+                                <tbody *ngIf="registros.length !== 0">
+                                    <tr *ngFor="let registro of registros" class="gradeA odd" [ngClass]="{'seleccionado': rowSeleccionado(registro)}" (click)="rowSeleccion(registro)">
+                                        <td class="center">{{registro?.archivo?.nombre}}</td>
+                                        <td class="center">{{registro.getStrUltimaActualizacion()}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                                    Número de horas a cuenta:
+                                </dt>
+                                <dd class="col-md-6">{{servicioSocial?.getStrNumeroHoras()}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

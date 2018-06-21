@@ -1,0 +1,142 @@
+<div class="tab-pane fade active in" id="tab3">
+  <h5 class="form-heading text-muted text-semibold text-sm">LISTA DE MATERIAS DEL PLAN DE ESTUDIOS</h5>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="table-responsive">
+        <br>
+        <table
+          class="table table-bordered table-hover table-striped table-condensed">
+          <thead>
+          <tr role="row">
+            <th *ngFor="let columna of columnas" class="text-center">
+              {{columna.titulo}}
+            </th>
+          </tr>
+          </thead>
+          <tbody *ngIf="registros.length === 0">
+          <tr class="gradeA odd">
+            <th class="text-center" colspan="7">
+              No hay Registros
+            </th>
+          </tr>
+          </tbody>
+          <tbody *ngIf="registros.length !== 0">
+          <tr
+            *ngFor="let registro of registros"
+            class="gradeA odd"
+          >
+            <td class="text-center">{{registro?.numeroPeriodo}}</td>
+            <td class="center">{{registro?.materia?.descripcion}}</td>
+            <td class="center">{{registro?.materia?.clave}}</td>
+            <td class="center">{{registro?.materia?.seriacion?.clave}}</td>
+            <td class="text-center">{{registro?.materia?.horasDocente}}</td>
+            <td class="text-center">{{registro?.materia?.horasIndependiente}}</td>
+            <td class="text-center">{{registro.materia?.creditos}}</td>
+          </tr>
+
+          <tr>
+            <th class="text-center"></th>
+            <th class="center"></th>
+            <th class="center"></th>
+            <th class="center"></th>
+            <th class="text-center">{{entidadPlanEstudios?.horasDocente}}</th>
+            <th class="text-center">{{entidadPlanEstudios?.horasIndependiente}}</th>
+            <th class="text-center"> {{entidadPlanEstudios?.totalCreditos}}</th>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="table-responsive">
+        <br>
+        <table
+          class="table table-bordered table-hover table-striped table-condensed">
+          <thead>
+          <tr role="row">
+            <th *ngFor="let columna of columnasMateriasOptativas" class="text-center">
+              {{columna.titulo}}
+            </th>
+          </tr>
+          </thead>
+          <tbody *ngIf="registrosCursosOptativos.length === 0">
+          <tr class="gradeA odd">
+            <th class="text-center" colspan="7">
+              No hay Registros
+            </th>
+          </tr>
+          </tbody>
+          <tbody *ngIf="registrosCursosOptativos.length !== 0">
+          <tr
+            *ngFor="let registro of registrosCursosOptativos"
+            class="gradeA odd"
+          >
+            <td class="text-center">{{registro?.numeroPeriodo}}</td>
+            <td class="center">{{registro?.materia?.descripcion}}</td>
+            <td class="center">{{registro?.materia?.clave}}</td>
+            <td class="center">{{registro?.materia?.seriacion?.clave}}</td>
+            <td class="text-center">{{registro?.materia?.horasDocente}}</td>
+            <td class="text-center">{{registro?.materia?.horasIndependiente}}</td>
+            <td class="text-center">{{registro.materia?.creditos}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-6 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Número de
+                materias:
+              </dt>
+              <dd class="col-md-6">{{entidadPlanEstudios?.numeroAsignaturas}}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-6 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Suma de créditos:
+              </dt>
+              <dd class="col-md-6">{{entidadPlanEstudios?.sumaCreditos}}</dd>
+            </dl>
+          </div>
+        </div>
+        <div class="col-md-6 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Créditos de
+                tesis:
+              </dt>
+              <dd class="col-md-6">{{entidadPlanEstudios?.creditosTesis}}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-6 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Total de
+                créditos:
+              </dt>
+              <dd class="col-md-6">{{entidadPlanEstudios?.totalCreditos}}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- / .tab-content panel -->

@@ -1,0 +1,155 @@
+<div class="page-header">
+  <div class="row">
+    <div
+            class="col-md-12 text-center text-left-sm">
+      <h1>Trámites</h1>
+      <p><small>Trámites disponibles para el estudiante</small></p>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12 col-xs-12">
+    <div class="panel colourable">
+      <div class="panel-body">
+        <div class="col-md-3 text-center">
+          <a (click)="modalAgregarSolicitudConstancia()" class="thumbnail" >
+            <img class="fa-img-icono" src="assets/images/iconos/constancia.png" alt="">
+            <hr>
+            <h4>Constancia de estudios</h4>
+          </a>
+        </div>
+        <div class="col-md-3 text-center">
+          <a (click)="detalleNoAdeudos()" class="thumbnail" >
+            <img class="fa-img-icono" src="assets/images/iconos/no-adeudo.png" alt="">
+            <hr>
+            <h4>Carta de no adeudo</h4>
+          </a>
+        </div>
+        <div class="col-md-3 text-center">
+          <a (click)="detalleCedular()" class="thumbnail" >
+            <img class="fa-img-icono" src="assets/images/iconos/cedula.png" alt="">
+            <hr>
+            <h4>Cédula profesional</h4>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalSolicitudConstancia>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModal()" aria-hidden="true">X</button>
+    <h4 class="modal-title" style="">Solicitud de constancia escolar</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+
+      <div class="col-md-6 form-group-margin">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Costo de trámite:</dt>
+            <dd class="col-md-6">$100.00</dd>
+          </dl>
+        </div>
+      </div>
+
+
+      <form class="form-horizontal" [formGroup]="formularioSolicitud">
+        <div class="col-md-12 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal" [ngClass]="{'has-error': getControlErrors('dirigida')}">
+              <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Constancia dirigida
+                a: *
+              </dt>
+              <dd class="col-md-9">
+                <input type="text" class="form-control" formControlName="dirigida" maxlength="1000">
+                <span id="helpBlock1"
+                      class="help-block"
+                      *ngIf="(getControlErrors('dirigida'))">
+                                  {{errorMessage(getControl('dirigida'))}}
+                    </span>
+              </dd>
+            </dl>
+          </div>
+        </div>
+
+
+        <div class="col-md-12 form-group-margin">
+          <div class="row">
+            <dl [ngClass]="{'has-error': getControlErrors('proposito')}">
+              <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Propósito del
+                documento solicitado: *
+              </dt>
+              <dd class="col-md-9">
+                <textarea rows="4" maxlength="3000" class="form-control" formControlName="proposito"> </textarea>
+                <span style="float: right">
+                            (M&aacute;ximo 3000 caracteres)
+                        </span>
+                <span id="helpBlock2"
+                      class="help-block"
+                      *ngIf="(getControlErrors('proposito'))">
+                                  {{errorMessage(getControl('proposito'))}}
+                        </span>
+              </dd>
+            </dl>
+          </div>
+        </div>
+
+        <div class=" col-sm-12 form-group-margin">
+          <div class="row">
+            <dl [ngClass]="{'has-error': getControlErrors('consideraciones')}">
+              <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Consideraciones
+                particulares:
+              </dt>
+              <dd class="col-md-9">
+                            <textarea rows="4" maxlength="3000" class="form-control" formControlName="consideraciones">
+                            </textarea>
+                <span style="float: right">
+                                (M&aacute;ximo 3000 caracteres)
+                            </span>
+                <!--<control-mensaje class="" control="consideraciones"></control-mensaje>-->
+              </dd>
+            </dl>
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+  </modal-body>
+  <modal-footer>
+    <div class="text-right">
+      <button class="btn btn-default" type="button" (click)="cerrarModal()"><span
+              class="glyphicon glyphicon-remove"></span> Cancelar
+      </button>
+      <button type="submit" class="btn btn-success" (click)="enviarFormulario()"><span
+              class="glyphicon glyphicon icon fa fa-check"></span> Enviar solicitud
+      </button>
+    </div>
+  </modal-footer>
+</modal>
+
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #confirmacionConstancia class="modal-alert modal-success">
+  <modal-header>
+    <i class="fa fa-check-circle"></i>
+  </modal-header>
+  <div class="modal-title">Tu solicitud ha sido enviada</div>
+  <modal-body>
+    <div class="col-md-12 form-group-margin">Descarga tu orden de pago. En caso de extravío tendrás que realizar la solicitud nuevamente. </div>
+    <div class="col-md-12 text-center form-group-margin">
+      <button type="button" class="btn btn-warning" data-dismiss="modal" (click)="descargarOrdenPago()">
+        <span class="btn-label icon fa fa-download"></span>
+        Orden de pago
+      </button>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button class="btn btn-default" type="button" (click)="cerrarModalConfirmacionConstancia()"><i class="fa fa-close"></i> Cerrar</button>
+  </modal-footer>
+</modal>

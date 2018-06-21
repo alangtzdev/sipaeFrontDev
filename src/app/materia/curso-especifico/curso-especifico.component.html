@@ -1,0 +1,595 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-xs-12 col-sm-4 text-left">
+      <h1>Gestión de cargas académicas</h1>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-body">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-4 col-sm-12">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-2 text-right-lg text-right-md text-left-sm text-left-xs">Materia:</dt>
+              <dd class="col-md-10">{{entidadPlanEstudioMateria?.materia?.descripcion}}</dd>
+            </dl>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Clave:</dt>
+              <dd class="col-md-6">{{entidadPlanEstudioMateria?.materia?.clave}}</dd>
+            </dl>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-4">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Créditos:</dt>
+              <dd class="col-md-6">{{entidadPlanEstudioMateria?.materia?.creditos}}</dd>
+            </dl>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-4">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-left-lg text-left-md text-left-sm text-left-xs">Horas docente:</dt>
+              <dd class="col-md-6">{{entidadPlanEstudioMateria?.materia?.horasDocente}}</dd>
+            </dl>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="panel">
+  <div class="panel-body">
+    <alert
+      *ngFor="let alerta of alertas; let i = index"
+      [type]="alerta.type"
+      dismissible="true"
+      (close)="cerrarAlerta(i)">
+      {{ alerta?.msg }}
+    </alert>
+    <h5 class="form-heading text-muted text-semibold text-sm">LISTA DE CURSOS ESPEC&Iacute;FICOS</h5>
+
+    <div class="col-md-12 text-right">
+      <div class="row">
+        <a *ngIf="registroSeleccionado" class="btn btn-labeled btn-default form-group-margin" (click)="modalDetalleOptativa()"><span class="btn-label icon fa fa-plus"></span>Detalle curso espec&iacute;fico</a>
+        <button *ngIf="registroSeleccionado" (click)="modalAgregarOptativa('editar')" class="btn btn-labeled btn-warning form-group-margin"><span class="btn-label icon fa fa-pencil-square-o"></span>Editar</button>
+        <button *ngIf="!registroSeleccionado" (click)="modalAgregarOptativa('agregar')" class="btn btn-labeled btn-success form-group-margin"><span class="btn-label icon fa fa-plus"></span>Agregar</button>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="row">
+        <div class="table-default">
+          <div role="grid" class="dataTables_wrapper form-inline">
+            <div class="table-header clearfix">
+              <div class="table-caption">Lista de cursos espec&iacute;ficos</div>
+
+              <div class="DT-lf-right">
+                <div class="DT-per-page">
+                  <div class="dataTables_length" id="jq-datatables-example_length">
+                    <label>Registros por página: <select
+                      #limiteControl
+                      name="jq-datatables-example_length"
+                      aria-controls="jq-datatables-example"
+                      class="form-control input-sm"
+                      (change)="setLimite(limiteControl.value)"
+                    >
+                      <option value="10">10</option>
+                      <option value="25">25</option>
+                      <option value="50">50</option>
+                      <option value="100">100</option>
+                    </select>
+                    </label>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                <thead>
+                <tr role="row">
+                  <th
+                    *ngFor="let columna of columnas"
+                    [ngClass]="{
+							        		'sorting_desc': columna.sort === 'desc',
+							        		'sorting_asc': columna.sort === 'asc',
+							        		'sorting': columna.sort !== false
+							        	}"
+                    (click)="sortChanged(columna)"
+                  >
+                    {{columna.titulo}}
+                  </th>
+                </tr>
+                </thead>
+                <tbody *ngIf = "registros.length === 0">
+                <tr class="gradeA odd">
+                  <th class="text-center" colspan="4">
+                    No hay Registros
+                  </th>
+                </tr>
+                </tbody>
+                <tbody *ngIf = "registros.length !== 0">
+                <tr
+                  *ngFor="let registro of registros"
+                  class="gradeA odd"
+                  [ngClass]="{
+                        'seleccionado': rowSeleccionado(registro)
+                      }"
+                  (click) = "rowSeleccion(registro)"
+                >
+                  <td class="center">{{registro?.materiaImpartida?.cursoOptativo?.clave}} - {{registro?.materiaImpartida?.cursoOptativo?.descripcion}}</td>
+                  <td class="center">{{registro?.profesor?.getNombreCompleto()}}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-footer clearfix">
+              <div class="DT-pagination" *ngIf="isSetPaginacion()">
+                <div class="dataTables_paginate paging_simple_numbers">
+                  <pagination
+                    class="pagination"
+                    [totalItems] = "paginacion.registrosTotales"
+                    [itemsPerPage] = "limite"
+                    [maxSize] = "maxSizePags"
+                    [rotate]="false"
+                    [(ngModel)] = "paginaActual"
+                    (pageChanged) = "cambiarPagina($event)"
+                    previousText = "Anterior"
+                    nextText = "Siguiente"
+                  >
+                  </pagination>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <div class="text-right">
+      <button (click)="regresaLista()" class="btn btn-default" type="button"><i class="fa fa-arrow-circle-o-left"></i> Regresar
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #detalle>
+  <modal-header>        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  </modal-header>
+  <modal-body>
+
+    <h6 class="form-heading text-muted text-semibold text-sm">DETALLE DEL CURSO ESPEC&Iacute;FICO</h6>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class=" col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Materia base:</label>
+              <div class="col-md-6">
+                <label>{{entidadMateriaOptativaCurso?.materia?.descripcion}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class=" col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Nombre del curso espec&iacute;fico:</label>
+              <div class="col-md-6">
+                <label>{{entidadMateriaOptativaCurso?.cursoOptativo?.descripcion}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="entidadMateriaOptativaCurso?.lgac?.id">
+          <div class=" col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">LGAC:</label>
+              <div class="col-md-6">
+                <label>{{entidadMateriaOptativaCurso?.lgac?.denominacion}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="table-default table-scroll-modal">
+          <div role="grid" class="dataTables_wrapper form-inline">
+            <div class="table-header clearfix">
+              <div class="table-caption">Lista de profesores asignados</div>
+            </div>
+            <div class="table-responsive">
+              <table cellpadding="0" cellspacing="0" border="0"
+                     class="table table-striped table-bordered dataTable no-footer"
+                     id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                <thead>
+                <tr role="row">
+                  <th
+                    *ngFor="let columna of columnasP"
+                    [ngClass]="{
+                        'sorting_desc': columna.sort === 'desc',
+                        'sorting_asc': columna.sort === 'asc',
+                        'sorting': columna.sort !== false
+                    }"
+                  >
+                    {{columna.titulo}}
+                  </th>
+                </tr>
+                </thead>
+                <tbody *ngIf="registrosProfesores.length === 0">
+                <tr class="gradeA odd">
+                  <th class="text-center" colspan="4">
+                    No hay Registros
+                  </th>
+                </tr>
+                </tbody>
+                <tbody *ngIf="registrosProfesores.length !== 0">
+                <tr
+                  *ngFor="let registro of registrosProfesores; let i = index"
+                  class="gradeA odd"
+                >
+                  <td class="text-left">{{registro.profesor.getNombreCompleto()}}</td>
+                  <td class="center"><input [checked]="registro.titular" id={{i}}  name="radios{{i}}" type="checkbox" disabled/></td>
+                  <td class="text-left">{{registro.horasAsignadas}}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h6 class="form-heading text-muted text-semibold text-sm">Horarios</h6>
+
+    <div class="row" [formGroup]="formularioHorarios">
+      <div class="col-md-12">
+        <div class="row">
+
+          <div class="col-md-2 padding-xs-vr">
+            <div class="row">
+              <div class="col-md-12 text-center padding-sm"></div>
+              <div class="col-md-12 text-center">
+                <h6 class="padding-sm"> Hora de inicio:</h6>
+              </div>
+              <div class="col-md-12 text-center">
+                <h6 class="padding-sm"> Hora de fin:</h6>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-md-2 padding-xs-vr"> <!-- inicio col-md-2 lunes -->
+            <div class="row">
+
+              <div class="col-md-12 form-group-margin text-center">
+                <label class="checkbox-inline text-center">
+                  <input [checked]="entidadMateriaOptativaCurso?.horario?.lunesInicio && entidadMateriaOptativaCurso?.horario?.lunesFin && horarioLunesValido()" 
+                    type="checkbox" id="inlineCheckbox1" value="option1" class="px"> <span class="lbl">Lunes</span>
+                </label>
+              </div>
+
+              <div class="col-md-12 form-group-margin">
+                <div class="dropdown" dropdown autoClose="outsideClick">
+                  <div class="input-group">
+                    <input type="text" class="form-control" ngControl="lunesInicio" id="lunesInicio" name="lunesInicio" disabled
+                           ng-model="lunesInicio"   value="{{ getLunesInicio()}}">
+
+                    <span class="input-group-btn">
+                                        <button disabled class="btn dropdown-toggle fa fa-clock-o" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                    </span>
+                  </div>
+
+                  <ul class="dropdown-menu dropdown-menu-right dropdown-time" role="menu" aria-labelledby="menu1" dropdownMenu >
+                    <li>
+                      <div style="display:inline-block;">
+                        <timepicker [(ngModel)]="lunesI" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]="false" [ngModelOptions]="{standalone: true}"></timepicker>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="col-md-12 form-group-margin">
+                <div class="dropdown" dropdown autoClose="outsideClick">
+                  <div class="input-group">
+                    <input type="text" class="form-control" ngControl="lunesFin" id="lunesFin" name="lunesFin" disabled
+                           ng-model="lunesFin"   value="{{ getLunesFin()}}">
+
+                    <span class="input-group-btn">
+                                        <button disabled class="btn dropdown-toggle fa fa-clock-o" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                    </span>
+                  </div>
+
+                  <ul class="dropdown-menu dropdown-menu-right dropdown-time" role="menu" aria-labelledby="menu1" dropdownMenu >
+                    <li>
+                      <div style="display:inline-block;">
+                        <timepicker [(ngModel)]="lunesF" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]="false" [ngModelOptions]="{standalone: true}"></timepicker>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+          </div> <!-- fin col-md-2 lunes -->
+
+
+          <div class="col-md-2 padding-xs-vr"> <!-- inicio col-md-2 martes -->
+            <div class="row">
+
+              <div class="col-md-12 form-group-margin text-center">
+                <label class="checkbox-inline">
+                  <input [checked]="entidadMateriaOptativaCurso?.horario?.martesInicio && entidadMateriaOptativaCurso?.horario?.martesFin && horarioMartesValido()" 
+                    type="checkbox" id="inlineCheckbox2" value="option1" class="px"> <span class="lbl">Martes</span>
+                </label>
+              </div>
+
+              <div class="col-md-12 form-group-margin">
+                <div class="dropdown" dropdown autoClose="outsideClick">
+                  <div class="input-group">
+                    <input type="text" class="form-control" ngControl="martesInicio" id="martesInicio" name="martesInicio" disabled
+                           ng-model="martesInicio"  value="{{ getMartesInicio()}}">
+
+                    <span class="input-group-btn">
+                                        <button disabled class="btn dropdown-toggle fa fa-clock-o" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                    </span>
+                  </div>
+
+                  <ul class="dropdown-menu dropdown-menu-right dropdown-time" role="menu" aria-labelledby="menu1" dropdownMenu >
+                    <li>
+                      <div style="display:inline-block;">
+                        <timepicker [(ngModel)]="martesI" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]="false" [ngModelOptions]="{standalone: true}"></timepicker>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="col-md-12 form-group-margin">
+                <div class="dropdown" dropdown autoClose="outsideClick">
+                  <div class="input-group">
+                    <input type="text" class="form-control" ngControl="martesFin" id="martesFin" name="martesFin" disabled
+                           ng-model="martesFin"   value="{{ getMartesFin()}}">
+
+                    <span class="input-group-btn">
+                                        <button disabled class="btn dropdown-toggle fa fa-clock-o" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                    </span>
+                  </div>
+
+                  <ul class="dropdown-menu dropdown-menu-right dropdown-time" role="menu" aria-labelledby="menu1" dropdownMenu >
+                    <li>
+                      <div style="display:inline-block;">
+                        <timepicker [(ngModel)]="martesF" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]="false" [ngModelOptions]="{standalone: true}"></timepicker>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+          </div> <!-- fin col-md-2 martes -->
+
+          <div class="col-md-2 padding-xs-vr"> <!-- inicio col-md-2 miercoles -->
+            <div class="row">
+
+              <div class="col-md-12 form-group-margin text-center">
+                <label class="checkbox-inline">
+                  <input [checked]="entidadMateriaOptativaCurso?.horario?.miercolesInicio && entidadMateriaOptativaCurso?.horario?.miercolesFin && horarioMiercolesValido()" 
+                    type="checkbox" id="inlineCheckbox3" value="option1" class="px"> <span class="lbl">Miércoles</span>
+                </label>
+              </div>
+
+              <div class="col-md-12 form-group-margin">
+                <div class="dropdown" dropdown autoClose="outsideClick">
+                  <div class="input-group">
+                    <input type="text" class="form-control" ngControl="miercolesInicio" id="miercolesInicio" name="miercolesInicio" disabled
+                           ng-model="miercolesInicio"   value="{{ getMiercolesInicio()}}">
+
+                    <span class="input-group-btn">
+                                        <button disabled class="btn dropdown-toggle fa fa-clock-o" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                    </span>
+                  </div>
+
+                  <ul class="dropdown-menu dropdown-menu-right dropdown-time" role="menu" aria-labelledby="menu1" dropdownMenu >
+                    <li>
+                      <div style="display:inline-block;">
+                        <timepicker [(ngModel)]="miercolesI" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]="false" [ngModelOptions]="{standalone: true}"></timepicker>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="col-md-12 form-group-margin">
+                <div class="dropdown" dropdown autoClose="outsideClick">
+                  <div class="input-group">
+                    <input type="text" class="form-control" ngControl="miercolesFin" id="miercolesFin" name="miercolesFin" disabled
+                           ng-model="miercolesFin"  value="{{ getMiercolesFin()}}">
+
+                    <span class="input-group-btn">
+                                        <button disabled class="btn dropdown-toggle fa fa-clock-o" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                    </span>
+                  </div>
+
+                  <ul class="dropdown-menu dropdown-menu-right dropdown-time" role="menu" aria-labelledby="menu1" dropdownMenu >
+                    <li>
+                      <div style="display:inline-block;">
+                        <timepicker [(ngModel)]="miercolesF" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]="false" [ngModelOptions]="{standalone: true}"></timepicker>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+          </div> <!-- fin col-md-2 miercoles -->
+
+          <div class="col-md-2 padding-xs-vr"> <!-- inicio col-md-2 jueves -->
+            <div class="row">
+
+              <div class="col-md-12 form-group-margin text-center">
+                <label class="checkbox-inline">
+                  <input [checked]="entidadMateriaOptativaCurso?.horario?.juevesInicio && entidadMateriaOptativaCurso?.horario?.juevesFin && horarioJuevesValido()" 
+                    type="checkbox" id="inlineCheckbox4" value="option1" class="px"> <span class="lbl">Jueves</span>
+                </label>
+              </div>
+
+              <div class="col-md-12 form-group-margin">
+                <div class="dropdown" dropdown autoClose="outsideClick">
+                  <div class="input-group">
+                    <input type="text" class="form-control" ngControl="juevesInicio" id="juevesInicio" name="juevesInicio" disabled
+                           ng-model="juevesInicio"  value="{{ getJuevesInicio()}}">
+
+                    <span class="input-group-btn">
+                                        <button disabled class="btn dropdown-toggle fa fa-clock-o" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                    </span>
+                  </div>
+
+                  <ul class="dropdown-menu dropdown-menu-right dropdown-time" role="menu" aria-labelledby="menu1" dropdownMenu >
+                    <li>
+                      <div style="display:inline-block;">
+                        <timepicker [(ngModel)]="juevesI" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]="false" [ngModelOptions]="{standalone: true}"></timepicker>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="col-md-12 form-group-margin">
+                <div class="dropdown" dropdown autoClose="outsideClick">
+                  <div class="input-group">
+                    <input type="text" class="form-control" ngControl="juevesFin" id="juevesFin" name="juevesFin" disabled
+                           ng-model="juevesFin"   value="{{ getJuevesFin()}}">
+
+                    <span class="input-group-btn">
+                                        <button disabled class="btn dropdown-toggle fa fa-clock-o" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                    </span>
+                  </div>
+
+                  <ul class="dropdown-menu dropdown-menu-right dropdown-time" role="menu" aria-labelledby="menu1" dropdownMenu >
+                    <li>
+                      <div style="display:inline-block;">
+                        <timepicker [(ngModel)]="juevesF" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]="false" [ngModelOptions]="{standalone: true}"></timepicker>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+          </div> <!-- fin col-md-2 jueves -->
+
+          <div class="col-md-2 padding-xs-vr"> <!-- inicio col-md-2 viernes -->
+            <div class="row">
+
+              <div class="col-md-12 form-group-margin text-center">
+                <label class="checkbox-inline">
+                  <input [checked]="entidadMateriaOptativaCurso?.horario?.viernesInicio && entidadMateriaOptativaCurso?.horario?.viernesFin && horarioViernesValido()" 
+                    type="checkbox" id="inlineCheckbox5" value="option1" class="px"> <span class="lbl">Viernes</span>
+                </label>
+              </div>
+
+              <div class="col-md-12 form-group-margin">
+                <div class="dropdown" dropdown autoClose="outsideClick">
+                  <div class="input-group">
+                    <input type="text" class="form-control" ngControl="viernesInicio" id="viernesInicio" name="viernesInicio" disabled
+                           ng-model="viernesInicio"  value="{{ getViernesInicio()}}">
+
+                    <span class="input-group-btn">
+                                        <button disabled class="btn dropdown-toggle fa fa-clock-o" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                    </span>
+                  </div>
+
+                  <ul class="dropdown-menu dropdown-menu-right dropdown-time" role="menu" aria-labelledby="menu1" dropdownMenu >
+                    <li>
+                      <div style="display:inline-block;">
+                        <timepicker [(ngModel)]="viernesI" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]="false" [ngModelOptions]="{standalone: true}"></timepicker>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="col-md-12 form-group-margin">
+                <div class="dropdown" dropdown autoClose="outsideClick">
+                  <div class="input-group">
+                    <input type="text" class="form-control" ngControl="viernesFin" id="viernesFin" name="viernesFin" disabled
+                           ng-model="viernesFin"  value="{{ getViernesFin()}}">
+
+                    <span class="input-group-btn">
+                                        <button disabled class="btn dropdown-toggle fa fa-clock-o" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                    </span>
+                  </div>
+
+                  <ul class="dropdown-menu dropdown-menu-right dropdown-time" role="menu" aria-labelledby="menu1" dropdownMenu >
+                    <li>
+                      <div style="display:inline-block;">
+                        <timepicker [(ngModel)]="viernesF" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]="false" [ngModelOptions]="{standalone: true}"></timepicker>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+          </div> <!-- fin col-md-2 viernes -->
+
+
+
+        </div>
+      </div>
+    </div>
+    <!-- Fin de row para Hora inicio-->
+    <!-- Inicio de row para Hora fin-->
+
+    <h5 class="form-heading text-muted text-semibold text-sm">ASIGNACIÓN DE AULA</h5>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+
+          <div class="col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">
+                Asignaci&oacute;n de aula:
+              </label>
+              <label>{{entidadMateriaOptativaCurso?.sala?.descripcion}}</label>
+            </div>
+          </div>
+
+          <div class="col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Per&iacute;odo escolar:</label>
+              <div class="col-md-6">
+                <label>{{entidadMateriaOptativaCurso?.periodoEscolar?.getPeriodoAnioConsecutivo()}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" (click)="cerrarModal()" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i>&nbsp;&nbsp;Cerrar</button>
+  </modal-footer>
+</modal>

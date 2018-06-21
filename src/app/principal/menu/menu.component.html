@@ -1,0 +1,225 @@
+<div *ngIf="this.authService.getUsuarioLogueado()">
+    <accordion [closeOthers]="true">
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">
+            <div accordion-heading><a [routerLink]="['/lista-interesados']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Interesados</a></div>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.estudiante,authService.roles.estudianteMovilidad])">
+            <div accordion-heading><a [routerLink]="['/dashboard']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.estudiante,authService.roles.estudianteMovilidad])">Expediente</a></div>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">
+            <div accordion-heading><a [routerLink]="['/expediente-alumno']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Alumnos</a></div>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.aspirante])">
+            <div accordion-heading><a [routerLink]="['/lista/solicitudes']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.aspirante])">Solicitud de admisión</a></div>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.aspiranteMovilidad])">
+            <div accordion-heading><a [routerLink]="['/lista-solicitudes']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.aspiranteMovilidad])">Solicitud de admisión de estudiante movilidad externa</a></div>
+        </accordion-group>
+
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador,authService.roles.profesor])" #solicitante [isOpen]="false" class="panel-body">
+            <div accordion-heading>
+                Selección
+                <i class="pull-right glyphicon" [ngClass]="{'glyphicon-chevron-down': solicitante?.isOpen, 'glyphicon-chevron-right': !solicitante?.isOpen}"></i>
+            </div>
+            <ul>
+                <li><a [routerLink]="['/seleccion/solicitante']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Solicitantes</a></li>
+                <li><a [routerLink]="['/seleccion/aspirante']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Aspirantes</a></li>
+                <li><a [routerLink]="['/seleccion/comite-evaluacion']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Comités de evaluación</a></li>
+                <li><a [routerLink]="['/seleccion/evaluacion-aspirante']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.profesor,authService.roles.coordinador,authService.roles.docencia])">Evaluación de aspirantes</a></li>
+                <li><a [routerLink]="['/seleccion/aspirante-aceptado']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Aspirantes aceptados</a></li>
+            </ul>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.finanzas])" #inscripciones [isOpen]="false" class="panel-body">
+            <div accordion-heading>
+                Inscripciones
+                <i class="pull-right glyphicon" [ngClass]="{'glyphicon-chevron-down': inscripciones?.isOpen, 'glyphicon-chevron-right': !inscrpciones?.isOpen}"></i>
+            </div>
+            <ul>
+                <li><a [routerLink]="['/inscripciones/recepcion-documento']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Recepción documentos</a></li>
+                <li><a [routerLink]="['/inscripciones/credencial']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Credenciales</a></li>
+                <li><a [routerLink]="['/inscripciones/colegiatura']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.finanzas])">Colegiatura</a></li>
+            </ul>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.biblioteca,authService.roles.utic])" #induccion [isOpen]="false" class="panel-body">
+            <div accordion-heading>
+                Inducción
+                <i class="pull-right glyphicon" [ngClass]="{'glyphicon-chevron-down': induccion?.isOpen, 'glyphicon-chevron-right': !induccion?.isOpen}"></i>
+            </div>
+            <ul>
+                <li><a [routerLink]="['/induccion/tics']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.utic])">Inducción TIC´S</a></li>
+                <li><a [routerLink]="['/induccion/docencia']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Inducción Docencia</a></li>
+                <li><a [routerLink]="['/induccion/biblioteca']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.biblioteca])">Inducción Biblioteca</a></li>
+            </ul>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador,authService.roles.profesor,authService.roles.secretariaAcademica])" #formacion [isOpen]="false" class="panel-body">
+            <div accordion-heading>
+                Formación academica
+                <i class="pull-right glyphicon" [ngClass]="{'glyphicon-chevron-down': formacion?.isOpen, 'glyphicon-chevron-right': !formacion?.isOpen}"></i>
+            </div>
+            <ul>
+                <li><a [routerLink]="['/formacion-academica/calificaciones']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.profesor])">Calificaciones</a></li>
+                <li><a [routerLink]="['/formacion-academica/revision-actas-calificacion']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.coordinador])">Actas de calificación</a></li>
+                <li><a [routerLink]="['/formacion-academica/actas-calificacion']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.secretariaAcademica])">Actas de calificación</a></li>
+                <li><a [routerLink]="['/formacion-academica/boletas-calificacion']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Boletas de calificación</a></li>
+                <li><a [routerLink]="['/formacion-academica/solicitud-recurso-revision']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Solicitudes de recurso de revisi&oacute;n</a></li>
+                <li><a [routerLink]="['/formacion-academica/evaluacion-recurso-revision']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.profesor])">Evaluación de recurso de revision</a></li>
+                <li><a [routerLink]="['/formacion-academica/lista-trabajos-recuperacion-recursos']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.profesor])">Trabajo de recuperación</a></li>
+                <li><a [routerLink]="['/formacion-academica/lista-trabajos-recuperacion-coordinacion']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Solicitudes de trabajo de recuperación</a></li>
+            </ul>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador,authService.roles.profesor])" #evaluacion [isOpen]="false" class="panel-body">
+            <div accordion-heading>
+                Evaluaci&oacute;n a profesores
+                <i class="pull-right glyphicon" [ngClass]="{'glyphicon-chevron-down': evaluacion?.isOpen, 'glyphicon-chevron-right': !evaluacion?.isOpen}"></i>
+            </div>
+            <ul>
+                <li><a [routerLink]="['/evaluacion-profesores/evaluacion-docente']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.profesor,authService.roles.coordinador])">Evaluaci&oacute;n Docente</a></li>
+                <li><a [routerLink]="['/evaluacion-profesores/lista-evaluacion-docente']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Evaluaci&oacute;n Docente</a></li>
+                <li><a [routerLink]="['/evaluacion-profesores/lista-estudiantes-pendientes']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Absolver Estudiante</a></li>
+            </ul>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])" #reinscripcion [isOpen]="false" class="panel-body">
+            <div accordion-heading>
+                Reinscripciones
+                <i class="pull-right glyphicon" [ngClass]="{'glyphicon-chevron-down': reinscripcion?.isOpen, 'glyphicon-chevron-right': !reinscripcion?.isOpen}"></i>
+            </div>
+            <ul>
+                <li><a [routerLink]="['/reinscripcion/materia']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Gestión de cargas académicas</a></li>
+                <li><a [routerLink]="['/reinscripcion/reinscripcion-alumno']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Reinscripción de alumnos</a></li>
+            </ul>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador,authService.roles.profesor])" #evaluacion [isOpen]="false" class="panel-body">
+            <div accordion-heading>
+                Movilidad Academica
+                <i class="pull-right glyphicon" [ngClass]="{'glyphicon-chevron-down': evaluacion?.isOpen, 'glyphicon-chevron-right': !evaluacion?.isOpen}"></i>
+            </div>
+            <ul>
+                <li><a [routerLink]="['/movilidad-academica/estudiante-especial-interesado']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Interesados Movilidad Externa</a></li>
+                <li><a [routerLink]="['/movilidad-academica/estudiante-especial-interesado-coordinacion']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.coordinador])">Interesados Movilidad Externa</a></li>
+                <li><a [routerLink]="['/movilidad-academica/estudiante-especial-aceptados-rechazados']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Aspirantes/estudiantes movilidad externa</a></li>
+                <li><a [routerLink]="['/movilidad-academica/estudiante-especial-aspirante']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Estudiantes movilidad externa</a></li>
+                <li><a [routerLink]="['/movilidad-academica/solicitudes-movilidad']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Solicitud de oficio de presentación</a></li>
+                <li><a [routerLink]="['/movilidad-academica/solicitudes-coordinacion']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.coordinador])">Solicitudes (Coordinación)</a></li>
+                <li><a [routerLink]="['/movilidad-academica/movilidades-vigentes']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Movilidades Vigentes</a></li>
+                <li><a [routerLink]="['/movilidad-academica/solicitudes-interporgramas']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Interprogramas</a></li>
+                <li><a [routerLink]="['/movilidad-academica/solicitudes-interporgramas-coordinacion']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.coordinador])">Interprogramas (Coordinacion)</a></li>
+                <li><a [routerLink]="['/movilidad-academica/solicitudes-interporgramas-profesor']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.profesor])">Interprogramas (Profesor)</a></li>
+                <li><a [routerLink]="['/movilidad-academica/solicitudes-profesor']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.profesor])">Solicitudes</a></li>
+            </ul>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">
+            <div accordion-heading><a [routerLink]="['/apoyo-economico']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Apoyos Económicos</a></div>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">
+        <div accordion-heading><a [routerLink]="['/formacion-continua']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Formación continua</a></div>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])" #titulacion [isOpen]="false" class="panel-body">
+            <div accordion-heading>
+                Titulación
+                <i class="pull-right glyphicon" [ngClass]="{'glyphicon-chevron-down': titulacion?.isOpen, 'glyphicon-chevron-right': !titulacion?.isOpen}"></i>
+            </div>
+            <ul>
+                <li><a [routerLink]="['/titulacion/asinar-tutor-director']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Tutor/Director</a></li>
+                <li><a [routerLink]="['/titulacion/asignar-comite']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Comit&eacute;</a></li>
+                <li><a [routerLink]="['/titulacion/defensa-tesis']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Requisitos para defensa de Tesis</a></li>
+                <li><a [routerLink]="['/titulacion/dictamen-defensa-tesis']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Dictamen para defensa de Tesis</a></li>
+                <li><a [routerLink]="['/titulacion/emision-titulos']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Emisión de Títulos</a></li>
+            </ul>
+        </accordion-group>
+
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">
+        <div accordion-heading><a [routerLink]="['/estadisticas']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Estadísticas</a></div>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador])" #administrador [isOpen]="false" class="panel-body">
+            <div accordion-heading>
+                Administrador
+                <i class="pull-right glyphicon" [ngClass]="{'glyphicon-chevron-down': administrador?.isOpen, 'glyphicon-chevron-right': !administrador?.isOpen}"></i>
+            </div>
+            <ul>
+                <li><a [routerLink]="['/administrador/lista-usuarios']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador])">Lista de usuarios</a></li>
+                <li><a [routerLink]="['/administrador/bitacora']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador])">Bitacora de movimiento</a></li>
+            </ul>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])" #catalogos [isOpen]="false" class="panel-body">
+            <div accordion-heading>
+                Cat&aacute;logos
+                <i class="pull-right glyphicon" [ngClass]="{'glyphicon-chevron-down': catalogos?.isOpen, 'glyphicon-chevron-right': !catalogos?.isOpen}"></i>
+            </div>
+            <ul>
+                <li><a [routerLink]="['/catalogo/becas-apoyos']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Becas/Ayudas</a></li>
+                <li><a [routerLink]="['/catalogo/convenios']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Convenios</a></li>
+                <li><a [routerLink]="['/catalogo/convocatoria']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Convocatoria</a></li>
+                <li><a [routerLink]="['/catalogo/calificaciones']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Calificaciones</a></li>
+                <li><a [routerLink]="['/catalogo/documentos']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Documentos</a></li>
+                <li><a [routerLink]="['/catalogo/idiomas']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Idiomas</a></li>
+                <li><a [routerLink]="['/catalogo/inducciones']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Inducciones</a></li>
+                <li><a [routerLink]="['/catalogo/institucion']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Instituci&oacute;n</a></li>
+                <li><a [routerLink]="['/catalogo/lgac']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">LGAC</a></li>
+                <li><a [routerLink]="['/catalogo/materias']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Materias</a></li>
+                <li><a [routerLink]="['/catalogo/nab']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">NAB</a></li>
+                <li><a [routerLink]="['/catalogo/nivel-estudios']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Nivel de estudios</a></li>
+                <li><a [routerLink]="['/catalogo/periodo-escolar']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Período escolar</a></li>
+                <li><a [routerLink]="['/catalogo/plan-estudios']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Plan de estudios</a></li>
+                <li><a [routerLink]="['/catalogo/preguntas-frecuentes']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Preguntas frecuentes</a></li>
+                <li><a [routerLink]="['/catalogo/profesores']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Profesores</a></li>
+                <li><a [routerLink]="['/catalogo/programa-docente']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Programa docente</a></li>
+                <li><a [routerLink]="['/catalogo/promociones-lista']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Promociones</a></li>
+                <li><a [routerLink]="['/catalogo/salas']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Salas</a></li>
+            </ul>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador,authService.roles.profesor])" #materias [isOpen]="false" class="panel-body">
+            <div accordion-heading>
+                Materias
+                <i class="pull-right glyphicon" [ngClass]="{'glyphicon-chevron-down': materias?.isOpen, 'glyphicon-chevron-right': !materias?.isOpen}"></i>
+            </div>
+            <ul>
+                <li><a [routerLink]="['/materias/lista-asistencia']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Lista de asistencia</a></li>
+                <li><a [routerLink]="['/materias/programa-base']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Programa Base</a></li>
+                <li><a [routerLink]="['/materias/optativa']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Designación de cursos específicos</a></li>
+                <li><a [routerLink]="['/materias/programa-materia']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.profesor])">Programa por materia</a></li>
+                <li><a [routerLink]="['/materias/temarios-particulares']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Temarios Particulares</a></li>
+                <li><a [routerLink]="['/materias/historial-materias']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador,authService.roles.profesor])">Historial de materias</a></li>
+            </ul>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.utic,authService.roles.finanzas,authService.roles.biblioteca,authService.roles.rms])" #tramites [isOpen]="false"
+            class="panel-body">
+            <div accordion-heading>
+                Trámites y constancias
+                <i class="pull-right glyphicon" [ngClass]="{'glyphicon-chevron-down': tramites?.isOpen, 'glyphicon-chevron-right': !tramites?.isOpen}"></i>
+            </div>
+            <ul>
+                <li><a [routerLink]="['/tramite-constancia/liberar-adeudos-area-docencia']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Liberar adeudos (Docencia)</a></li>
+                <li><a [routerLink]="['/tramite-constancia/liberar-adeudos-area-utic']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.utic])">Liberar adeudos (UTIC)</a></li>
+                <li><a [routerLink]="['/tramite-constancia/liberar-adeudos-area-finanzas']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.finanzas])">Liberar adeudos (Finanzas)</a></li>
+                <li><a [routerLink]="['/tramite-constancia/liberar-adeudos-area-biblioteca']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.biblioteca])">Liberar adeudos (Biblioteca)</a></li>
+                <li><a [routerLink]="['/tramite-constancia/liberar-adeudos-area-rms']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.rms])">Liberar adeudos (RMS)</a></li>
+                <li><a [routerLink]="['/tramite-constancia/lista-carta-no-adeudo']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Solicitudes carta de no adeudo</a></li>
+                <li><a [routerLink]="['/tramite-constancia/solicitud-constancia-estudio']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Constancias de estudio</a></li>
+                <li><a [routerLink]="['/tramite-constancia/solicitud-constancia-profesor']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Constancias profesores</a></li>
+                <li><a [routerLink]="['/tramite-constancia/tramite-cedula']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Contacto Dirección de Profesiones</a></li>
+                <li><a [routerLink]="['/tramite-constancia/registro-profesores']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Registro de profesiones</a></li>
+            </ul>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])" #idiomas [isOpen]="false" class="panel-body">
+            <div accordion-heading>
+                Idiomas
+                <i class="pull-right glyphicon" [ngClass]="{'glyphicon-chevron-down': idiomas?.isOpen, 'glyphicon-chevron-right': !idiomas?.isOpen}"></i>
+            </div>
+            <ul>
+                <li><a [routerLink]="['/idiomas/grupos-idiomas']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Grupos</a></li>
+                <li><a [routerLink]="['/idiomas/evaluacion-idiomas']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Evaluaciones</a></li>
+                <li><a [routerLink]="['/idiomas/acreditacion-idiomas']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Acreditación</a></li>
+            </ul>
+        </accordion-group>
+        <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])" #social [isOpen]="false" class="panel-body">
+            <div accordion-heading>
+                Servicio Social
+                <i class="pull-right glyphicon" [ngClass]="{'glyphicon-chevron-down': social?.isOpen, 'glyphicon-chevron-right': !social?.isOpen}"></i>
+            </div>
+            <ul>
+                <li><a [routerLink]="['/servicio-social/solicitud']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Solicitud y Seguimiento</a></li>
+                <li><a [routerLink]="['/servicio-social/reporte']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia])">Reportes</a></li>
+            </ul>
+        </accordion-group>
+    </accordion>
+</div>

@@ -1,0 +1,590 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12 text-center text-left-sm">
+      <h1>Administraci&oacute;n de cat&aacute;logos</h1>
+      <p>
+        <small>Cat&aacute;logo de convenios</small>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel">
+      <div class="panel-body">
+        <div class="row">
+          <alert
+            *ngFor="let alerta of erroresConsultas"
+            [type]="alerta.tipo"
+            dismissible="true">
+            {{ alerta?.mensaje }}
+          </alert>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row text-right">
+                  <div class="col-md-10">
+                    <button *ngIf="ocultarOpcionActivar()"
+                            class="btn btn-labeled btn-success form-group-margin"
+                            (click)="cambiarEstatus('activar')">
+                      <span class="btn-label icon fa fa-plus-circle"></span>Activar
+                    </button>
+                    <button *ngIf="ocultarOpcionDesactivar()"
+                            class="btn btn-labeled btn-danger form-group-margin"
+                            (click)="cambiarEstatus('desactivar')">
+                      <span class="btn-label icon fa fa-minus-circle"></span>Desactivar
+                    </button>
+                    <button *ngIf="registroSeleccionado"
+                            class="btn btn-labeled btn-warning form-group-margin"
+                            (click)="constructorAgreActuConvenios('editar')">
+                      <span class="btn-label icon fa fa-pencil-square-o"></span>Editar
+                    </button>
+                    <button *ngIf="registroSeleccionado"
+                            class="btn btn-labeled btn-default form-group-margin"
+                            (click)="constructorDetaConvenios()">
+
+                      <span class="btn-label icon fa fa-eye"></span>Detalle
+                    </button>
+                    <button class="btn btn-labeled btn-success form-group-margin"
+                            (click)="constructorAgreActuConvenios('agregar')">
+                      <span class="btn-label icon fa fa-plus"></span>Agregar
+                    </button>
+                    <div class="btn-group form-group-margin" dropdown>
+                      <button class="btn btn-conacyt dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span class="btn-label icon fa fa-download"></span> Exportar </button>
+                      <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                    <i class="fa fa-caret-down"></i>
+                  </button>         
+                       <ul class="dropdown-menu">
+                        <li role="menuitem"><a class="dropdown-item" (click)="exportar('Excel')" >Exportar a Excel</a></li>
+                        <li class="divider dropdown-divider"></li>
+                        <li role="menuitem" ><a class="dropdown-item" (click)="exportar('PDF')" >Exportar a PDF</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-md-2 form-group-margin">
+                    <input
+                      #filtro
+                      type="text"
+                      class="form-control"
+                      id="buscar"
+                      placeholder="Buscar..."
+                      (keyup.enter)="filtroChanged(filtro.value)"
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-default">
+              <div role="grid" class="dataTables_wrapper form-inline">
+                <div class="table-header clearfix">
+                  <div class="table-caption">Lista de convenios</div>
+                  <div class="DT-lf-right">
+                    <div class="DT-per-page">
+                      <div class="dataTables_length" id="jq-datatables-example_length">
+                        <label>Registros por página:
+                          <select #limiteControl
+                                  name="jq-datatables-example_length"
+                                  aria-controls="jq-datatables-example"
+                                  class="form-control input-sm"
+                                  (change)="setLimite(limiteControl.value)"
+                          >
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                          </select>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <table cellpadding="0" cellspacing="0" border="0"
+                         class="table table-striped table-bordered dataTable no-footer"
+                         id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                    <thead>
+                    <tr role="row ">
+                      <th
+                        *ngFor="let columna of columnas"
+                        [ngClass]="{
+                                                        'sorting_desc': columna.sort === 'desc',
+                                                        'sorting_asc': columna.sort === 'asc',
+                                                        'sorting': columna.sort !== false
+                                                        }"
+                        (click)="sortChanged(columna)"
+                      >
+                        {{columna.titulo}}
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="registros.length === 0">
+                    <tr class="gradeA odd">
+                      <th class="text-center" colspan="4">
+                        No hay Registros
+                      </th>
+                    </tr>
+                    </tbody>
+                    <tbody *ngIf="registros.length !== 0">
+                    <tr
+                      *ngFor="let registro of registros"
+                      class="gradeA odd"
+                      [ngClass]="{
+                                                'seleccionado': rowSeleccionado(registro)
+                                        }"
+                      (click)="rowSeleccion(registro)"
+                    >
+                      <td class="text-left">{{registro.descripcion}}</td>
+                      <td class="text-left">{{registro.detalles}}</td>
+                      <td class="text-left">{{obtenerFecha(registro.ultimaActualizacion)}}</td>
+                      <td class="text-left">{{registro.estatus.valor}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+               <div class="table-footer clearfix">
+                  <div class="DT-pagination" *ngIf="isSetPaginacion()">
+                    <div class="dataTables_paginate paging_simple_numbers">
+                      <pagination
+                        class="pagination"
+                        [totalItems]="paginacion.registrosTotales"
+                        [itemsPerPage]="limite"
+                        [maxSize]="maxSizePags"
+                        [rotate]="false"
+                        [(ngModel)]="paginaActual"
+                        (pageChanged)="cambiarPagina($event)"
+                        previousText="Anterior"
+                        nextText="Siguiente"
+                      >
+                      </pagination>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalAgreActu  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalAgregarActualizar()">×</button>
+    <h4 class="modal-title">{{edicionFormulario ? 'Editar convenio': 'Agregar convenio'}}</h4>
+  </modal-header>
+  <modal-body>
+    <form class="form-horizontal" (ngSubmit)="enviarFormulario()" [formGroup]="formularioConvenios">
+      <div class="row">
+        <div class="col-md-12">
+          <h6 class="form-heading text-muted text-semibold text-sm">CONVENIO</h6>
+        </div>
+
+        <div class="col-md-12" *ngIf="fechaInvalida">
+          <alert
+                  *ngFor="let alerta of mensajeErrors"
+                  [type]="alerta.tipo"
+                  dismissible="true">
+            {{ alerta?.mensaje }}
+          </alert>
+        </div>
+
+        <div class="col-md-12 padding-xs-vr">
+          <div class="row">
+
+            <div [ngClass]="{'has-error': getControlErrors('descripcion')}">
+              <label for="descripcion"
+                     class="col-md-3 control-label text-left">Descripci&oacute;n:<span>*</span></label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" id="descripcion" name="descripcion" maxlength="50"
+                       ngControl="descripcion" placeholder="" maxlength="249" #descripcion formControlName="descripcion">
+                <!-- <control-mensaje control="descripcion"></control-mensaje>  -->
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('descripcion'))">
+                                    {{errorMessage(getControl('descripcion'))}}
+                                </span>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+        <div class="col-md-12 padding-xs-vr">
+          <div class="row">
+            <div [ngClass]="{'has-error': getControlErrors('idInstitucion')}">
+              <label for="idInstitucion"
+                     class="col-md-3 control-label text-left">Instituci&oacute;n:<span>*</span></label>
+              <div class="col-md-9">
+                <select name="idInstitucion" id="idInstitucion"
+                        ngControl="idInstitucion" class="form-control" #idInstitucion formControlName="idInstitucion">
+                  <option value="">Selecciona...</option>
+                  <option
+                          *ngFor="let catalogoItem of opcionesCatalogoInstitucion"
+                          value="{{catalogoItem.id}}"
+                  >
+                    {{catalogoItem.text}}
+                  </option>
+                </select>
+                <span id="helpBlock3" class="help-block"
+                      *ngIf="(getControlErrors('idInstitucion'))">
+                                        {{errorMessage(getControl('idInstitucion'))}}
+                                    </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 padding-xs-vr">
+              <div class="row">
+                <div [ngClass]="{'has-error': getControlErrors('idTipoConvenio')}">
+                  <label for="idTipoConvenio" class="col-md-6 control-label text-left">Tipo:<span>*</span></label>
+                  <div class="col-md-6">
+                    <select name="idTipoConvenio" id="idTipoConvenio"
+                            ngControl="idTipoConvenio" class="form-control" #idTipoConvenio formControlName="idTipoConvenio">
+                      <option value="" selected>Selecciona...</option>
+                      <option
+                              *ngFor="let catalogoItem of opcionesCatalogoTipoConvenio"
+                              value="{{catalogoItem.id}}"
+                      >
+                        {{catalogoItem.text}}
+                      </option>
+                    </select>
+                    <span id="helpBlock4" class="help-block"
+                          *ngIf="(getControlErrors('idTipoConvenio'))">
+                                        {{errorMessage(getControl('idTipoConvenio'))}}
+                                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-md-6 padding-xs-vr">
+              <div class="row">
+                <div [ngClass]="{'has-error': getControlErrors('idSector')}">
+                  <label for="idSector"
+                         class="col-md-6 control-label text-left">Sector:<span>*</span></label>
+                  <div class="col-md-6">
+                    <select name="idSector" id="idSector"
+                            ngControl="idSector" class="form-control" #idSector formControlName="idSector">
+                      <option value="" selected>Selecciona...</option>
+                      <option
+                              *ngFor="let catalogoItem of opcionesCatalogoSector"
+                              value="{{catalogoItem.id}}"
+                      >
+                        {{catalogoItem.text}}
+                      </option>
+                    </select>
+                    <span id="helpBlock5" class="help-block" *ngIf="(getControlErrors('idSector'))">
+                                        {{errorMessage(getControl('idSector'))}}
+                                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+
+            <div class="col-md-6 padding-xs-vr">
+              <div class="row">
+                <div [ngClass]="{'has-error': getControlErrors('idAlcance')}">
+                  <label for="idAlcance"
+                         class="col-md-6 control-label text-left">Alcance:<span>*</span></label>
+                  <div class="col-md-6">
+                    <select name="idAlcance" id="idAlcance"
+                            ngControl="idAlcance" class="form-control" #idAlcance formControlName="idAlcance">
+                      <option value="" selected>Selecciona...</option>
+                      <option
+                              *ngFor="let catalogoItem of opcionesCatalogoAlcance"
+                              value="{{catalogoItem.id}}"
+                      >
+                        {{catalogoItem.text}}
+                      </option>
+                    </select>
+                    <span id="helpBlock6" class="help-block" *ngIf="(getControlErrors('idAlcance'))">
+                                        {{errorMessage(getControl('idAlcance'))}}
+                                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 padding-xs-vr">
+              <div class="row">
+                <div [ngClass]="{'has-error': getControlErrors('idEstatus')}">
+                  <label for="idEstatus"
+                         class="col-md-6 control-label text-left">Estatus:<span>*</span></label>
+                  <div class="col-md-6">
+                    <select id="idEstatus" name="idEstatus"
+                            ngControl="idEstatus" class="form-control" #idEstatus formControlName="idEstatus">
+                      <option value="" selected>Selecciona...</option>
+                      <option
+                              *ngFor="let catalogoItem of opcionesCatalogoEstatus"
+                              value="{{catalogoItem.id}}"
+                      >
+                        {{catalogoItem.text}}
+                      </option>
+                    </select>
+                    <span id="helpBlock7" class="help-block" *ngIf="(getControlErrors('idEstatus'))">
+                                        {{errorMessage(getControl('idEstatus'))}}
+                                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+
+
+            <div class="col-md-6 padding-xs-vr">
+              <div class="row">
+                <label class="col-md-6 control-label text-left" for="fecha">Fecha inicio: </label>
+                <div class="col-md-6">
+                   <div class="dropdown" dropdown autoClose="outsideClick">
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="fechaInicio" name="fechaInicio"
+                             disabled
+                             ng-model="fechaInicio" *ngIf="dt" value="{{ getDate()}}"
+                             >
+                      <span class="input-group-btn">
+                                                <button class="btn dropdown-toggle fa fa-calendar" type="button"
+                                                        id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                            </span>
+                    </div>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" dropdownMenu>
+                      <li>
+                        <div style="display:inline-block;">
+                          <datepicker [(ngModel)]="dt" [ngModelOptions]="{standalone: true}" [minDate]= "minDate"
+                                      [showWeeks]="true" ></datepicker>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-md-6 padding-xs-vr" *ngIf="!ocultarFeacha">
+              <div class="row">
+                <label class="col-md-6 control-label text-left" for="fechafin">Fecha fin: </label>
+                <div class="col-md-6">
+                  <div class="dropdown" dropdown autoClose="outsideClick">
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="fechaFin" name="fechaFin" disabled
+                             ng-model="fechaFin" *ngIf="dt2" value="{{ getDateFecha()}}"
+                             >
+                      <span class="input-group-btn">
+                                            <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu2"
+                                                    data-toggle="dropdown" dropdownToggle></button>
+                                        </span>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu2" aria-labelledby="menu1"
+                        dropdownMenu>
+                      <li>
+                        <div style="display:inline-block;">
+                          <datepicker [(ngModel)]="dt2" [ngModelOptions]="{standalone: true}" [minDate]="minDate"
+                                      [showWeeks]="true"></datepicker>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-12 ">
+          <div class="row">
+
+            <div class="col-md-6 padding-xs-vr">
+              <div class="row">
+                <div class="checkbox">
+                  <label for="actualmente"
+                         class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs"
+                         style="font-weight: 600;">Fecha indefinida:</label>
+                  <input class="col-md-6" id="actualmente"
+                         ngControl="aplicaFechaFin"
+                         type="checkbox" (click)="ocultarFechaFin(ocultarFeacha)" #aplicaFechaFin formControlName="aplicaFechaFin">
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div [ngClass]="{'has-error': getControlErrors('descripcion')}">
+              <div class=" col-md-12 padding-xs-vr">
+                <div class="row">
+                  <label for="detalles" class="col-md-3 control-label">Detalles:</label>
+                  <div class="col-md-9">
+                                    <textarea class="form-control" rows="3" id="detalles" maxlength="250"
+                                              name="detalles" placeholder="" ngControl="detalles" #detalles formControlName="detalles">
+                                    </textarea>
+                    <span id="helpBlock1" class="help-block" *ngIf="(getControlErrors('detalles'))">
+                                        {{errorMessage(getControl('detalles'))}}
+                                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModalAgregarActualizar()">
+      <i class="fa fa-close"></i> Cerrar
+    </button>
+    <button class="btn btn-success" type="button" (click)="enviarFormulario()">
+      <i class="fa fa-save"></i>{{edicionFormulario? '&nbsp;&nbsp;Actualizar' : '&nbsp;&nbsp;Guardar'}}
+    </button>
+  </modal-footer>
+</modal>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalDetalle  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalDetalleConvenio()">×</button>
+    <h4 class="modal-title">Detalle del convenio</h4>
+  </modal-header>
+  <modal-body>
+    <div class="col-md-12" *ngIf="erroresConsultas.lenght !== 0">
+      <alert
+              *ngFor="let alerta of erroresConsultas"
+              [type]="alerta.tipo"
+              dismissible="true">
+        {{ alerta?.mensaje }}
+      </alert>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Descripci&oacute;n:</dt>
+                  <dd class="col-md-9">{{entidadConvenio?.descripcion}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Instituci&oacute;n:</dt>
+                  <dd class="col-md-9">{{entidadConvenio?.institucion?.nombre}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Tipo:
+                  </dt>
+                  <dd class="col-md-6">{{entidadConvenio?.tipo?.valor}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Sector:
+                  </dt>
+                  <dd class="col-md-6">{{entidadConvenio?.sector?.valor}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                    Alcance:
+                  </dt>
+                  <dd class="col-md-6">{{entidadConvenio?.alcance?.valor}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                    Estatus:
+                  </dt>
+                  <dd class="col-md-6">{{entidadConvenio?.estatus?.valor}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha
+                    inicio:
+                  </dt>
+                  <dd class="col-md-6">{{obtenerFecha(entidadConvenio?.fechaInicio)}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin" *ngIf="!entidadConvenio?.aplicaFechaFin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha
+                    fin:
+                  </dt>
+                  <dd class="col-md-6">{{obtenerFecha(entidadConvenio?.fechaFin)}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">
+                    Detalles:
+                  </dt>
+                  <dd class="col-md-9">{{entidadConvenio?.detalles}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModalDetalleConvenio()"><i class="fa fa-close"></i> Cerrar
+    </button>
+  </modal-footer>
+</modal>

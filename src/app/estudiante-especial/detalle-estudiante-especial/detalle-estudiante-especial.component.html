@@ -1,0 +1,34 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 text-center text-left-sm">
+      <h1>Solicitante de inscripcion para movilidad</h1>
+      <p><small>Detalle solicitante para movilidad.</small></p>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-body">
+    <tabset>
+      <tab heading="Datos personales">
+        <app-detalle-datos-personales [entidadEstudianteMovilidad] = "estudianteMovilidad">Datos Personales</app-detalle-datos-personales>
+      </tab>
+      <tab heading="Antecedentes acad&eacute;micos">
+        <app-detalle-antecedentes-academicos [entidadEstudianteMovilidad] = "estudianteMovilidad">Antecedentes acad&eacute;micos</app-detalle-antecedentes-academicos>
+      </tab>
+      <tab heading="Investigador anfitri&oacute;n">
+        <app-detalle-investigador-anfitrion [entidadEstudianteMovilidad] = "estudianteMovilidad">Investigador anfitr&oacute;n</app-detalle-investigador-anfitrion>
+      </tab>
+      <tab heading="Documentaci&oacute;n">
+       <app-detalle-documentos [entidadEstudianteMovilidad] = "estudianteMovilidad">Documentación</app-detalle-documentos>
+      </tab>
+    </tabset>
+  </div>
+  <div class="panel-footer">
+    <div class="text-right">
+      <button class="btn btn-default" type="button" (click)="mostrarListaMovilidad()"><i class="fa fa-arrow-circle-o-left"></i> Regresar
+      </button>
+    </div>
+  </div>
+</div>
+

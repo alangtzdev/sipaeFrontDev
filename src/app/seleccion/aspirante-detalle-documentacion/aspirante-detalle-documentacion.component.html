@@ -1,0 +1,116 @@
+<div class="panel">
+  <div class="tab-content tab-content-bordered">
+    <div class="tab-pane active" id="datos-documentacion">
+      <div class="row">
+        <div class="col-md-12">
+          <alert
+            *ngFor="let alerta of alertas;let i = index"
+            [type]="alerta.type"
+            dismissible="true"
+            (close)="cerrarAlerta(i)">
+            {{ alerta?.msg }}
+          </alert>
+        </div>
+        <div class="col-md-12">
+          <h5 class="form-heading text-muted text-semibold text-sm">Lista de Documentaci&oacute;n</h5>
+        </div>
+        <div class="col-md-12 text-right">
+          <button *ngIf="esVistaSolicitante" type="button" class="btn btn-default form-group-margin"
+                  title="Validar Documento"
+                  (click)="modalDocumentacion(entidadAspirante?.promocion?.programaDocente?.descripcion , entidadAspirante.usuario.email)">
+            <span class="glyphicons glyphicons-message-plus"></span>
+            <i class="fa fa-envelope-o"></i> Enviar comentarios
+          </button>
+        </div>
+
+        <div class="col-md-12">
+          <div class="panel" style="width:100%;height: 400px; overflow-y: scroll; margin: auto">
+            <div class="panel-body">
+              <div class="row">
+                <div *ngFor="let registroDocumento of registroDocuemntos"
+                     [ngClass]="{
+                       'seleccionado': rowSeleccionado(registroDocumento)
+                     }"
+                     (click)="rowSeleccion(registroDocumento)"
+                     class="col-md-3 text-center">
+                  <div class="thumbnail">
+                    <i class="fa fa-file-text-o fa-5x"></i>
+                    <h5 class="">{{registroDocumento?.tipoDocumento.valor}}</h5>
+                    <hr>
+                    <div *ngIf="registroDocumento?.valido === true || registroDocumento?.valido === false">
+                      <button class="btn  btn-warning fa fa-download "
+                              (click)="descargarArchivo(registroDocumento?.archivo?.id)"></button>
+                      <p>{{registroDocumento?.valido ? 'Validado' : 'Rechazado'}}</p>
+                    </div>
+
+                    <div class="btn-tumbnail btn-group"
+                         *ngIf="registroDocumento?.valido !== true && registroDocumento?.valido !== false">
+                      <button class="btn  btn-warning fa fa-download"
+                              (click)="descargarArchivo(registroDocumento?.archivo?.id)"></button>
+                      <button class="btn  btn-danger fa fa-times" title="Rechazar documento"
+                              *ngIf="hasRol('DOCENCIA') && esVistaSolicitante"
+                              (click)="validarCampo(registroDocumento, false, registroDocumento?.length, noDocTrue?.length)"></button>
+                      <button class="btn  btn-success fa fa-check" title="Validar documento"
+                              *ngIf="hasRol('DOCENCIA') && esVistaSolicitante" (click)="validarCampo(registroDocumento, true, registroDocuemntos?.length, noDocTrue?.length)"></button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-->INICIA MODAL ENVIAR COMENTARIOS</!-->
+<modal [animation]="animation" [keyboard]="keyboard" 
+  [backdrop]="backdrop" #modalEnviarComentarios>
+  <modal-header>
+    <button (click)="cerrarModalDocumentacion()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Env&iacute;o de comentarios</h4>
+  </modal-header>
+  <div class="row">
+    <div class="col-md-12 padding-xs-vr">
+        <label class="fat-commentarios"> Hemos recibido y revisado su solicitud de admisión para participar en el proceso de selección a la/a el {{programaDocente}},
+          misma que no estamos en posibilidad de registrar, toda vez que incumple el requisito de la convocatoria.</label>
+    </div>
+  </div>
+  <modal-body>
+    <form [formGroup]="formularioCorreo">
+      <div class="row">
+        <div class="col-md-12">
+            <div class="row form-group text-left">
+              <label class="col-sm-12 control-label">Comentarios:</label>
+              <div class="col-sm-12">
+                  <div [ngClass]="{ 'has-error': getControlErrors('comentarios')}">
+                    <textarea id="comentarios" class="form-control" rows="10" formControlName="comentarios"></textarea>
+                  <span id="helpBlockProgramaDocente" class="help-block" *ngIf="(getControlErrors('comentarios'))">
+                    {{errorMessage(getControl('comentarios'))}}
+                </span>
+                  </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <div class="text-right">
+      <button (click)="cerrarModalDocumentacion()" class="btn btn-default" type="button">
+      <span class="glyphicon glyphicon-remove"></span>
+        Cancelar
+      </button>
+      <button (click)="enviarComentarios()"  type="submit" class="btn btn-success">
+        <i class="fa fa-envelope-o"></i>
+        Enviar
+      </button>
+    </div>
+  </modal-footer>
+</modal>
+<!-->TERMINA MODAL ENVIAR COMENTARIOS</!-->

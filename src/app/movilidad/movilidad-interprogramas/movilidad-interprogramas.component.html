@@ -1,0 +1,486 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+      <h1>Interprogramas</h1>
+      <p><small>Descripci&oacute;n y solicitud de interprogramas</small></p>
+    </div>
+    <div *ngIf="!permisoDocencia" class="col-xs-12 col-sm-8">
+      <hr class="visible-xs">
+      <div class="pull-right col-xs-12 col-sm-auto" *ngIf="estudiante && mostrarBotonSolicitud" > <!--  -->
+        <button class="btn btn-labeled btn-success pull-right col-xs-12 col-sm-auto" (click)="constructorRegistro()"><span class="btn-label icon fa fa-plus"></span>Solicitud</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel">
+      <div class="panel-body">
+        <div class="col-md-6 col-sm-6" style="padding: 0">
+          <h5 class="form-heading text-muted text-semibold text-sm">MATR&Iacute;CULA:
+            {{estudiante?.matricula?.matriculaCompleta}}</h5>
+        </div>
+        <div class="col-md-6  col-sm-6 text-left" style="padding: 0">
+          <h5 class="form-heading text-muted text-semibold text-sm text-right-sm">ESTUDIANTE:
+            {{estudiante?.datosPersonales?.getNombreCompleto()}}</h5>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+
+            <div class="col-md-10"><!-- cont-botones-->
+              <div class="text-right" *ngIf="registroSeleccionado">
+                <a (click)='constructorDetalle()' class="btn btn-labeled btn-default form-group-margi"><span class="btn-label icon fa fa-eye"></span>Detalle</a>
+              </div>
+            </div> <!-- cont-botones-->
+            ​
+            <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+              <div class="row">
+                <div class="col-md-12 pull-right text-right">
+                  <div class="row">
+                    <input
+                            #filtro
+                            type="text"
+                            class="form-control"
+                            id="buscar"
+                            placeholder="Buscar..."
+                            (keyup.enter)="filtroChanged(filtro.value)"
+                    >
+                  </div>
+                </div>
+              </div>
+            </div> <!-- cont-buscar-->
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+
+            <div class="table-default">
+              <div role="grid" class="dataTables_wrapper form-inline">
+                <div class="table-header clearfix">
+                  <div class="table-caption">Lista de solicitudes</div>
+
+                  <div class="DT-lf-right">
+                    <div class="DT-per-page">
+                      <div class="dataTables_length" id="jq-datatables-example_length">
+                        <label>Registros por página:
+                          <select
+                                  #limiteControl
+                                  name="jq-datatables-example_length"
+                                  aria-controls="jq-datatables-example"
+                                  class="form-control input-sm"
+                                  (change) = "setLimite(limiteControl.value)"
+                          >
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                          </select>
+                        </label>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                    <thead>
+                    <tr role="row">
+                      <th
+                              *ngFor="let columna of columnas"
+                              [ngClass]="{
+							        		'sorting_desc': columna.sort === 'desc',
+							        		'sorting_asc': columna.sort === 'asc',
+							        		'sorting': columna.sort !== false
+							        	}"
+                              (click)="sortChanged(columna)"
+                      >
+                        {{columna.titulo}}
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf = "registros.length === 0">
+                    <tr class="gradeA odd">
+                      <th class="text-center" colspan="5">
+                        No hay Registros
+                      </th>
+                    </tr>
+                    </tbody>
+                    <tbody *ngIf = "registros.length !== 0">
+
+                    <tr class="gradeA odd" *ngFor="let registro of registros"
+                        [ngClass]="{
+  							        		          'seleccionado': rowSeleccionado(registro)}"
+                        (click) = "rowSeleccion(registro)"
+                    >
+                      <td class="text-center">{{registro.materiaCursar.materia.descripcion}}</td>
+                      <td class="text-center">{{registro.programaDocenteCursar.descripcion}}</td>
+                      <td class="text-center">{{registro.estatusDirector.valor}}</td>
+                      <td class="text-center">{{registro.estatus.valor}}</td>
+                      <td class="text-center">{{registro.estatusCoordinadorMovilidad.valor}}</td>
+                    </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+                <div class="table-footer clearfix">
+                  <div class="DT-pagination">
+                    <div class="DT-pagination" *ngIf="isSetPaginacion()">
+                      <div class="dataTables_paginate paging_simple_numbers">
+                        <pagination
+                                class="pagination"
+                                [totalItems] = "paginacion.registrosTotales"
+                                [itemsPerPage] = "limite"
+                                [maxSize] = "maxSizePags"
+                                [rotate]="false"
+                                [(ngModel)] = "paginaActual"
+                                (pageChanged) = "cambiarPagina($event)"
+                                previousText = "Anterior"
+                                nextText = "Siguiente"
+                        >
+                        </pagination>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalRegistro>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalRegistro()">×</button>
+    <h4 class="modal-title">Movilidad interprogramas</h4>
+  </modal-header>
+  <modal-body>
+    <form class="form-horizontal" [formGroup]="formularioRegistro">
+      <div class="text-right-lg text-left-md text-left-sm text-left-xs">
+        <div class="col-md-12">
+          <div class="row">
+            <p class="text-left">
+              <small class="text-left">Indique la materia que desea cambiar de su programa docente de
+                adscripci&oacute;n
+              </small>
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div [ngClass]="{'has-error': getControlErrors('idMateriaCambiar')}">
+              <div class="col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label class="col-md-6 control-label">Materia que desea convalidar:*</label>
+                  <div class="col-md-6">
+                    <select id="idMateriaCambiar" class="form-control" formControlName="idMateriaCambiar" ngControl="idMateriaCambiar">
+                      <option value="" disabled selected> Selecciona...</option>
+                      <option *ngFor="let materia of opcionSelectMateria" value="{{materia.id}}">
+                        {{materia.text}}
+                      </option>
+                    </select>
+                    <span id="helpBlock1" class="help-block"
+                          *ngIf="(getControlErrors('idMateriaCambiar'))">
+                                           {{errorMessage(getControl('idMateriaCambiar'))}}
+                                       </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <p class="text-left">
+              <small>Indique el programa docente al que solicita movilidad, donde se encuentra la materia
+                que desee cursar
+              </small>
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div [ngClass]="{'has-error': getControlErrors('idProgramaDocenteCursar')}">
+              <div class="col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label class="col-md-6 control-label">Programa docente:*</label>
+                  <div class=" col-md-6">
+                    <select #idProgramaDocente class="form-control"
+                            formControlName="idProgramaDocenteCursar"
+                            ngControl="idProgramaDocenteCursar"
+                            (change)="obtenerMateriasXProgramaDocente(idProgramaDocente.value)"
+                            (change)="obtenerCorreoCoordinador(idProgramaDocente.value, 'Receptor')">
+                      <option value="" disabled selected> Selecciona...</option>
+                      <option *ngFor="let programa of opcionSelectProgramaDocente"
+                              value="{{programa.id}}">{{programa.text}}
+                      </option>
+                    </select>
+                    <span id="helpBlock" class="help-block"
+                          *ngIf="(getControlErrors('idProgramaDocenteCursar'))">
+                                       {{errorMessage(getControl('idProgramaDocenteCursar'))}}
+                                   </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div [ngClass]="{'has-error': getControlErrors('idMateriaCursar')}">
+              <div class="col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label class="col-md-6 control-label">Materia que desea cursar:*</label>
+                  <div class=" col-md-6">
+                    <select #MateriaCursar formControlName="idMateriaCursar" class="form-control" ngControl="idMateriaCursar">
+                      <option value="" disabled selected> Selecciona...</option>
+                      <option *ngFor="let materiaCursar of opcionSelectMateriaXProgramaDocente"
+                              value="{{materiaCursar.id}}">{{materiaCursar.text}}
+                      </option>
+                    </select>
+                    <span id="helpBlock2" class="help-block"
+                          *ngIf="(getControlErrors('idMateriaCursar'))">
+                                       {{errorMessage(getControl('idMateriaCursar'))}}
+                                   </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-md-12">
+            <h6 class="form-heading text-muted text-semibold text-sm text-left">Carta de motivos</h6>
+            <div class="row-centered" *ngIf="!existeArchivo">
+              <div [ngClass]="{'has-error': getControlErrors('upload')}">
+                <div class="col-md-6">
+                  <div id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome"
+                       style="min-height: 185px;">
+                    <div class="dz-default dz-message " ngFileSelect [options]="options"
+                         (onUpload)="handleDropUpload($event)">
+                      <i class="fa fa-cloud-upload"></i>
+                      Soltar archivo aqu&iacute;<br><span class="dz-text-small">o clic para cargar manualmente</span>
+                    </div>
+                    <input type="file" name="file" ngControl="upload" ngFileSelect [options]="options"
+                           (onUpload)="handleBasicUpload($event)" accept="application/pdf">
+                    <span id="helpBlock4" class="help-block" *ngIf="(getControlErrors('upload'))">
+                                        {{errorMessage(getControl('upload'))}}
+                                    </span>
+                  </div>
+                  <div class="progress">
+                    <div
+                            *ngIf="enableBasic()"
+                            class="progress-bar"
+                            role="progressbar"
+                            aria-valuenow="basicProgress"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            [style.width]="basicProgress + '%'">
+                      {{basicProgress}}%
+                    </div>
+
+                    <div
+                            *ngIf="enableDrop()"
+                            class="progress-bar"
+                            role="progressbar"
+                            aria-valuenow="dropProgress"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            [style.width]="dropProgress + '%'">
+                      {{dropProgress}}%
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+
+              <div class="col-md-12 text-right" *ngIf="existeArchivo">
+                <div class="row">
+                  <button (click)="eliminarCartaMotivo()" type="button"
+                          class="btn btn-danger form-group-margin"><i class="fa fa-times"></i>
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="table-default table-responsive">
+                    <table cellpadding="0" cellspacing="0" border="0"
+                           class="table table-striped table-bordered dataTable no-footer"
+                           id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                      <thead>
+                      <tr role="row">
+                        <th>Documento</th>
+                        <th>Fecha de actualizaci&oacute;n</th>
+                      </tr>
+                      </thead>
+                      <tbody *ngIf="!existeArchivo">
+                      <tr class="gradeA odd">
+                        <th class="text-center" colspan="4">
+                          No hay Registros
+                        </th>
+                      </tr>
+                      </tbody>
+                      <tbody *ngIf="existeArchivo">
+                      <tr class="gradeA odd">
+                        <td class="text-center">{{descripcionDocumento}}</td>
+                        <td class="text-center">{{fechaModificacion}}</td>
+                      </tr>
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <button class="btn btn-danger" type="button" (click)="cerrarModalRegistro()"><i class="fa fa-times"></i> Cancelar
+    </button>
+    <button class="btn btn-success" type="button" (click)="enviarFormulario()"><i class="fa fa-check"></i>&nbsp;&nbsp;Enviar solicitud
+    </button>
+  </modal-footer>
+</modal>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalDetalle>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalDetalle()">×</button>
+    <h4 class="modal-title">Detalle de interprograma</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estudiante:</dt>
+                <dd class="col-md-6">{{entidadMovilidadInterprograma?.estudiante?.datosPersonales?.getNombreCompleto()}}</dd>
+              </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Matr&iacute;cula:</dt>
+                <dd class="col-md-6">{{entidadMovilidadInterprograma?.estudiante?.matricula?.matriculaCompleta}}</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente:</dt>
+                <dd class="col-md-6">{{entidadMovilidadInterprograma?.estudiante?.promocion?.programaDocente?.descripcion}}</dd>
+              </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Materia que desea convalidar:</dt>
+                <dd class="col-md-6">{{entidadMovilidadInterprograma?.materiaCambiar?.materiaImpartida?.cursoOptativo?.descripcion}}</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12 form-group-margin">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Cr&eacute;ditos de la materia que desea convalidar:</dt>
+            <dd class="col-md-9">{{entidadMovilidadInterprograma?.materiaCambiar?.materiaImpartida?.cursoOptativo?.creditos}}</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="col-md-12 form-group-margin">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente de movilidad de la materia que desee cursar:</dt>
+                <dd class="col-md-6">{{entidadMovilidadInterprograma?.programaDocenteCursar?.descripcion}}</dd>
+              </dl>
+            </div>
+          </div>
+
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Materia que desea cursar:</dt>
+                <dd class="col-md-6">{{entidadMovilidadInterprograma?.materiaCursar?.materia?.descripcion}}</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12 form-group-margin">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Créditos de la materia que desea cursar:</dt>
+            <dd class="col-md-9">{{entidadMovilidadInterprograma?.materiaCursar?.materia?.creditos}}</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="col-md-12 form-group-margin">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Comentarios:</dt>
+            <dd class="col-md-9">
+                        <textarea rows="5" class="form-control" disabled>
+                        {{entidadMovilidadInterprograma?.comentarios}}
+                        </textarea>
+            </dd>
+          </dl>
+        </div>
+      </div>
+
+
+      <div class="col-md-12">
+        <div class="panel" style="width:100%;height: 200px; overflow-y: scroll; margin: auto">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-3 text-center">
+                <div class="thumbnail">
+                  <i class="fa fa-file-text-o fa-5x"></i>
+                  <h5 class="">Carta de motivos</h5>
+                  <hr>
+                  <div class="btn-tumbnail btn-group">
+                    <button class="btn  btn-warning fa fa-download"
+                            (click)="descargarArchivo()"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button (click)="cerrarModalDetalle()" class="btn btn-default" type="button">
+      <i class="fa fa-times"></i>&nbsp;&nbsp;Cancelar
+    </button>
+  </modal-footer>
+</modal>

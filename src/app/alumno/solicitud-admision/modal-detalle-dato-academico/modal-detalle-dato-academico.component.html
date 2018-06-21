@@ -1,0 +1,220 @@
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalDetalleDato>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModal()" aria-hidden="true">×</button>
+    <h4 class="modal-title">Detalle de datos acad&eacute;micos</h4>
+  </modal-header>
+  <modal-body>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nivel Académico:</dt>
+              <dd class="col-md-6">
+                {{entidadDatoAcademico?.gradoAcademico?.valor}}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <h5 class="form-heading text-muted text-semibold text-sm"></h5>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Disciplina/&aacute;rea de especializaci&oacute;n:</dt>
+              <dd class="col-md-6">
+                {{entidadDatoAcademico?.disciplina}}
+              </dd>
+            </dl>
+          </div>
+        </div>
+        <div class="col-md-6 padding-xs-vr" *ngIf="!camposParaBachillerato">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Facultad, escuela, departamento o centro:</dt>
+              <dd class="col-md-6">
+                {{entidadDatoAcademico?.facultad}}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Universidad o Instituci&oacute;n:</dt>
+              <dd class="col-md-6">
+                {{entidadDatoAcademico?.universidad}}
+              </dd>
+            </dl>
+          </div>
+        </div>
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Promedio de Calificaciones:</dt>
+              <dd class="col-md-6">
+                {{entidadDatoAcademico?.promedio}}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="!camposParaBachillerato">
+      <div class="col-md-12">
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Grado o T&iacute;tulo: </dt>
+              <dd class="col-md-6">
+                {{entidadDatoAcademico?.grado}}
+              </dd>
+            </dl>
+          </div>
+        </div>
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha en que se obtuvo:</dt>
+              <dd class="col-md-6">
+                {{entidadDatoAcademico?.getFechaTitulacion()}}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="!camposParaBachillerato">
+      <div class="col-md-12">
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Tipo de trabajo con el que obtuvo el grado:</dt>
+              <dd class="col-md-6">
+                {{entidadDatoAcademico?.tipoTrabajo?.valor == 'Otro' ? entidadDatoAcademico?.otroTipoTrabajo : entidadDatoAcademico?.tipoTrabajo?.valor}}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="!camposParaBachillerato">
+      <div class="col-md-12">
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Tutor o Supervisor:</dt>
+              <dd class="col-md-6">
+                {{entidadDatoAcademico?.tutor}}
+              </dd>
+            </dl>
+          </div>
+        </div>
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">N&uacute;mero de c&eacute;dula:</dt>
+              <dd class="col-md-6">
+                {{entidadDatoAcademico?.numeroCedula}}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-6 padding-xs-vr" >
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha de inicio:</dt>
+              <dd class="col-md-6">
+                {{entidadDatoAcademico?.anioInicio}}
+              </dd>
+            </dl>
+          </div>
+        </div>
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Año de término:</dt>
+              <dd class="col-md-6">
+                {{entidadDatoAcademico?.anioFin}}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Pa&iacute;s:</dt>
+              <dd class="col-md-6">
+                {{entidadDatoAcademico?.pais?.valor}}
+              </dd>
+            </dl>
+          </div>
+        </div>
+        <div class="col-md-6 padding-xs-vr" *ngIf="ocultarEstado">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estado:</dt>
+              <dd class="col-md-6">
+                {{entidadDatoAcademico?.entidadFederativa?.valor}}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-6 padding-xs-vr" *ngIf="ocultarEstado">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Municipio:</dt>
+              <dd class="col-md-6">
+                {{entidadDatoAcademico?.municipio?.valor}}
+              </dd>
+            </dl>
+          </div>
+        </div>
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Domicilio:</dt>
+              <dd class="col-md-6">
+                {{entidadDatoAcademico?.direccion}}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModal()"><i class="fa fa-times"></i>&nbsp;&nbsp;Cerrar</button>
+  </modal-footer>
+</modal>

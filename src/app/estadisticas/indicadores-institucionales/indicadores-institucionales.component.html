@@ -1,0 +1,51 @@
+<div class="tab-pane fade active in" id="indicador">
+  <form class="form-horizontal" [formGroup]="formularioIndicadores" (submit)="exportar(cicloSeleccionado.value)">
+    <h5 class="form-heading text-muted text-semibold text-sm">Indicadores Institucionales</h5>
+    <div class="col-md-12 padding-xs-vr">
+      <div class="row">
+        <div [ngClass]="{'has-error': getControlErrors('ciclo')}">
+
+          <label class="col-md-6 control-label" for="ciclo">Ciclo escolar:</label>
+          <div class="col-md-6">
+            <select id="ciclo" name="ciclo" #cicloSeleccionado formControlName="ciclo"
+                    class="form-control" ngControl="ciclo">
+              <option value="" selected>Selecciona...</option>
+              <option
+                *ngFor="let catalogoItem of opcionesCiclosEscolares"
+                value="{{catalogoItem.anio}}">
+                {{catalogoItem.anio}}
+              </option>
+            </select>
+            <span id="helpBlock1" class="help-block" *ngIf="(getControlErrors('ciclo'))">
+                                {{errorMessage(getControl('ciclo'))}}
+                            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-md-12 padding-xs-vr">
+      <div class="row">
+<!--
+        <div class="btn-group pull-right">
+          <div class="btn-group form-group-margin" dropdown>
+            <button class="btn btn-primary dropdown-toggle" type="submit">Exportar
+              <span class="btn-label icon fa fa-download"></span></button>
+          </div>
+        </div> -->
+
+
+        <div class="btn-group pull-right" dropdown>
+                  <button class="btn btn-labeled btn-conacyt form-group-margin"
+                          type="submit">
+                    <span class="btn-label icon fa fa-download"></span> Exportar</button>
+                      <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                    <i class="fa fa-caret-down"></i>
+                  </button>
+                </div>
+
+      </div>
+    </div>
+  </form>
+</div>

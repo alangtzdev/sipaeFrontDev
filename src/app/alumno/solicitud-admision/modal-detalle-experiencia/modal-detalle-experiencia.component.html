@@ -1,0 +1,83 @@
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalDetalleExp>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModal()" aria-hidden="true">×</button>
+    <h4 class="modal-title">Detalle de experiencia </h4>
+  </modal-header>
+  <modal-body>
+
+    <!-- SECCION-DETALLE -->
+    <div class="col-md-12" *ngIf="erroresConsultas.lenght !== 0" >
+      <alert
+        *ngFor="let alerta of erroresConsultas"
+        [type]="alerta.tipo"
+        dismissible="true">
+        {{ alerta?.mensaje }}
+      </alert>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-6 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Experiencia: </dt>
+              <dd class="col-md-6">{{entidadDetalleExperiencia?.tipoExperiencia?.valor}}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12" *ngIf="!mostrarCamposTipoExperiencia()">
+        <div class="col-md-6 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Título / tema: </dt>
+              <dd class="col-md-6">{{entidadDetalleExperiencia?.titulo}}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="col-md-6 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Institución o empresa: </dt>
+              <dd class="col-md-6">{{entidadDetalleExperiencia?.institucion}}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="col-md-6 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">{{mostrarCampo ? 'Cargo ocupado' : 'Responsabilidad'}}: </dt>
+              <dd class="col-md-6">{{entidadDetalleExperiencia?.responsabilidad}}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="col-md-6 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Desde: </dt>
+              <dd class="col-md-6">{{entidadDetalleExperiencia?.getFechaInicioConFormato()}}</dd>
+            </dl>
+          </div>
+        </div>
+        <div *ngIf="entidadDetalleExperiencia?.fechaFin" class="col-md-6 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Hasta: </dt>
+              <dd class="col-md-6">{{entidadDetalleExperiencia?.getFechaFinConFormato()}}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModal()"><i class="fa fa-close"></i> Cerrar</button>
+  </modal-footer>
+</modal>

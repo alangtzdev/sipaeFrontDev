@@ -1,0 +1,471 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12 text-center text-left-sm">
+      <h1>Contacto Dirección de Profesiones</h1>
+      <p>
+        <small>Informaci&oacute;n de contacto para tr&aacute;mite de c&eacute;dula</small>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-body">
+
+    <h6 class="form-heading text-muted text-semibold text-sm padding-xs-vr">CONTACTO SEDE ESTATAL</h6>
+
+    <div class="col-md-12 padding-xs-vr">
+      <div class="row">
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Nombre
+                    de la instituci&oacute;n:
+                  </dt>
+                  <dd class="col-md-6">
+                    {{entidadDireccionGP?.nombreInstitucion}}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Direcci&oacute;n:</dt>
+                  <dd class="col-md-6">
+                    {{entidadDireccionGP?.getDireccion()}}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                    Estado:
+                  </dt>
+                  <dd class="col-md-6">
+                    {{entidadDireccionGP?.entidadFederativa?.valor}}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Teléfono:
+                  </dt>
+                  <dd class="col-md-6">
+                    {{entidadDireccionGP?.telefono}}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Correo
+                    electr&oacute;nico:
+                  </dt>
+                  <dd class="col-md-6">
+                    {{entidadDireccionGP?.email}}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Sitio
+                    web:
+                  </dt>
+                  <dd class="col-md-6">{{entidadDireccionGP?.paginaWeb}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-12 text-right">
+          <div class="row">
+            <a class="btn btn-labeled btn-warning" *ngIf="hasRol('DOCENCIA')"
+               (click)="constructorEditar(1)"><span
+              class="btn-label icon fa fa-pencil-square-o"></span>Editar</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <h6 class="form-heading text-muted text-semibold text-sm padding-xs-vr">CONTACTO SEDE FEDERAL</h6>
+
+    <div class="col-md-12">
+      <div class="row">
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre de
+                    la instituci&oacute;n:
+                  </dt>
+                  <dd class="col-md-6">{{entidadDireccionSEP?.nombreInstitucion}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Direcci&oacute;n:</dt>
+                  <dd class="col-md-6">{{entidadDireccionSEP?.getDireccion()}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estado:
+                  </dt>
+                  <dd class="col-md-6">{{entidadDireccionSEP?.entidadFederativa?.valor}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Teléfono:
+                  </dt>
+                  <dd class="col-md-6">{{entidadDireccionSEP?.telefono}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Correo
+                    electr&oacute;nico:
+                  </dt>
+                  <dd class="col-md-6">{{entidadDireccionSEP?.email}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Sitio
+                    web:
+                  </dt>
+                  <dd class="col-md-6">{{entidadDireccionSEP?.paginaWeb}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12 text-right padding-xs-vr">
+          <div class="row">
+            <a class="btn btn-labeled btn-warning" *ngIf="hasRol('DOCENCIA')"
+               (click)="constructorEditar(2)"><span
+              class="btn-label icon fa fa-pencil-square-o"></span>Editar</a>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <h6 class="form-heading text-muted text-semibold text-sm padding-xs-vr" *ngIf="hasRol('ESTUDIANTE')">Clave de Institución / Clave de carrera</h6>
+
+    <div class="col-md-12" *ngIf="hasRol('ESTUDIANTE')">
+      <div class="row">
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Clave
+                    institucional:
+                  </dt>
+                  <dd class="col-md-6">{{entidadColsan?.claveInstitucion}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Clave de
+                    programa docente:
+                  </dt>
+                  <dd class="col-md-6">{{idProgramaDocente}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div >
+  </div>
+
+  <div class="panel-footer" *ngIf="hasRol('DOCENCIA')">
+    <div class="text-right">
+      <a class="btn btn-labeled btn-default" (click)="constructorDetalle()"><span
+        class="btn-label icon fa fa-eye"></span>Ver claves de carreras</a>&nbsp;&nbsp;&nbsp;
+    </div>
+  </div>
+</div>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalEditar  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalEditarDatos()">×</button>
+    <h4 class="modal-title">{{idDireccionDGP == 1 ? 'Actualizar Dirección Estatal de Profesiones' : ' Actualizar Dirección General de Profesiones'}}</h4>
+  </modal-header>
+  <modal-body>
+    <form class="form-horizontal" >
+      <div class="row">
+        <form [formGroup]="formulario">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 padding-xs-vr">
+                    <div class="row">
+                      <div [ngClass]="{'has-error': getControlErrors('nombreInstitucion')}">
+                        <label class="col-md-6 control-label text-left" for="nombreInstitucion">Nombre de la
+                          instituci&oacute;n:*</label>
+                        <div class="col-md-6">
+                          <input id="nombreInstitucion" name="nombreInstitucion" class="form-control" ngControl="nombreInstitucion"
+                                 placeholder="Direcci&oacute;n Estatal de Profesiones (SEP)" maxlength="50"
+                          formControlName="nombreInstitucion"/>
+                          <span id="helpBlock1" class="help-block" *ngIf="(getControlErrors('nombreInstitucion'))">
+                                                {{errorMessage(getControl('nombreInstitucion'))}}
+                                            </span>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="col-md-6 padding-xs-vr">
+                    <div class="row">
+                      <div [ngClass]="{'has-error': getControlErrors('idEntidadFederativa')}">
+                        <label class="col-md-6 control-label text-left" for="idEntidadFederativa">Estado:*</label>
+                        <div class="col-md-6">
+                          <select id="idEntidadFederativa" name="idEntidadFederativa"
+                                  ngControl="entidadFederativa" class="form-control"
+                          formControlName="idEntidadFederativa">
+                            <option value="" selected>Selecciona...</option>
+                            <option
+                                    *ngFor="let catalogoItem of opcionesEstados"
+                                    value="{{catalogoItem.id}}"
+                            >
+                              {{catalogoItem.text}}
+                            </option>
+                          </select>
+                          <span id="helpBlock3" class="help-block" *ngIf="(getControlErrors('idEntidadFederativa'))">
+                                                {{errorMessage(getControl('idEntidadFederativa'))}}
+                                            </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 padding-xs-vr">
+                    <div class="row">
+                      <div [ngClass]="{'has-error': getControlErrors('localidad')}">
+                        <label class="col-md-6 control-label text-left" for="localidad">Localidad/Colonia:*</label>
+                        <div class="col-md-6">
+                          <input id="localidad" class="form-control" ngControl="localidad"
+                                 placeholder="Direcci&oacute;n" maxlength="50" formControlName="localidad"/>
+                          <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('localidad'))">
+                                                {{errorMessage(getControl('localidad'))}}
+                                            </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 padding-xs-vr">
+                    <div class="row">
+                      <div [ngClass]="{'has-error': getControlErrors('vialidadPrincipal')}">
+                        <label class="col-md-6 control-label text-left" for="idioma">Calle:*</label>
+                        <div class="col-md-6">
+                          <input id="vialidadPrincipal" class="form-control" ngControl="vialidadPrincipal"
+                                 placeholder="Calle" maxlength="50" formControlName="vialidadPrincipal"/>
+                          <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('vialidadPrincipal'))">
+                                                {{errorMessage(getControl('vialidadPrincipal'))}}
+                                            </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 padding-xs-vr">
+                    <div class="row">
+                      <div [ngClass]="{'has-error': getControlErrors('numeroExterior')}">
+                        <label class="col-md-6 control-label text-left" for="numeroExterior">Numero exterior:*</label>
+                        <div class="col-md-6">
+                          <input id="numeroExterior" name="numeroExterior" class="form-control" ngControl="numeroExterior"
+                                 placeholder="Número exterior" maxlength="50" formControlName="numeroExterior"/>
+                          <span id="helpBlock1" class="help-block" *ngIf="(getControlErrors('numeroExterior'))">
+                                                {{errorMessage(getControl('numeroExterior'))}}
+                                            </span>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 padding-xs-vr">
+                    <div class="row">
+                      <div [ngClass]="{'has-error': getControlErrors('telefono')}">
+                        <label class="col-md-6 control-label text-left" for="telefono">Tel.:*</label>
+                        <div class="col-md-6">
+                          <input id="telefono" class="form-control" ngControl="telefono"
+                                 placeholder="Tel&eacute;fono" maxlength="25" formControlName="telefono"/>
+                          <span id="helpBlock4" class="help-block" *ngIf="(getControlErrors('telefono'))">
+                                                {{errorMessage(getControl('telefono'))}}
+                                            </span>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 padding-xs-vr">
+                    <div class="row">
+                      <div [ngClass]="{'has-error': getControlErrors('email')}">
+                        <label class="col-md-6 control-label text-left" for="email">Correo electr&oacute;nico:*</label>
+                        <div class="col-md-6">
+                          <input id="email" class="form-control" ngControl="email"
+                                 placeholder="Correo electr&oacute;nico" maxlength="50" formControlName="email"/>
+                          <span id="helpBlock5" class="help-block" *ngIf="(getControlErrors('email'))">
+                                                {{errorMessage(getControl('email'))}}
+                                            </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 padding-xs-vr">
+                    <div class="row">
+                      <div [ngClass]="{'has-error': getControlErrors('paginaWeb')}">
+                        <label class="col-md-6 control-label text-left" for="paginaWeb">Sitio web:</label>
+                        <div class="col-md-6">
+                          <input id="paginaWeb" class="form-control" ngControl="paginaWeb"
+                                 placeholder="Sitio web" maxlength="50" formControlName="paginaWeb"/>
+                          <span id="helpBlock6" class="help-block" *ngIf="(getControlErrors('paginaWeb'))">
+                                                {{errorMessage(getControl('paginaWeb'))}}
+                                            </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cerrarModalEditarDatos()"><i class="fa fa-close"></i> Cerrar</button>
+    <button type="button" class="btn btn-success" (click)="enviarFormulario()"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Guardar</button>
+  </modal-footer>
+</modal>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalDetalle  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalDetalleDatos()">&times;</button>
+    <h4 class="modal-title">Detalle claves carreras</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="col-md-12">
+          <h6 class="form-heading text-muted text-semibold text-sm">Clave Instiucional</h6>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Clave Institucional: </dt>
+                  <dd class="col-md-6">{{entidadCOLSAN?.claveInstitucion}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <h6 class="form-heading text-muted text-semibold text-sm">clave carrera / programa docente</h6>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row"  >
+            <div class="col-md-6 form-group-margin" *ngFor="let registro of registros">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">{{registro?.abreviatura}} - {{registro?.descripcion}}: </dt>
+                  <dd class="col-md-6">{{registro?.claveDgp}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <div class="text-right">
+      <button class="btn  btn-default" data-dismiss="modal" (click)="cerrarModalDetalleDatos()" type="button"><i class="fa fa-close"></i> Cerrar
+      </button>
+    </div>
+  </modal-footer>
+</modal>

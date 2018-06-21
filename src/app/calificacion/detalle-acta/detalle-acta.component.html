@@ -1,0 +1,92 @@
+<div class="panel-body tab-content tab-content-bordered">
+  <div class="tab-pane fade active in" id="tab1">
+
+      <h5 class="form-heading text-muted text-semibold text-sm">DETALLES GENERALES DEL ACTA </h5>
+
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+                <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Número de acta:</dt>
+                    <dd class="col-md-6">{{materiaImpartida?.actaCalificacion?.consecutivo ?  materiaImpartida?.actaCalificacion?.consecutivo : '-----'}}</dd>
+                </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+                <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Semestre y generación:</dt>
+                    <dd class="col-md-6">{{materiaImpartida?.periodoEscolar?.anio}} - {{materiaImpartida?.periodoEscolar?.periodo}}</dd>
+                </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+                <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente:</dt>
+                    <dd class="col-md-6">{{materiaImpartida?.materia?.id ? materiaImpartida?.materia?.programaDocente?.descripcion : materiaImpartida?.cursoOptativo?.programaDocente?.descripcion}}</dd>
+                </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+                <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha de per&iacute;odo escolar:</dt>
+                    <dd class="col-md-6">{{materiaImpartida?.periodoEscolar?.getPeriodo()}}</dd>
+                </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+                <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Promoción:</dt>
+                    <dd class="col-md-6">{{materiaImpartida?.promocion?.programaDocente?.abreviatura}}-{{materiaImpartida?.promocion?.consecutivo}}°</dd>
+                </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+                <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Materia:</dt>
+                    <dd class="col-md-6">{{materiaImpartida?.materia?.descripcion ? materiaImpartida?.materia?.descripcion : materiaImpartida?.cursoOptativo?.descripcion}}</dd>
+                </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+                <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Acrónimo y clave de la materia:</dt>
+                    <dd class="col-md-6">{{materiaImpartida?.materia?.clave ? materiaImpartida?.materia?.clave : materiaImpartida?.cursoOptativo?.clave}}</dd>
+                </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+                <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Profesor titular:</dt>
+                    <dd class="col-md-6">{{profesor}}</dd>
+                </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- / .tab-pane -->
+
+  </div> <!-- / .tab-content panel -->

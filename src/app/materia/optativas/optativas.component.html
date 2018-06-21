@@ -1,0 +1,400 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 text-center text-left-sm">
+      <h1>Designación de cursos especificos</h1>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-body ">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <!--<form  [formGroup]="formulario">&lt;!&ndash;(submit)="enviarFormulario($event)"&ndash;&gt;-->
+            <div class="col-md-8">
+              <div class="row" >
+                <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+
+                  <label class="control-label">Programa docente:</label>
+                  <div class="">
+                    <select #programaDocenteSelection class="form-control"
+                            (change)="activarBotonBusqueda(2)"
+                            (change)="cambioProgramaDocenteFiltro(programaDocenteSelection.value)"
+                    >
+                      <option value="" disabled selected> Selecciona...</option>
+                      <option *ngFor="let programaDocenteItem of programaDocenteSelectEstatus"
+                              [value]="programaDocenteItem.id">
+                        {{programaDocenteItem.text}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+
+                  <label class="control-label">Promoción:</label>
+                  <div class="">
+                    <select #promocion class="form-control"
+                            (change)="activarBotonBusqueda(2)"
+                            (change)="recuperarOptativas(promocion.value)">
+                      <option value="" disabled selected> Selecciona...</option>
+                      <option *ngFor="let promocionItem of promocionSelectEstatus"
+                              [value]="promocionItem.id">
+                        {{promocionItem.text}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                  <div [ngClass]="{ 'has-error': getControlErrors('optativa')}">
+                    <label class="">Curso espec&iacute;fico:</label>
+                    <div class="">
+                      <select #optativa class="form-control"
+                              (change)="activarBotonBusqueda(3)">
+                        <option value="" disabled selected> Selecciona...</option>
+                        <option *ngFor="let optativaItem of optativaSelectEstatus"
+                                [value]="optativaItem.id">
+                          {{optativaItem.text}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-12 text-right  padding-sm-vr no-padding-b">
+              <button
+                class="btn" (click)="buscarCriteriosCabezera(
+                                                promocion.value,
+												optativa.value
+                                             )" [disabled]="!botonBuscar"
+              >
+                Buscar <span class="fa fa-search"></span>
+              </button>
+            </div>
+          <!--</form>-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-10">
+            <div class="text-right" id="">
+              <a *ngIf="mostarBotones()" class="btn btn-labeled btn-default form-group-margin"
+                 (click)="constructorAgregar('Detalle')"><span class="btn-label icon fa fa-eye"></span>Detalle</a>
+              <a *ngIf="mostarBotones()" class="btn btn-labeled btn-success form-group-margin"
+                 (click)="constructorAgregar('Agregar')"><span class="btn-label icon fa fa-plus"></span>Agregar estudiantes</a>
+            </div>
+          </div>
+
+          <!--<div class="col-md-2 form-group-margin">
+            <div class="row">
+              <div class="col-md-12 text-right">
+                <div data-toggle="tooltip" title="Buscar">
+                  <input
+                    #filtro
+                    type="text"
+                    class="form-control"
+                    id="buscar"
+                    placeholder="Buscar..."
+                    (keyup.enter)="filtroChanged(filtro.value)"
+                    (blur)="limpiarFiltroBusqueda(); filtro.value = ''"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>-->
+        </div>
+      </div>
+    </div>
+
+    <!--<div class="col-md-12">-->
+    <div class="table-default">
+      <div class="table-responsive">
+        <div role="grid" class="dataTables_wrapper form-inline">
+          <div class="table-header clearfix">
+            <div class="table-caption">Lista de cursos especificos</div>
+
+            <div class="DT-lf-right">
+              <div class="DT-per-page">
+                <div class="dataTables_length" id="jq-datatables-example_length">
+                  <label>Registros por p&aacute;gina:
+                    <select
+                      #limiteControl
+                      name="jq-datatables-example_length"
+                      aria-controls="jq-datatables-example"
+                      class="form-control input-sm"
+                      (change) = "setLimite(limiteControl.value)"
+                    >
+                      <option value="10">10</option>
+                      <option value="25">25</option>
+                      <option value="50">50</option>
+                      <option value="100">100</option>
+                    </select>
+                  </label>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+            <thead>
+            <tr role="row">
+              <th *ngFor="let columna of columnas"
+                  [ngClass]="{
+                                                    'sorting_desc': columna.sort === 'desc',
+                                                    'sorting_asc': columna.sort === 'asc',
+                                                    'sorting': columna.sort !== false
+                                                }"
+                  (click)="sortChanged(columna)"
+              >
+                {{columna.titulo}}
+              </th>
+            </tr>
+            </thead>
+            <tbody *ngIf = "registros.length === 0">
+            <tr class="gradeA odd">
+              <th class="text-center" colspan="5">
+                Cambie sus criterios de búsqueda
+              </th>
+            </tr>
+            </tbody>
+            <tbody *ngIf = "registros.length !== 0">
+            <tr
+              *ngFor="let registro of registros"
+              class="gradeA odd"
+              [ngClass]="{
+                                                    'seleccionado': rowSeleccionado(registro)
+                                            }"
+              (click) = "rowSeleccion(registro)"
+            >
+              <td class="center">{{registro?.cursoOptativo?.clave}}</td>
+              <td class="center">{{registro?.cursoOptativo?.descripcion}}</td>
+              <td class="center">{{registro?.getProfesorTitular()}}</td>
+              <td class="center">{{registro?.periodoEscolar?.getPeriodoAnioConsecutivo()}}</td> <!--¿De donde se obtiene período?-->
+              <td class="center">{{registro?.cursoOptativo?.totalHoras}}</td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="table-footer clearfix">
+            <div class="DT-pagination" *ngIf="isSetPaginacion()">
+              <div class="dataTables_paginate paging_simple_numbers">
+                <pagination
+                  class="pagination"
+                  [totalItems] = "paginacion.registrosTotales"
+                  [itemsPerPage] = "limite"
+                  [maxSize] = "maxSizePags"
+                  [rotate]="false"
+                  [(ngModel)] = "paginaActual"
+                  (pageChanged) = "cambiarPagina($event)"
+                  previousText = "Anterior"
+                  nextText = "Siguiente"
+                >
+                </pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--</div>-->
+    </div>
+  </div>
+</div>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalAgregarEstu  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalAgregar()" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">{{tipoModal}} estudiantes</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"
+                    for="programaDocente">Programa docente:
+                </dt>
+                <dd class="col-md-6">{{registroActual?.materia?.programaDocente?.descripcion}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"
+                    for="promocion">Promoci&oacute;n:
+                </dt>
+                <dd class="col-md-6">{{registroActual?.promocion?.getClavePromocion()}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"
+                    for="optativa">Curso base:
+                </dt>
+                <dd class="col-md-6">
+                  {{registroActual?.materia?.clave}}-{{registroActual?.materia?.descripcion}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs" for="optativa">Curso
+              espec&iacute;fico:
+            </dt>
+            <dd class="col-md-9">
+              {{registroActual?.cursoOptativo?.clave}}-{{registroActual?.cursoOptativo?.descripcion}}
+            </dd>
+          </dl>
+        </div>
+      </div>
+
+      <div *ngIf="tipoModal == 'Agregar' || tipoModal == 'Editar' ">
+        <div class="col-md-12">
+          <h5 class="form-heading text-muted text-semibold text-sm">AGREGAR ESTUDIANTES</h5>
+        </div>
+
+        <form>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Matrícula:</label>
+                  <div class="container-fluid col-md-6">
+                    <input
+                            class="form-control"
+                            ng2-auto-complete
+                            [(ngModel)]="searchStr2"
+                            [ngModelOptions]="{standalone: true}"
+                            [source]="estudiantes"
+                            [min-chars] = "2"
+                            display-property-name="name"
+                            list-formatter="name"
+                            loading-text="Buscando..."
+                            no-match-found-text = "No hay coincidencias"
+                            list-formatter="name"
+                            (valueChanged)= "autocompleteOnSelect(searchStr2)"
+                            (keyup.enter) = "autocompleteOnSelect(searchStr2)"
+                            (keyup.backspace)="filtroAutocompleteChanged()"/>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 padding-xs-vr">
+                <div class="text-right">
+                  <button type="reset" class="btn btn-success form-group-margin"
+                          *ngIf="estadoBoton" (click)="agregarEstudiante()">
+                    <i class="fa fa-plus"></i>&nbsp;&nbsp;Agregar
+                  </button>
+                  <button type="button" class="btn btn-danger form-group-margin"
+                          *ngIf="registroSeleccionadoAG" (click)="eliminarEstudiante()">
+                    <i class="fa fa-times"></i>&nbsp;&nbsp;Eliminar
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </form>
+
+
+      </div>
+
+      <div *ngIf="tipoModal == 'Detalle' ">
+        <div class="col-md-12">
+          <h5 class="form-heading text-muted text-semibold text-sm">LISTA DE ALUMNOS ASIGNADOS</h5>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="table-default table-scroll-modal">
+          <div role="grid" class="dataTables_wrapper form-inline">
+            <table cellpadding="0" cellspacing="0" border="0"
+                   class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example"
+                   aria-describedby="jq-datatables-example_info">
+              <thead>
+              <tr role="row">
+                <th *ngFor="let columna of columnasAG"
+                    [ngClass]="{
+                                                  'sorting_desc': columna.sort === 'desc',
+                                                  'sorting_asc': columna.sort === 'asc',
+                                                  'sorting': columna.sort !== false
+                                              }"
+                >
+                  {{columna.titulo}}
+                </th>
+              </tr>
+              </thead>
+              <tbody *ngIf="registrosAG.length === 0">
+              <tr class="gradeA odd">
+                <th class="text-center" colspan="2">
+                  No hay Registros
+                </th>
+              </tr>
+              </tbody>
+              <tbody *ngIf="registrosAG.length !== 0">
+              <tr
+                      *ngFor="let registro of registrosAG"
+                      class="gradeA odd"
+                      [ngClass]="{
+                                                  'seleccionado': rowSeleccionadoAG(registro)
+                                          }"
+                      (click)="rowSeleccionAG(registro)"
+              >
+                <td class="center">{{registro?.estudiante?.matricula?.matriculaCompleta}}</td>
+                <td class="center">{{registro?.estudiante?.datosPersonales?.getNombreCompleto()}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </modal-body>
+  <modal-footer>
+    <div class="text-right">
+      <div *ngIf="tipoModal == 'Agregar' ">
+        <button (click)="cerrarModalAgregar()" class="btn btn-default" type="button"><i
+                class="fa fa-close"></i>&nbsp;&nbsp;Cerrar
+        </button>
+        <button (click)="cerrarModalAgregar()" type="submit" class="btn btn-success"><i
+                class="fa fa-floppy-o"></i>&nbsp;&nbsp;Guardar
+        </button>
+      </div>
+      <div *ngIf="tipoModal == 'Detalle' ">
+        <button (click)="cerrarModalAgregar()" class="btn btn-default" type="button"><i
+                class="fa fa-close"></i>&nbsp;&nbsp;Cerrar
+        </button>
+      </div>
+    </div>
+  </modal-footer>
+</modal>
+

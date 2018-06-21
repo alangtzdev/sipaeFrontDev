@@ -1,0 +1,601 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 text-center text-left-sm">
+      <h1>Servicio social</h1>
+      <p><small>Información del servicio social y reportes de seguimiento</small></p>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 text-right">
+      <hr class="visible-xs no-grid-gutter-h">
+      <button class="btn btn-labeled  btn-default" [disabled]="!servicioSocial" (click)="modalDetalleSolicitudServicioSocial()"><span class="btn-label icon fa fa-eye"></span>Detalle de la solicitud</button>
+    </div>
+  </div>
+</div>
+<div class="panel">
+  <div class="panel-body">
+    <tabset [justified]="true">
+      <tab heading="Información del servicio" active="true" class="nav nav-tabs">
+        <!--<informacion-servicio [entidadServicio]="servicioSocial" [horasTotales]="horasTotales" [horasRestantes]="horasRestantes">Informaci&oacute;n del servicio</informacion-servicio>-->
+        <div class="panel-body tab-content tab-content-bordered">
+          <div class="tab-pane fade active in" id="tab1">
+            <div class="row">
+              <div class="col-md-12">
+                <h6 class="form-heading text-muted text-semibold text-sm">Información del Servicio</h6>
+              </div>
+            </div> <!-- cierre div row-->
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Institución:</dt>
+                      <dd class="col-md-6">{{servicioSocial?.getStrInstitucion()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Sector:</dt>
+                      <dd class="col-md-6">{{servicioSocial?.getStrSector()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+
+              </div>
+            </div> <!--cierre col-md-12-->
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha de inicio:</dt>
+                      <dd class="col-md-6">{{servicioSocial?.getStrFechaInicio()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha de fin:</dt>
+                      <dd class="col-md-6">{{servicioSocial?.getStrFechaFin()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+
+              </div>
+            </div> <!--cierre col-md-12-->
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Horario:</dt>
+                      <dd class="col-md-6">{{servicioSocial?.getStrHorario()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Días de servicio:</dt>
+                      <dd class="col-md-6">{{servicioSocial?.getStrDias()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+
+              </div>
+            </div> <!--cierre col-md-12-->
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Número de horas reportadas:</dt>
+                      <dd class="col-md-6">{{horasTotales}}</dd>
+                    </dl>
+                  </div>
+                </div>
+
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Número de horas de servicio restantes:</dt>
+                      <dd class="col-md-6">{{horasRestantes}}</dd>
+                    </dl>
+                  </div>
+                </div>
+
+              </div>
+            </div> <!--cierre col-md-12-->
+          </div> <!-- / .tab-pane -->
+        </div> <!-- / .tab-content panel -->
+
+      </tab>
+      <tab heading="Reportes de seguimiento">
+        <div class="panel-body tab-content tab-content-bordered">
+          <div id="tab2" class="tab-pane active in">
+
+            <div class="row">
+              <div class="col-md-12" *ngIf="erroresAlerts">
+                <div class="alert alert-danger">
+                  <button class="close" data-dismiss="alert" aria-label="close" (click)="erroresAlerts=''">&times;</button>
+                  {{erroresAlerts}}
+                </div>
+              </div>
+              <div class="col-md-12">
+                <h6 class="form-heading text-muted text-semibold text-sm">Reportes de seguimiento</h6>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="row">
+                <h6>Agregar reporte de seguimiento</h6>
+              </div>
+            </div>
+
+            <form [formGroup]="formularioReporteBimestral">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="row">
+
+                    <div class="col-md-6 padding-xs-vr">
+                      <div class="row">
+                        <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs" for="fecha">De:*</label>
+                        <div class="col-md-6">
+                          <div class="dropdown" dropdown autoClose="disabled">
+                            <div class="input-group">
+                              <input type="text" class="form-control" disabled formControlName="fechaInicio" ng-model="fechaInicio" *ngIf="dt" value="{{ getDate(true)}}">
+                              <span class="input-group-btn">
+                                                        <button (click)="verificarFechas('fechaInicio')" id="simple-btn-keyboard-nav" type="button" class="btn fa fa-calendar" dropdownToggle></button>
+                                                    </span>
+                            </div>
+
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu" dropdownMenu >
+                              <li>
+                                <div style="display:inline-block;" (click)="verificarFechas('fechaInicio',true)">
+                                  <datepicker [(ngModel)]="dt" [ngModelOptions]="{standalone: true}" [minDate]="tomorrow" [showWeeks]="true"></datepicker>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 padding-xs-vr">
+                      <div class="row">
+                        <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs" for="fecha">A:</label>
+                        <div class="col-md-6">
+                          <div class="dropdown" dropdown autoClose="disabled">
+                            <div class="input-group">
+                              <input type="text" class="form-control" disabled formControlName="fechaFin" ng-model="fechaFin" *ngIf="dtend" value="{{ getDateEnd(true) }}">
+                              <span class="input-group-btn">
+                                                    <button (click)="verificarFechas('fechaFin')" id="simple-btn-keyboard-nav" type="button" class="btn fa fa-calendar" dropdownToggle></button>
+                                                    </span>
+                            </div>
+
+                            <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu" dropdownMenu >
+                              <li>
+                                <div style="display:inline-block;" (click)="verificarFechas('fechaFin',true)">
+                                  <datepicker [(ngModel)]="dtend" [ngModelOptions]="{standalone: true}" [minDate]="tomorrow" [showWeeks]="true"></datepicker>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="row text-right">
+                  <a (click)="validarSolicitud()" class="btn btn-labeled btn-success form-group-margin"><span class="btn-label icon fa fa-plus"></span>Agregar</a>
+                </div>
+              </div>
+            </form>
+
+            <br>
+            <div class="col-md-12" *ngIf="nombreArchivo!==null">
+              {{nombreArchivo}}
+            </div>
+            <div class="col-md-12">
+              <div class="row">
+                <div id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome" style="min-height: 185px;">
+                  <div class="dz-default dz-message " ngFileSelect [options]="options" (onUpload)="handleDropUpload($event)">
+                    <i class="fa fa-cloud-upload"></i>Soltar archivo aqu&iacute;<br><span class="dz-text-small">o clic para cargar manualmente</span>
+                  </div>
+                  <input type="file" ngFileSelect [options]="options" (onUpload)="handleBasicUpload($event)">
+                </div>
+                <div class="progress">
+                  <div *ngIf="enableBasic()" class="progress-bar" role="progressbar" aria-valuenow="basicProgress" aria-valuemin="0" aria-valuemax="100"
+                       [style.width]="basicProgress + '%'">
+                    {{basicProgress}}%
+                  </div>
+
+                  <div *ngIf="enableDrop()" class="progress-bar" role="progressbar" aria-valuenow="dropProgress" aria-valuemin="0" aria-valuemax="100"
+                       [style.width]="dropProgress + '%'">
+                    {{dropProgress}}%
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <h6>Reportes de seguimiento elaborados</h6>
+              </div>
+              <div class="col-md-12" *ngIf="erroresConsultas.lenght !== 0">
+                <alert *ngFor="let alerta of erroresConsultas" [type]="alerta.tipo" dismissible="true">
+                  {{ alerta?.mensaje }}
+                </alert>
+              </div>
+              <div class="col-md-12" *ngIf="erroresGuardado.lenght !== 0">
+                <alert *ngFor="let alerta of erroresGuardado" [type]="alerta.tipo" dismissible="true">
+                  {{ alerta?.mensaje }}
+                </alert>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="text-right">
+                  <button [disabled]="!registroSeleccionado" (click)="descargarArchivo()" class="btn btn-labeled btn-warning form-group-margin"><span class="btn-label icon fa fa-download"></span>Descargar</button>
+                  <button [disabled]="deshabilitarEliminar()" (click)="eliminarArchivo()" class="btn btn-labeled btn-danger form-group-margin"><span class="btn-label icon fa fa-times"></span>Eliminar</button>
+                </div>
+
+                <div class="table-default">
+                  <div role="grid" class="dataTables_wrapper form-inline">
+                    <div class="table-responsive">
+                      <table class="table table-striped table-bordered dataTable no-footer">
+                        <thead>
+                        <tr>
+                          <th class="sorting text-center" tabindex="0" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending"
+                              style="">Nombre</th>
+                          <th class="sorting text-center" tabindex="0" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending"
+                              style="">Periodo</th>
+                          <th class="sorting text-center" tabindex="0" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending"
+                              style="">Fecha de actualizaci&oacute;n</th>
+                        </tr>
+                        </thead>
+                        <tbody *ngIf="registros.length === 0">
+                        <tr class="gradeA odd">
+                          <th class="text-center" colspan="3">
+                            No hay Registros
+                          </th>
+                        </tr>
+                        </tbody>
+                        <tbody *ngIf="registros.length !== 0">
+                        <tr *ngFor="let registro of registros" class="gradeA odd" [ngClass]="{'seleccionado': rowSeleccionado(registro)}" (click)="rowSeleccion(registro)">
+                          <td class="center">{{registro?.documento?.archivo?.nombre}}</td>
+                          <td class="center">{{registro?.documento?.getStrPeriodo()}}</td>
+                          <td class="center">{{registro?.documento?.getStrUltimaActualizacion()}}</td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- / .tab-pane -->
+        </div>
+        <!-- / .tab-content panel -->
+      </tab>
+      <tab heading="Finalización">
+        <!--<finalizacion-servicio *ngIf="registrosFinal" [registrosFinal]="registrosFinal">Finalización</finalizacion-servicio>-->
+        <div class="panel-body tab-content tab-content-bordered">
+          <div id="tab3" class="tab-pane active in">
+            <div class="col-md-12">
+              <div class="row">
+                <h6 class="form-heading text-muted text-semibold text-sm">Documentos de terminaci&oacute;n de servicio social</h6>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="text-right">
+                  <button class="btn btn-labeled btn-warning form-group-margin" (click)="descargarArchivoTerminacion()" [ngClass]="{'disabled':!registroSeleccionado}">
+                    <span class="btn-label icon fa fa-download"></span>Descargar
+                  </button>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="table-default">
+                  <div role="grid" class="dataTables_wrapper form-inline">
+                    <div class="table-responsive">
+                      <table class="table table-striped table-bordered dataTable no-footer">
+                        <thead>
+                        <tr>
+                          <th class="sorting text-center" tabindex="0" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending"
+                              style="">Nombre</th>
+                          <th class="sorting text-center" tabindex="0" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending"
+                              style="">Periodo</th>
+                          <th class="sorting text-center" tabindex="0" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending"
+                              style="">Fecha de actualizaci&oacute;n</th>
+                        </tr>
+                        </thead>
+                        <tbody *ngIf="registrosFinal.length === 0">
+                        <tr class="gradeA odd">
+                          <th class="text-center" colspan="3">
+                            No hay Registros
+                          </th>
+                        </tr>
+                        </tbody>
+                        <tbody *ngIf="registrosFinal.length !== 0">
+                        <tr *ngFor="let registro of registrosFinal" class="gradeA odd" [ngClass]="{'seleccionado': rowSeleccionadoTerminacion(registro)}" (click)="rowSeleccionTerminacion(registro)">
+                          <td class="center">{{registro?.archivo?.nombre}}</td>
+                          <td class="center">{{registro?.getStrPeriodo()}}</td>
+                          <td class="center">{{registro.getStrUltimaActualizacion()}}</td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> <!-- / .tab-pane -->
+        </div> <!-- / .tab-content panel -->
+
+      </tab>
+
+    </tabset>
+  </div>
+</div>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalDetalles>
+  <modal-header>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cerrarModal()">×</button>
+    <h4 class="modal-title"> Detalle solicitud de servicio social</h4>
+  </modal-header>
+  <modal-body>
+    <tabset>
+      <tab heading="Datos generales">
+        <!--<generales [servicioSocial]="element"></generales>-->
+        <div class="panel">
+          <div class="panel-body tab-content tab-content-bordered">
+            <div class="row">
+
+              <div class="col-md-12">
+                <div class="row">
+
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Institución:</dt>
+                        <dd class="col-md-6">{{servicioSocial?.getStrInstitucion()}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Responsable:</dt>
+                        <dd class="col-md-6">{{servicioSocial?.getStrResponsable()}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="row">
+
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Área:</dt>
+                        <dd class="col-md-6">{{servicioSocial?.getStrSector()}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt style="text-overflow:clip;" class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Proyecto a desarrollar:</dt>
+                        <dd class="col-md-6">{{servicioSocial?.proyecto}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="row">
+
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Período del:</dt>
+                        <dd class="col-md-6">{{servicioSocial?.getStrFechaInicio()}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Período al:</dt>
+                        <dd class="col-md-6">{{servicioSocial?.getStrFechaFin()}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="col-md-12 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Observaciones:</dt>
+                    <dd class="col-md-9"><textarea class="form-control" rows="6" cols="200" disabled>{{servicioSocial?.observaciones}}</textarea></dd>
+                  </dl>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div> <!-- / .tab-pane -->
+
+      </tab>
+      <tab heading="Datos del servicio">
+        <!--<actividades *ngIf="element" [servicioSocial]="element" [registrosEvidencia]="registrosEvidencia"></actividades>-->
+        <div class="panel">
+          <div class="panel-body tab-content tab-content-bordered">
+            <div class="tab-pane fade active in" id="tab2m">
+              <div class="row">
+
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-6 form-group-margin">
+                      <div class="row">
+                        <dl class="form-horizontal">
+                          <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Tipo de servicio:</dt>
+                          <dd class="col-md-6">Servicio social</dd>
+                        </dl>
+                      </div>
+                    </div>
+                    <div class="col-md-6 form-group-margin">
+                      <div class="row">
+                        <dl class="form-horizontal">
+                          <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Área:</dt>
+                          <dd class="col-md-6">{{servicioSocial?.getStrSector()}}</dd>
+                        </dl>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Proyecto a desarrollar:</dt>
+                      <dd class="col-md-9">{{servicioSocial?.proyecto}}</dd>
+                    </dl>
+                  </div>
+                </div>
+
+
+
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-6 form-group-margin">
+                      <div class="row">
+                        <dl class="form-horizontal">
+                          <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Per&iacute;odo del:</dt>
+                          <dd class="col-md-6">{{servicioSocial?.getStrFechaInicio()}}</dd>
+                        </dl>
+                      </div>
+                    </div>
+                    <div class="col-md-6 form-group-margin">
+                      <div class="row">
+                        <dl class="form-horizontal">
+                          <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Per&iacute;odo al:</dt>
+                          <dd class="col-md-6">{{servicioSocial?.getStrFechaFin()}}</dd>
+                        </dl>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Horas acumuladas del servicio:</dt>
+                      <dd class="col-md-6">{{servicioSocial?.getStrNumeroHoras()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Actividades:</dt>
+                      <dd class="col-md-9">
+                        <textarea class="form-control" rows="6" cols="200" maxlength="500" width="900" disabled>{{servicioSocial?.actividades}}</textarea>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- / .tab-pane -->
+          </div>
+          <!-- / .tab-content panel -->
+        </div>
+      </tab>
+      <tab heading="Documentos en expediente ">
+        <!--<documentos-en-expediente [servicioSocial]="element"></documentos-en-expediente>-->
+        <div class="panel">
+          <div class="panel-body tab-content tab-content-bordered">
+            <div class="col-md-12">
+
+              <div class="row text-right">
+                <div class="btn-group">
+                  <button (click)="descargarArchivoModal()" type="button" class="btn btn-warning form-group-margin" [ngClass]="{'disabled':!registroSeleccionadoModal}"><span class="btn-label icon fa fa-download"></span> Descargar</button>
+                </div>
+              </div>
+
+              <div class="row">
+                <!--=================================
+                =            DATA-TABLES            =
+                ==================================-->
+                <div role="grid" id="jq-datatables-example_wrapper" class="dataTables_wrapper form-inline no-footer table-responsive">
+                  <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example"
+                         aria-describedby="jq-datatables-example_info">
+                    <thead>
+                    <tr role="row">
+                      <th class="sorting_asc" tabindex="0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column ascending">Documento</th>
+                      <th class="sorting" tabindex="0" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">Fecha de expedici&oacute;n</th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="listaDocumentos.length < 1 ">
+                    <tr class="gradeA odd">
+                      <th class="text-center" colspan="2">
+                        No hay Registros
+                      </th>
+                    </tr>
+                    </tbody>
+                    <tbody *ngIf="listaDocumentos.length !== 0">
+                    <tr *ngFor="let registro of listaDocumentos" class="gradeA odd" [ngClass]="{'seleccionado': rowSeleccionadoModal(registro)}" (click)="rowSeleccionModal(registro)">
+                      <td class="center">{{registro?.archivo?.nombre}}</td>
+                      <td class="center">{{registro?.getStrUltimaActualizacion()}}</td>
+                    </tr>
+                    </tbody>
+
+                  </table>
+                </div>
+                <!--====  End of DATA-TABLES  ====
+                            [ngClass]="{
+                            'seleccionado': rowSeleccionado(registro)
+                            }"
+                            (click)="rowSeleccion(registro)"
+
+                -->
+              </div>
+
+            </div>
+            <!-- / .tab-pane -->
+          </div>
+          <!-- / .tab-content panel -->
+        </div>
+      </tab>
+    </tabset>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModal()"><i class="fa fa-close"></i> Cerrar</button>
+  </modal-footer>
+</modal>

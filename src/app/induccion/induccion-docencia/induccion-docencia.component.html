@@ -1,0 +1,530 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 text-center text-left-sm">
+      <h1>Inducción docencia</h1>
+      <p><small>Listas de asistencias de docencia.</small></p>
+    </div>
+  </div>
+</div>
+<div class="panel ">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="row">
+          <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+            <div class="row">
+              <label class="col-md-12">Fecha:</label>
+              <div class="col-md-12">
+                <div class="dropdown" dropdown autoClose="disabled">
+                  <div class="input-group">
+                    <input type="text" class="form-control" value="{{getFechaEjemplo()}}" disabled>
+                    <span class="input-group-btn">
+                                         <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                        </span>
+                  </div>
+                  ​
+                  <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1" dropdownMenu >
+                    <li>
+                      <div style="display:inline-block;">
+                        <datepicker [(ngModel)]="dt" [ngModelOptions]="{standalone: true}" [showWeeks]="true"></datepicker>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-sm-12 text-right padding-sm-vr no-padding-b">
+        <button class="btn btn-default" (click)="filtrarPorFecha()">
+          Buscar por fecha
+          <span class="fa fa-search"></span>
+        </button>
+      </div>
+      <div class="col-md-2 col-sm-12 text-right padding-sm-vr no-padding-b">
+        <button class="btn btn-default" (click)="mostrarTodos()">
+          Mostrar todos
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="panel">
+  <div class="panel-body">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-10"><!-- cont-botones-->
+          <div class="text-right">
+            <button class="btn btn-labeled btn-success form-group-margin" (click)="constructorCLA('agregar')"><span class="btn-label icon fa fa-plus"></span>Crear lista de asistencia</button>
+            <button *ngIf="mostrarBotonEditar()" class="btn btn-labeled btn-warning form-group-margin" (click)="constructorCLA('editar')"><span class="btn-label icon fa fa-pencil"></span>Editar</button>
+            <button *ngIf="registroSeleccionado" class="btn btn-labeled btn-default form-group-margin" (click)="constructorDL()"><span class="btn-label icon fa fa-eye"></span>Detalle</button>
+
+            <div class="btn-group form-group-margin" dropdown>
+                  <button class="btn btn-conacyt dropdown-toggle" type="button" data-toggle="dropdown">
+                  <span class="btn-label icon fa fa-download"></span> Exportar </button> 
+                   <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                    <i class="fa fa-caret-down"></i>
+                  </button>
+                   <ul class="dropdown-menu">
+                    <li role="menuitem"><a class="dropdown-item" (click)="exportar('Excel')">Exportar a Excel</a></li>
+                    <li class="divider dropdown-divider"></li>
+                    <li role="menuitem" ><a class="dropdown-item" (click)="exportar('PDF')">Exportar a PDF</a></li>
+                  </ul>
+                </div>
+      </div>
+    </div>
+        <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+          <div class="row">
+            <div class="col-md-12 pull-right text-right">
+              <div class="row">
+                <input
+                        #filtro
+                        type="text"
+                        class="form-control"
+                        id="buscar"
+                        placeholder="Buscar..."
+                        (keyup.enter)="filtroChanged(filtro.value)"
+                        (blur)="limpiarFiltroBusqueda(); filtro.value=''"
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+    <div class="col-md-12">
+      <div class="row">
+        <div class="table-default table-responsive">
+          <div role="grid" class="dataTables_wrapper form-inline">
+            <div class="table-header clearfix">
+              <div class="table-caption">Lista de asistencia</div>
+              <div class="DT-lf-right">
+                <div class="DT-per-page">
+                  <div class="dataTables_length" id="jq-datatables-example_length">
+                    <label>
+                      Registros por página:
+                      <select #limiteControl
+                              name="jq-datatables-example_length"
+                              aria-controls="jq-datatables-example"
+                              class="form-control input-sm"
+                              (change) = "setLimite(limiteControl.value)"
+                      >
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example"
+                   aria-describedby="jq-datatables-example_info">
+              <thead>
+              <tr role="row">
+                <th *ngFor="let columna of columnas"
+                    [ngClass]="{
+                                    'sorting_desc': columna.sort === 'desc',
+                                    'sorting_asc': columna.sort === 'asc',
+                                    'sorting': columna.sort !== false
+                                }"
+                    (click)="sortChanged(columna)">
+                  {{columna.titulo}}
+                </th>
+              </tr>
+              </thead>
+              <tbody *ngIf="registros.length === 0">
+              <tr class="gradeA odd">
+                <th class="text-center" colspan="5">
+                  No hay registros
+                </th>
+              </tr>
+              </tbody>
+              <tbody *ngIf="registros.length !== 0">
+              <tr class="gradeA odd" (click)="rowSeleccion(registro)" *ngFor="let registro of registros" [ngClass]="{'seleccionado': rowSeleccionado(registro)}">
+                <td class="center">{{registro.sala.descripcion}}</td>
+                <td class="center">{{obtenerFecha(registro.horario)}}</td>
+                <td class="center">{{obtenerHora(registro.horario)}}</td>
+                <td class="center">{{registro?.tipo?.valor}}</td>
+                <td class="center">{{registro.getEstatus()}}</td>
+              </tr>
+              </tbody>
+            </table>
+           <div class="table-footer clearfix">
+              <div class="DT-pagination" *ngIf="isSetPaginacion()">
+                <div class="dataTables_paginate paging_simple_numbers">
+                  <pagination
+                    class="pagination"
+                    [totalItems]="paginacion.registrosTotales"
+                    [itemsPerPage] = "limite"
+                    [maxSize] = "maxSizePags"
+                    [rotate]="false"
+                    [(ngModel)]="paginaActual"
+                    (pageChanged)="cambiarPagina($event)"
+                    previousText="Anterior"
+                    nextText="Siguiente">
+                  </pagination>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalCrearEditar  >
+  <modal-header>
+    <button type="button" class="close" data-dismiss="modal" (click)="cerrarModalCrearListaAsistencia()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">{{modo==="editar" ? 'Editar' : 'Agregar'}} lista de asistencia</h4>
+  </modal-header>
+  <modal-body>
+
+    <form [formGroup]="formularioListaAsistencia">
+      <div class="row">
+        <div class="col-md-12 text-right-lg text-right-md text-left-sm text-left-xs">
+          <div class="row">
+
+
+            <div [ngClass]="{'has-error': getControlErrors('idSala')}" class=" col-md-6 padding-xs-vr">
+              <div class="row">
+                <label class="col-md-6 control-label" for="Sala">
+                  Sala:*
+                </label>
+                <div class="col-md-6">
+                  <select id="sala" class="form-control" required ngControl="idSala" formControlName="idSala">
+                    <option value=""> Selecciona... </option>
+                    <option value="{{sala.id}}" *ngFor="let sala of opcionesCatalogoSala">{{sala.text}}</option>
+                  </select>
+                  <span id="helpBlock1" class="help-block" *ngIf="(getControlErrors('idSala'))">
+                                        {{errorMessage(getControl('idSala'))}}
+                                    </span>
+                </div>
+              </div>
+            </div>
+
+            <div [ngClass]="{'has-error': getControlErrors('horario')}" class=" col-md-6 padding-xs-vr">
+              <div class="row">
+                <label class="col-md-6 control-label" for="horario">
+                  Horario:*
+                </label>
+                <div class="col-md-6">
+                  <input id="horario" class="form-control" ngControl="horario" type="text" required placeholder="HH:MM (24Hrs)"
+                  formControlName="horario">
+                  <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('horario'))">
+                                        {{errorMessage(getControl('horario'),'horario')}}
+                                    </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 text-right-lg text-right-md text-left-sm text-left-xs">
+          <div class="row">
+            <div class="col-md-6 padding-xs-vr" (click)="$event.preventDefault()">
+              <div class="row">
+                <label class="col-md-6 control-label " for="fecha">Fecha:*</label>
+                <div class="col-md-6">
+                  <div class="dropdown" dropdown autoClose="outsideClick">
+                    <div class="input-group">
+                      <input type="text" id="fecha" class="form-control" value="{{getFechaEjemploCLA()}}" disabled>
+                      <span class="input-group-btn">
+                                                 <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu11" data-toggle="dropdown" dropdownToggle></button>
+                                                </span>
+                    </div>
+                    ​
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1" dropdownMenu >
+                      <li>
+                        <div style="display:inline-block;">
+                          <datepicker [(ngModel)]="dtCLA" [minDate]="minDate" [ngModelOptions]="{standalone: true}" [showWeeks]="true"></datepicker>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="" *ngIf="idListaAsistencia">
+        <h5 class="form-heading text-muted text-semibold text-sm">AGREGAR ASISTENTES AL GRUPO</h5>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+
+              <div class="col-md-6 padding-xs-vr">
+                <div class="row">
+                  <div [ngClass]="{ 'has-error': getControlErrors('idEstudiante') }" >
+
+                    <label class="col-md-6 control-label text-left">Estudiante:</label>
+                    <div class='container-fluid col-md-6'>
+                      <input formControlName="idEstudiante" id="addEstudiante" name="addEstudiante" #addEstudiante
+                             class="form-control"
+                             ng2-auto-complete
+                             [(ngModel)]="searchStr2"
+                             [source]="opcions"
+                             [min-chars] = "2"
+                             display-property-name="name"
+                             list-formatter="name"
+                             loading-text="Buscando..."
+                             no-match-found-text = "No hay coincidencias"
+                             list-formatter="name"
+                             (valueChanged)= "autocompleteOnSelect(searchStr2)"
+                             (keyup.enter) = "autocompleteOnSelect(searchStr2)"
+                             (keyup.backspace)="filtroAutocompleteChanged()"/>
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 padding-xs-vr">
+                <button  class="btn btn-labeled btn-success" *ngIf="estadoBoton" (click)="agregarEstudiante();" (blur)="addEstudiante.value=''"><span class="btn-label icon fa fa-plus"></span>Agregar </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <h5 class="form-heading text-muted text-semibold text-sm">LISTA DE ASISTENTES</h5>
+
+        <div class="row">
+          <div class="col-md-12">
+
+            <div class="row">
+              <div class="col-md-12">
+
+                <div class="col-md-12"><!-- cont-botones-->
+                  <div class="text-right">
+                    <button *ngIf="idListaAsistencia && registroSeleccionadoCLA && registroSeleccionadoCLA.asitio" (click)="marcarAsistencia(false)" class="btn btn-labeled btn-danger form-group-margin"><span class="btn-label icon fa fa-times"></span>No asistió</button>
+                    <button *ngIf="idListaAsistencia && registroSeleccionadoCLA && !registroSeleccionadoCLA.asitio" (click)="marcarAsistencia(true)" class="btn btn-labeled btn-success form-group-margin"><span class="btn-label icon fa fa-check"></span>Asistió</button>
+                    <div class="btn-group form-group-margin" dropdown>
+                      <button class="btn btn-conacyt dropdown-toggle" type="button" data-toggle="dropdown">Exportar
+                        <span class="caret"></span></button>
+                      <ul class="dropdown-menu">
+                        <li role="menuitem"><a class="dropdown-item" (click)="exportarCLA('Excel')">Exportar a Excel</a></li>
+                        <li class="divider dropdown-divider"></li>
+                        <li role="menuitem" ><a class="dropdown-item" (click)="exportarCLA('PDF')">Exportar a PDF</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div> <!-- cont-botones-->
+                ​
+                <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+                  <div class="row">
+                    <div class="col-md-12 pull-right text-right">
+                      <div class="row">
+                        <input
+                                #filtro2
+                                type="text"
+                                class="form-control"
+                                id="buscar1"
+                                placeholder="Buscar..."
+                                (keyup.enter)="filtroChangedCLA(filtro2.value)"
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div> <!-- cont-buscar-->
+              </div>
+            </div>
+
+            <div class="table-default table-responsive">
+              <div role="grid" class="dataTables_wrapper form-inline">
+                <div class="table-header clearfix">
+                  <div class="table-caption">Lista de asistencia</div>
+
+                </div>
+                <div class="panel" style="width:100%;height: 200px; overflow-y: scroll; margin: auto">
+                  <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example1"
+                         aria-describedby="jq-datatables-example_info">
+                    <thead>
+                    <tr role="row">
+                      <th *ngFor="let columna of columnasCLA"
+                          [ngClass]="{
+                                              'sorting_desc': columna.sort === 'desc',
+                                              'sorting_asc': columna.sort === 'asc',
+                                              'sorting': columna.sort !== false
+                                          }"
+                          (click)="sortChangedCLA(columna)">
+                        {{columna.titulo}}
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="estudiantesListaAsistencia.length === 0">
+                    <tr class="gradeA odd">
+                      <th class="text-center" colspan="4">
+                        No hay Registros
+                      </th>
+                    </tr>
+                    </tbody>
+                    <tbody *ngIf="estudiantesListaAsistencia.length !== 0" >
+                    <tr *ngFor="let asistente of estudiantesListaAsistencia" class="gradeA odd" (click)="rowSeleccionCLA(asistente)" [ngClass]="{'seleccionado': rowSeleccionadoCLA(asistente)}">
+                      <td class=" center ">{{asistente?.estudiante?.matricula?.matriculaCompleta}}</td>
+                      <td class="center ">{{asistente.getNombreCompleto()}}</td>
+                      <td class="center ">{{asistente.getProgramaDocente()}}</td>
+                      <td class="center text-center"> <span class='btn-label icon fa fa-{{columnaAsistencia(asistente.asitio)}}'></span> </td>
+                    </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <button type="button " class="btn btn-default " data-dismiss="modal " (click)="cerrarModalCrearListaAsistencia() "><i class="fa
+                                            fa-times "></i> Cancelar</button>
+    <button type="submit " class="btn btn-success " (click)="enviarFormulario() "><i class="fa {{band
+                                            ? 'fa-floppy-o' : 'fa-floppy-o'}} "></i>{{band ? '&nbsp;&nbsp;Actualizar' : '&nbsp;&nbsp;Guardar'}}</button>
+  </modal-footer>
+</modal>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalDetalle  >
+  <modal-header>
+    <button type="button" class="close" data-dismiss="modal" (click)="cerrarModalDetalleLista()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Detalles lista de asistencia</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+      <div class="col-md-12 text-right-lg text-right-md text-left-sm text-left-xs">
+        <div class="row">
+
+          <div class=" col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label" for="Sala">
+                Sala:
+              </label>
+              <div class="col-md-6">
+                <input type="text" class="form-control" disabled="" value="{{asistenciaInduccion?.sala?.descripcion}}">
+              </div>
+            </div>
+          </div>
+
+          <div class=" col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label" for="horario">
+                Horario:
+              </label>
+              <div class="col-md-6">
+                <input id="horario1" class="form-control" type="text" disabled="" value="{{asistenciaInduccion?.obtenerHora()}}">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 text-right-lg text-right-md text-left-sm text-left-xs">
+        <div class="row">
+          <div class="col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label " for="fecha">Fecha:</label>
+              <div class="col-md-6">
+                <input type="text" id="fecha1" class="form-control" disabled="" value="{{asistenciaInduccion?.obtenerFecha()}}">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="" > <!--*ngIf="idListaAsistencia"-->
+
+      <h5 class="form-heading text-muted text-semibold text-sm">LISTA DE ASISTENTES</h5>
+
+      <div class="row">
+        <div class="col-md-12">
+
+          <div class="row">
+            <div class="col-md-12">
+
+              <div class="col-md-10"><!-- cont-botones-->
+
+              </div> <!-- cont-botones-->
+              ​
+              <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+                <div class="row">
+                  <div class="col-md-12 pull-right text-right">
+                    <div class="row">
+                      <input
+                              #filtro3
+                              type="text"
+                              class="form-control"
+                              id="buscar2"
+                              placeholder="Buscar..."
+                              (keyup.enter)="filtroChangedDL(filtro3.value)"
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div> <!-- cont-buscar  -->
+            </div>
+          </div>
+
+          <div class="table-default table-responsive">
+            <div role="grid" class="dataTables_wrapper form-inline">
+              <div class="table-header clearfix">
+                <div class="table-caption">Lista de asistencia</div>
+
+
+              </div>
+              <div class="panel" style="width:100%;height: 200px; overflow-y: scroll; margin: auto">
+                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example2"
+                       aria-describedby="jq-datatables-example_info">
+                  <thead>
+                  <tr role="row">
+                    <th *ngFor="let columna of columnasDL"
+                        [ngClass]="{
+                                              'sorting_desc': columna.sort === 'desc',
+                                              'sorting_asc': columna.sort === 'asc',
+                                              'sorting': columna.sort !== false
+                                          }"
+                        (click)="sortChangedDL(columna)">
+                      {{columna.titulo}}
+                    </th><!---->
+                  </tr>
+                  </thead>
+                  <tbody *ngIf="estudiantesListaAsistencia.length === 0">
+                  <tr class="gradeA odd">
+                    <th class="text-center" colspan="4">
+                      No hay Registros
+                    </th>
+                  </tr>
+                  </tbody>
+                  <tbody *ngIf="estudiantesListaAsistencia.length !== 0" >
+                  <tr *ngFor="let asistente of estudiantesListaAsistencia" class="gradeA odd" (click)="rowSeleccionDL(asistente)" [ngClass]="{'seleccionado': rowSeleccionadoDL(asistente)}">
+                    <td class=" center ">{{asistente?.estudiante?.matricula?.matriculaCompleta}}</td>
+                    <td class="center ">{{asistente.getNombreCompleto()}}</td>
+                    <td class="center ">{{asistente.getProgramaDocente()}}</td>
+                    <td class="center text-center"> <span class='btn-label icon fa fa-{{columnaAsistenciaDL(asistente.asitio)}}'></span> </td>
+                  </tr>
+
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </modal-body>
+</modal>

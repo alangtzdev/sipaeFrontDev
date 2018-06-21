@@ -1,0 +1,150 @@
+<!-- Page background -->
+<div id="page-signin-bg" style="z-index: -1">
+  <!-- Replace this with your bg image -->
+  <img src="assets/images/login/background_colsan.png" alt="">
+</div>
+<!-- / Page background -->
+
+<!-- Container -->
+
+<div class="col-md-12 center-block text-center logo-colsan-login">
+  <img src="assets/images/login/colsan_logo.png">
+</div>
+
+<div class="signin-container">
+
+  <!-- Left side -->
+  <div class="signin-info">
+    <div class="colsan-logo-login">
+      <img class="img-responsive" src="assets/images/SIPAE_LOGO.png">
+    </div>
+    <div class="slogan text-center">
+      Sistema Integral de Planeación y Administración Escolar
+    </div> <!-- / .slogan -->
+  </div>
+
+
+  <!-- Right side -->
+  <div class="signin-form">
+
+    <!-- Form -->
+    <form role="form" (ngSubmit)="login($event, usuario.value, contrasenia.value)" data-toggle="validator" autocomplete="off">
+      <div class="form-group-login w-icon">
+        <input id="usuario"
+               name="usuario"
+               type="text"
+               #usuario
+               class="form-control input-lg"
+               required
+               placeholder="Nombre de usuario" autocomplete="off">
+        <span class="fa fa-user signin-form-icon"></span>
+      </div>
+
+      <div class="form-group-login w-icon">
+        <input id="contrasenia"
+               name="contrasenia"
+               type="password"
+               #contrasenia
+               class="form-control input-lg"
+               required
+               placeholder="Contrase&ntilde;a" autocomplete="off">
+        <span class="fa fa-lock signin-form-icon"></span>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit"
+                class="btn btn-primary btn-block">
+          Iniciar Sesi&oacute;n
+        </button>
+      </div>
+
+      <div class="form-actions text-right">
+        <a [routerLink]="['/forgotPassword']"
+           class="forgot-password">
+          ¿Olvidaste tu contraseña?
+        </a>
+      </div>
+      <alert
+        *ngFor="let alerta of alertas;let i = index"
+        [type]="alerta.type"
+        dismissible="true"
+        (close)="cerrarAlerta(i)">
+        {{alerta?.msg}}
+      </alert>
+
+      <div class="col-md-12 padding-xs-vr text-right">
+        <label class="fat-commentarios">Esta versi&oacute;n est&aacute; optimizada para el navegador Google Chrome</label>
+      </div>
+    </form>
+    <!-- / Form -->
+
+  </div>
+  <!-- Right side -->
+</div>
+<!-- / Container -->
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-alert modal-danger" #modal  >
+  <modal-header class="text-left" [show-close]="true">
+    <i class="fa fa-times"></i>
+  </modal-header>
+  <modal-body>
+    <span><strong>{{descripcionError}}</strong></span>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModal()"><i class="fa fa-times"></i>&nbsp;&nbsp;Cerrar</button>
+  </modal-footer>
+</modal>
+
+
+<div class="not-a-member">
+      <span dropdown (on-toggle)="toggled($event)">
+      <a class="form-group-margin" href id="simple-dropdown" data-tooltip="Información relacionada con proceso de selección para nuevos estudiantes"  dropdownToggle>
+       Selección COLSAN
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="simple-dropdown">
+        <li>
+          <a class="faq-list" [routerLink]="['/registroInteresado']">
+          Registro de interesado
+          </a>
+        </li>
+        <li>
+          <a class="faq-list" [routerLink]="['/registroSolicitante']">
+          Registro de solicitante
+          </a>
+        </li>
+        <li>
+          <a class="faq-list" [routerLink]="['/PreguntasFrecuentes']">
+          Preguntas frecuentes
+          </a>
+        </li>
+      </ul>
+    </span>
+  <div class="clearfix visible-xs"></div>
+  <span dropdown (on-toggle)="toggled($event)" autoClose="always">
+      <a class="form-group-margin" href id="movilidad" data-tooltip="Información relacionada con proceso de movilidad para estudiantes externos" dropdownToggle>
+        Movilidad
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="movilidad">
+        <li>
+        <a class="faq-list" [routerLink]="['/registroInteresadoMovilidad']">
+          Registro interesado movilidad externa
+        </a>
+        </li>
+        <li>
+          <a class="faq-list" [routerLink]="['/estudianteMovilidad']">
+          Registro estudiante movilidad externa
+          </a>
+        </li>
+        <li>
+          <a class="faq-list" [routerLink]="['/pregruntaFrecuentesMovilidad']">
+          Preguntas frecuentes movilidad externa
+          </a>
+        </li>
+      </ul>
+    </span>
+  <div class="clearfix visible-xs"></div>
+  <a class="form-group-margin" target="_blank" href="http://www.colsan.edu.mx/vinculacion/convenios.html" data-tooltip="Lista de convenios generales y específicos">
+    Convenios
+  </a>
+
+</div>

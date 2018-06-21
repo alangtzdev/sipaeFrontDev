@@ -1,0 +1,55 @@
+<div *ngIf="this.authService.getUsuarioLogueado()">
+  <button
+    type="button"
+    class="toggle-boton"
+    menu-toggle
+    (click)="toggle()"
+  ><span class="fa" [ngClass]="{'icono-abierto': !isOn, 'icono-cerrado': isOn}"></span>
+    <i class="navbar-icon fa fa-bars icon"></i>
+
+  </button>
+
+  <div (click)="$event.preventDefault()">
+    <div class="navbar-inner">
+      <!-- Main navbar header -->
+      <div class="navbar-header">
+
+        <!-- Logo -->
+        <a href="#" [routerLink]="['/dashboard']" class="navbar-brand">
+          <div><img alt="Pixel Admin" src="assets/images/SIPAE_LOGO.png"></div>
+        </a>
+
+        <!-- Main navbar toggle -->
+        <button type="button" class="navbar-toggle collapsed pull-right" dropdown>
+          <i id="split-button" class="navbar-icon fa fa-bars" dropdownToggle></i>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+            <li><a class="dropdown-item" (click)="logout()"><i class="dropdown-icon fa fa-power-off"></i> Salir</a></li>
+          </ul>
+        </button>
+      </div> <!-- / .navbar-header -->
+
+      <div id="main-navbar-collapse" class="collapse navbar-collapse main-navbar-collapse">
+        <div>
+
+          <div class="right clearfix">
+            <ul class="nav navbar-nav pull-right right-navbar-nav">
+
+              <li class="dropdown user" dropdown autoClose="outsideClick">
+                <a href="#" id="single-button" class="dropdown-toggle user-menu" data-toggle="dropdown" dropdownToggle
+                  id="menu1">
+                  <img *ngIf=usuarioLogueado.imagenUrl src='{{usuarioLogueado.imagenUrl}}' alt="">
+                  <img *ngIf=!usuarioLogueado.imagenUrl src="assets/images/usuario.png" alt="">
+                  <span>{{usuarioLogueado?.nombreCompleto ? usuarioLogueado?.nombreCompleto : usuarioLogueado.email}} </span>
+                </a>
+                <ul class="dropdown-menu" role="menu1" aria-labelledby="menu1" dropdownMenu>
+                  <li><a (click)="logout()"><i class="dropdown-icon fa fa-power-off"></i> Salir</a></li>
+                </ul>
+              </li>
+            </ul> <!-- / .navbar-nav -->
+          </div> <!-- / .right -->
+        </div>
+      </div> <!-- / #main-navbar-collapse -->
+
+    </div> <!-- / .navbar-inner -->
+  </div>
+</div>

@@ -1,0 +1,69 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12 text-center text-left-sm">
+      <h1>{{editarCursoBandera ? "Editar grupo" : "Agregar grupo"}}</h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel">
+      <div class="panel-body">
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="panel">
+              <div class="col-lg-12">
+                <form-wizard #wizard [isHidden]="true">
+                  <wizard-step [title]="'1 Datos del curso'" (onNext)="onStep1Next()">
+                    <app-datos-curso #datosCurso></app-datos-curso>
+                  </wizard-step>
+                  <wizard-step [title]="'2 Agregar estudiantes'" (onNext)="onStep2Next()">
+                    <app-estudiantes-curso #agregarEstudiantes></app-estudiantes-curso>
+                  </wizard-step>
+                </form-wizard>
+              </div>
+            </div>
+            <div class="card-footer2" [hidden]="isCompleted">
+              <button type="button" class="btn btn-secondary float-left" (click)="previous()" >Atras</button>
+              <button type="button" class="btn btn-secondary float-right" (click)="next()"  >Siguiente</button>
+            </div>
+            <div class="col-lg-12">
+              <button
+                      class="btn btn-default pull-right"
+                      (click)="cancelar()">
+                <i class="btn-label icon fa fa-arrow-circle-o-left"></i>
+                Regresar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-alert modal-success fade in" #modalConfirmar  >
+  <div class=" modal-content">
+    <div class="modal-header text-left">
+      <i class="fa fa-check-circle"></i>
+    </div>
+    <div class="modal-body">
+      <div class="col-md-12 col-sm-12 col-xs-12 modal-title">
+        {{editarCursoBandera ? '¿Estás seguro de actualizar el grupo?' : '¿Estás seguro de agregar un nuevo grupo?'}}
+      </div>
+      <!--    <div class="col-md-12 col-sm-12 col-xs-12 modal-title">
+              ¿Est&aacute;s seguro de editar ese grupo?
+          </div>  -->
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12 modal-footer">
+      <div class="col-md-6 col-sm-6 col-xs-6">
+        <button data-dismiss="modal" class="btn btn-danger" type="button" (click)="cerrarModalConfirma()">&nbsp;No</button>
+      </div>
+      <div class="col-md-6 col-sm-6 col-xs-6">
+        <!--   <button type="button" class="btn btn-success" data-dismiss="modal" (click)="editarGrupoo()">&nbsp;Sí</button>  -->
+        <button type="button" class="btn btn-success" (click)="agregarGrupo()" data-dismiss="modal">&nbsp;Sí</button>
+      </div>
+    </div>
+  </div>
+</modal>

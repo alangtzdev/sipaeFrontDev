@@ -1,0 +1,25 @@
+<div cass="container">
+  <div class="row padding">
+    <app-spinner-overflow></app-spinner-overflow>
+    <barra-navegacion *ngIf="authService.getUsuarioLogueado()" [usuarioLogueado]=authService.getUsuarioLogueado() [isOn]=!isOn id="main-navbar" class="navbar navbar-inverse" role="navigation" (isOnChange)="changeState($event)">
+    </barra-navegacion>
+    <div *ngIf="authService.getUsuarioLogueado()" class="main-menu sidebar" [ngClass]="{'active-menu': !isOn, 'inactive-menu': isOn}">
+      <perfil [usuarioLogueado]=authService.getUsuarioLogueado() class="menu-profile">
+      </perfil>
+      <nav>
+        <a [routerLink]="crisis-center" routerLinkActive="active">Crisis Center</a>
+        <a [routerLink]="heroes" routerLinkActive="active">Heroes</a>
+        <a [routerLink]="admin" routerLinkActive="active">Admin</a>
+        <a [routerLink]="login" routerLinkActive="active">Login</a>
+      </nav>
+      <menu id="accordion" class="panel-group">
+      </menu>
+    </div>
+    <!--TODO Se realizo cambio debido a que no se activa (isOnChange)="changeState($event)" -->
+    <!--<div [ngClass]="{'active-content': !isOn, 'inactive-content': isOn}">-->
+    <div [ngClass]="{'active-content': authService.getUsuarioLogueado(), 'inactive-content': !authService.getUsuarioLogueado()}">
+      <router-outlet></router-outlet>
+      <div class="main-menu-bg"></div>
+    </div>
+  </div>
+</div>

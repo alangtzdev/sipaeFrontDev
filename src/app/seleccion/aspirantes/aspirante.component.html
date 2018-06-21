@@ -1,0 +1,312 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12 text-center text-left-sm">
+      <h1>Aspirantes</h1>
+      <p>
+        <small>Lista de aspirantes a los programas docentes.</small>
+      </p>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+      <hr class="visible-xs no-grid-gutter-h">
+
+      <!--<button [disabled]="noSeleccionoPromocion" (click)="descargarFormatoActa(promocion.value)"
+              class="btn btn-labeled btn-success col-lg-12 col-md-12 col-xs-12 col-sm-12 pull-right col-sm-auto form-group-margin bordered"><span
+              class="btn-label icon fa fa-plus"></span>Acta de comit&eacute; de admisi&oacute;n
+      </button>-->
+
+      <button [disabled]="noSeleccionoPromocion"
+              class="btn btn-labeled btn-success col-lg-12 col-md-12 col-xs-12 col-sm-12 pull-right col-sm-auto"
+              (click)="modalRegistro(promocion.value)"><span class="btn-label icon fa fa-plus"></span>Lista de
+        resultados
+      </button>
+    </div>
+
+  </div>
+</div>
+
+    <div class="panel">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-sm-12 col-md-8">
+                <div class="row">
+                  <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                    <label for="exampleInputEmail1">Programa docente:</label>
+                    <select #programaDocenteSelection class="form-control" id="programaDocente"
+                            (change)="cambioProgramaDocenteFiltro(programaDocenteSelection.value)"
+                            (change)="activarBotonBusqueda(2)">
+                      <option value="" selected>Selecciona...</option>
+                      <option *ngFor="let opciones of opcionesProgramaDocente"
+                              [value]="opciones.id">
+                        {{opciones.text}}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                    <label for="examplePromocion">Promoci&oacute;n:</label>
+                    <select #promocion class="form-control" id="tipoPromocion"
+                            (change)="hayPromocion(promocion.value)"
+                            (change)="activarBotonBusqueda(1)"
+                            [disabled]="selectPromocionDeshabilitado">
+                      <option value="" selected>Selecciona...</option>
+                      <option *ngFor="let promocionItem of opcionesPromocion"
+                              [value]="promocionItem.id">
+                        {{promocionItem.text}}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                    <label for="exampleInputEmail1">Resultados:</label>
+                    <select #estuatusResultado class="form-control" id="tipoNacionalidad"
+                            [disabled]="selectResultados">
+                      <option value="" selected>Selecciona...</option>
+                      <option *ngFor="let ResultadoItem of opcionesResultados"
+                              [value]="ResultadoItem.id">
+                        {{ResultadoItem.text}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+                <!--<div class="row">-->
+                <button class="btn"
+                        (click)="buscarCriteriosCabezera(programaDocenteSelection.value,promocion.value,estuatusResultado.value)"
+                        [disabled]="!botonValido">
+                  Buscar <span class="fa fa-search"></span></button>
+                <!--</div>-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="panel">
+      <div class="panel-body">
+
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-10"><!-- cont-botones-->
+                <div class="text-right">
+                  <button *ngIf="mostrarGenerarDictamenNoAceptacion"
+                          class="btn btn-labeled btn-success form-group-margin"
+                          (click)="abrirModalDictamenNoAceptacion()"><span
+                    class="btn-label icon fa fa-file"></span>
+                    Dictamen de no aceptación
+                  </button>
+                  <button *ngIf="mostrarGenerarDictamen && (usuarioRol.rol.id !== 2)"
+                          class="btn btn-labeled btn-success form-group-margin"
+                          (click)="descargarFormatoDictamenAceptacion()"><span
+                    class="btn-label icon fa fa-file"></span>
+                    Dictamen de aceptación
+                  </button>
+                  <button *ngIf="registroSelecionado"
+                          class="btn btn-labeled btn-success form-group-margin"
+                          (click)="generarSolicitudAdminision()"><span
+                    class="btn-label icon fa fa-file"></span>
+                    Solicitud de admisión
+                  </button>
+                  <button *ngIf="registroSelecionado"
+                          class="btn btn-labeled btn-info form-group-margin"
+                          (click)="aspiranteDetalles()"><span
+                    class="btn-label icon fa fa-folder-open"></span>Expediente
+                  </button>
+
+
+                  <div class="btn-group form-group-margin" dropdown>
+                    <button id="split-button" type="button" class="btn btn-conacyt dropdown-toggle">
+                      <span class="btn-label icon fa fa-download"></span> Exportar
+                    </button>
+
+                    <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                      <i class="fa fa-caret-down"></i>
+                    </button>
+
+
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+                      <li role="menuitem">
+                        <a
+                          class="dropdown-item"
+                          (click)="exportar('Excel')"
+                        >
+                          Exportar a Excel
+                        </a>
+                      </li>
+                      <li class="divider dropdown-divider"></li>
+                      <li role="menuitem">
+                        <a
+                          class="dropdown-item"
+                          (click)="exportar('PDF')"
+                        >
+                          Exportar a PDF
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                </div>
+
+
+                <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+                  <div class="row">
+                    <div class="col-md-12 pull-right text-right">
+                      <input
+                        #filtro
+                        type="text"
+                        class="form-control"
+                        id="buscar"
+                        placeholder="Buscar..."
+                        (keyup.enter)="filtroChanged(filtro.value)"
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div><!-- cont-buscar-->
+            </div>
+
+
+            <div class="col-md-12"> <!-- cont-tabla-->
+              <!--DATA-TABLE-->
+              <div role="grid" id="jq-datatables-example_wrapper"
+                   class="dataTables_wrapper form-inline no-footer table-responsive">
+                <form [formGroup]="formularioRegistroPagina">
+                  <div class="table-header clearfix">
+                    <div class="table-caption">Lista de aspirantes</div>
+                    <div class="DT-lf-right">
+                      <div class="DT-per-page">
+                        <div class="dataTables_length" id="jq-datatables-example_length">
+                          <label>
+                            Registros por página
+                            <select
+                              #limiteControl
+                              name="jq-datatables-example_length"
+                              aria-controls="jq-datatables-example"
+                              class="form-control input-sm"
+                              (change)="setLimite(limiteControl.value)"
+                              formControlName="registrosPorPagina"
+                            >
+                              <option value="10">10</option>
+                              <option value="25">25</option>
+                              <option value="50">50</option>
+                              <option value="100">100</option>
+                            </select>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+
+                <div class="table-responsive">
+                  <table cellpadding="0" cellspacing="0" border="0"
+                         class="table table-striped table-bordered dataTable no-footer"
+                         id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                    <thead>
+                    <tr role="row">
+                      <th
+                        *ngFor="let columna of columnas"
+                        [ngClass]="{
+                                                    'sorting_desc': columna.sort === 'desc',
+                                                    'sorting_asc': columna.sort === 'asc',
+                                                    'sorting': columna.sort !== false
+                                                }"
+                        (click)="sortChanged(columna)"
+                      >
+                        {{columna.titulo}}
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="registrosEstudiante.length === 0">
+                    <tr class="gradeA odd">
+                      <th class="text-center" colspan="6">
+                        Cambie sus criterios de busqueda
+                      </th>
+                    </tr>
+                    </tbody>
+                    <tbody *ngIf="registrosEstudiante.length !== 0">
+                    <tr
+                      *ngFor="let registro of registrosEstudiante"
+                      class="gradeA odd"
+                      [ngClass]="{
+                                'seleccionado': rowSeleccionado(registro)
+                              }"
+                      (click)="getAspirante(registro)"
+                    >
+                      <td class="center">{{registro?.foliosSolicitud?.folioCompleto}}</td>
+                      <td class="center">{{registro?.datosPersonales?.getNombreCompleto()}}</td>
+                      <td class="center">{{registro?.promocion?.programaDocente?.descripcion}}</td>
+                      <!--<td class="center">{{registro?.lgac?.denominacion}}</td>-->
+                      <td class="center">{{registro?.getFechaUltimaActualizacionConFormato()}}</td>
+                      <td class="center">{{registro?.estatus?.valor}}
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="table-footer clearfix">
+                  <div class="DT-pagination" *ngIf="isSetPaginacion()">
+                    <div class="dataTables_paginate paging_simple_numbers">
+                      <pagination
+                        class="pagination"
+                        [totalItems]="paginacion.registrosTotales"
+                        [itemsPerPage]="limite"
+                        [maxSize]="maxSizePags"
+                        [rotate]="false"
+                        [(ngModel)]="paginaActual"
+                        (pageChanged)="cambiarPagina($event)"
+                        previousText="Anterior"
+                        nextText="Siguiente"
+                      >
+                      </pagination>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>  <!-- cont-tabla-->
+          </div>
+        </div> <!--panel-body-->
+     <!--termino row-->
+
+
+<!--INICIA MODAL DICTAMEN NO ACEPTACION-->
+<modal [animation]="animation" [keyboard]="keyboard"
+       [backdrop]="backdrop" class="modal-alert modal-success" #modalDictamenNoAceptacion>
+  <form [formGroup]="formularioComentarios">
+    <modal-header>
+      <div class="modal-header">
+        <i class="fa fa-file"></i>
+      </div>
+      <div class="col-md-12 modal-title">Dictamen de no aceptacion</div>
+    </modal-header>
+
+    <modal-body>
+      <div class="col-md-12 modal-body">
+        <div class="form-group text-left">
+          Agregar comentarios:*
+          <div>
+            <textarea class="form-control" rows="7" ngControl='comentarios' maxlength="500"
+                      formControlName="comentarios"></textarea>
+          </div>
+        </div>
+      </div>
+    </modal-body>
+    <modal-footer>
+      <div class="col-md-12 modal-footer">
+        <div class="col-md-6">
+          <button type="button" class="btn btn-danger" (click)="cerrarModalDictamenNoAceptacion()">No</button>
+        </div>
+        <div class="col-md-6">
+          <button type="submit" class="btn btn-success" (click)="enviarFormulario()">Sí</button>
+        </div>
+      </div>
+    </modal-footer>
+
+  </form>
+</modal>
+<!--TERMINA MODAL DICTAMEN NO ACEPTACION-->

@@ -1,0 +1,397 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12 text-center text-left-sm">
+      <h1>Detalle de movilidad</h1>
+      <p>
+        <small>Detalle del estudiante para movilidad.</small>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel">
+      <div class="panel-body">
+
+        <h6 class="form-heading text-muted text-semibold text-sm">Detalle del estudiante</h6>
+
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estudiante:</dt>
+                  <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.estudiante?.datosPersonales?.getNombreCompleto()}}</dl>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Matr&iacute;cula:</dt>
+                  <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.estudiante?.matricula?.matriculaCompleta}}</dl>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Promoci&oacute;n:</dt>
+                  <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.estudiante?.promocion?.getClavePromocion()}}</dl>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente:</dt>
+                  <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.estudiante?.promocion?.programaDocente?.descripcion}}</dl>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12" *ngIf="entidadMovilidadCurricular?.tipoMovilidad?.id == 1">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Asignatura que acredit&oacute;:</dt>
+                  <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.materia?.descripcion}}</dl>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Clave de asignatura:</dt>
+                  <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.materia?.clave}}</dl>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Modalidad de movilidad:</dt>
+                  <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.tipoMovilidad?.valor}}</dl>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h6 class="form-heading text-muted text-semibold text-sm" *ngIf="entidadMovilidadCurricular?.tipoMovilidad?.id == 1">Información complementaria</h6>
+
+        <div class="col-xs-12 col-sm-12 col-md-12" *ngIf="entidadMovilidadCurricular?.tipoMovilidad?.id == 1">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Cr&eacute;ditos COLSAN:</dt>
+                  <dl class="col-xs-12 col-sm-6 col-md-6">
+                    {{entidadInformacionComplementaria?.movilidad?.materia?.creditos ? entidadInformacionComplementaria?.movilidad?.materia?.creditos : 'No aplica'}}
+                  </dl>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha de inicio:</dt>
+                  <dl class="col-xs-12 col-sm-6 col-md-6">
+                    {{entidadMovilidadCurricular?.estudianteMateriaImpartida?.materiaImpartida?.periodoEscolar?.getInicioCursoConFormato() ? entidadMovilidadCurricular?.estudianteMateriaImpartida?.materiaImpartida?.periodoEscolar?.getInicioCursoConFormato(): 'No aplica'}}
+                  </dl>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-12" *ngIf="entidadMovilidadCurricular?.tipoMovilidad?.id == 1">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fin de cursos:</dt>
+                  <dl class="col-xs-12 col-sm-6 col-md-6">
+                    {{entidadMovilidadCurricular?.estudianteMateriaImpartida?.materiaImpartida?.periodoEscolar?.getFinCursoConFormato() ? entidadMovilidadCurricular?.estudianteMateriaImpartida?.materiaImpartida?.periodoEscolar?.getFinCursoConFormato() : 'No Aplica'}}
+                  </dl>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h6 class="form-heading text-muted text-semibold text-sm">Datos de instituci&oacute;n receptora</h6>
+        <div *ngIf="entidadMovilidadCurricular?.tipoMovilidad?.id == 1">
+          <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Convenio:</dt>
+                    <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.convenio?.descripcion ? entidadMovilidadCurricular?.convenio?.descripcion : 'No aplica'}}</dl>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Per&iacute;odo de la instituci&oacute;n:</dt>
+                    <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadInformacionComplementaria?.periodoInstitucion}}</dl>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Instituci&oacute;n receptora:</dt>
+                    <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadInformacionComplementaria?.institucionReceptora}}</dl>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Calendario de la instituci&oacute;n:</dt>
+                    <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadInformacionComplementaria?.calendarioInstitucion}}</dl>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Abreviado de la instituci&oacute;n:</dt>
+                    <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadInformacionComplementaria?.abreviadoInstitucion}}</dl>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente:</dt>
+                    <dl class="col-xs-12 col-sm-6 col-md-6">
+                      {{entidadInformacionComplementaria?.programaDocenteInstitucion}}
+                    </dl>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Asignatura que cursar&aacute;:</dt>
+                    <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.materiaCursar}}</dl>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Profesor titular:</dt>
+                    <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadInformacionComplementaria?.profesorUno}}</dl>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Profesor adjunto:</dt>
+                    <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadInformacionComplementaria?.profesorDos}}</dl>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Cr&eacute;ditos en la instituci&oacute;n:</dt>
+                    <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadInformacionComplementaria?.creditosInstitucion}}</dl>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Calificaci&oacute;n:</dt>
+                    <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.estudianteMateriaImpartida?.calificacionOrdinaria}}</dl>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Calificaci&oacute;n equivalencia:</dt>
+                    <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadInformacionComplementaria?.calificacionColsanEquivalencia}}</dl>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin" *ngIf="entidadMovilidadCurricular?.tipoMovilidad?.id == 3">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Trabajo de campo:</dt>
+                    <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.trabajoCampo}}</dl>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Registro de fecha de conclusi&oacute;n:</dt>
+                    <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.estudianteMateriaImpartida?.getFechaConFormato()}}</dl>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="entidadMovilidadCurricular?.tipoMovilidad?.id == 2 || entidadMovilidadCurricular?.tipoMovilidad?.id == 3">
+          <div *ngIf="entidadMovilidadCurricular?.tipoMovilidad?.id == 2">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Convenio institucional:</dt>
+                      <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.convenio?.descripcion}}</dl>
+                    </dl>
+                  </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estancia:</dt>
+                      <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.estancia}}</dl>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Instituci&oacute;n en la que est&aacute; interesado:</dt>
+                      <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.institucionInteres}}</dl>
+                    </dl>
+                  </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Profesor anfitri&oacute;n:</dt>
+                      <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.nombreContacto}}</dl>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="entidadMovilidadCurricular?.tipoMovilidad?.id == 3">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Trabajo de campo:</dt>
+                      <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.trabajoCampo}}</dl>
+                    </dl>
+                  </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Lugar:</dt>
+                      <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.lugar}}</dl>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha inicio:</dt>
+                    <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.getFechaInicioFormato()}}</dl>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha fin:</dt>
+                    <dl class="col-xs-12 col-sm-6 col-md-6">{{entidadMovilidadCurricular?.getFechaFinFormato()}}</dl>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h6 class="form-heading text-muted text-semibold text-sm">Lista de documentaci&oacute;n</h6>
+
+        <div class="col-md-12">
+          <div class="panel" style="width:100%;height: 200px; overflow-y: scroll; margin: auto">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-3 text-center"  *ngFor="let doc of documentos">
+                  <div class="thumbnail">
+                    <i class="fa fa-file-text-o fa-5x"></i>
+                    <h5 class="">{{(doc?.tipoDocumento?.valor == 'Otro') ? doc?.otroTipoDocumento : doc?.tipoDocumento?.valor}}</h5>
+                    <hr>
+                    <button class="btn  btn-warning fa fa-download" (click)="descargarArchivo(doc?.archivo?.id)"></button>
+                    <button class="btn  btn-default fa fa-eye right" (click)="verArchivo(doc?.archivo?.id)"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- col-md-12 -->
+
+      </div><!--fin del panel-body-->
+      <div class="panel-footer text-right">
+
+        <button (click)="regresarListaHistorialMovilidad()" class="btn btn-default" type="button">
+          <i class="fa fa-close"></i> Cerrar
+        </button>
+      </div>
+    </div><!--Fin del panel-->
+  </div><!--fin del col-md-12-->
+</div><!--fin del row-->

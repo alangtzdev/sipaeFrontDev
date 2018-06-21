@@ -1,0 +1,636 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 text-center text-left-sm">
+      <h1>Interesados</h1>
+      <p>
+        <small>Lista de interesados en los programas docentes</small>
+      </p>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+      <hr class="visible-xs no-grid-gutter-h">
+      <button class="btn btn-labeled btn-success col-lg-6 col-md-9 col-sm-10 col-xs-12 pull-right col-sm-auto"
+              (click)="modalRegistro()"><span class="btn-label icon fa fa-plus"></span>Nuevo interesado
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel">
+      <div class="panel-body">
+        <div class="row">
+          <form [formGroup]="formularioCriteriosCabecera">
+            <div class="col-md-8">
+              <div class="row">
+
+                <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                  <label> Programa docente: </label>
+                  <select [disabled]="oculto"
+                          #programaDocenteSelection class="form-control" ngControl="idProgramaDocente"
+                          formControlName="idProgramaDocente"
+                          (change)="cambioProgramaDocenteFiltro(programaDocenteSelection.value)">
+                    <option value="" disabled selected> Selecciona...</option>
+                    <option *ngFor="let programaDocenteItem of programasDocentesSelect"
+                            [value]="programaDocenteItem.id">
+                      {{programaDocenteItem.text}}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                  <label>Promoción:</label>
+                  <select #promocion class="form-control" (change)="habilitarBtnBuscar()" formControlName="idPromocionSeleccionada">
+                    <option value="" selected> Selecciona...</option>
+                    <option *ngFor="let promocionItem of promocionesSelect" [value]="promocionItem.id">
+                      {{promocionItem.text}}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                  <label> Nacionalidad:</label>
+                  <select #nacionalidad class="form-control">
+                    <option value="" selected> Selecciona...</option>
+                    <option *ngFor="let nacionalidadItem of opcionSelectNacionalidad" [value]="nacionalidadItem.id">
+                      {{nacionalidadItem.text}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+              <button
+                class="btn" (click)="buscarCriteriosCabezera(
+                programaDocenteSelection.value,
+                promocion.value,
+                nacionalidad.value
+              )"
+                [disabled]="desactivarBotonBuscar === false"
+              >
+                Buscar <span class="fa fa-search"></span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel">
+      <div class="panel-body">
+
+        <div class="row">
+          <div class="col-md-12 padding-sm-vr no-padding-t">
+
+            <div class="col-md-10"><!-- cont-botones-->
+              <div class="text-right">
+                <button *ngIf="mostarBotonesCoordinador()"
+                        class="btn btn-labeled btn-primary form-group-margin" (click)="cambiarEstatus()"><span
+                  class="btn-label icon fa fa-check-circle"></span>Contactado
+                </button>
+                <button *ngIf="mostarBotones()"  class="btn btn-labeled btn-default form-group-margin"
+                        (click)="modalDetalles()"><span class="btn-label icon fa fa-eye"></span>Detalle
+                </button>
+                <div class="btn-group form-group-margin" dropdown>
+                  <button class="btn btn-conacyt dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span class="btn-label icon fa fa-download"></span> Exportar </button>
+                  <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                    <i class="fa fa-caret-down"></i>
+                  </button>
+
+ <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+                    <li role="menuitem">
+                      <a
+                        class="dropdown-item"
+                        (click)="exportar('Excel')"
+                      >
+                        Exportar a Excel
+                      </a>
+                    </li>
+                    <li class="divider dropdown-divider"></li>
+                    <li role="menuitem">
+                      <a
+                        class="dropdown-item"
+                        (click)="exportar('PDF')"
+                      >
+                        Exportar a PDF
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+          </div>
+</div>
+
+        <div class="col-md-12">
+          <div class="row">
+
+
+            <div role="grid" class="dataTables_wrapper form-inline" id="jq-datatables-example_wrapper">
+              <form [formGroup]="formularioRegistroPagina">
+                <div class="table-header clearfix">
+                <div class="table-caption">Lista de interesados</div>
+                <div class="DT-lf-right">
+                  <div class="DT-per-page">
+                    <div class="dataTables_length" id="jq-datatables-example_length">
+                      <label>
+                        Registros por página:
+                        <select #limiteControl name="jq-datatables-example_length" aria-controls="jq-datatables-example"
+                                formControlName="registroPorPagina"
+                                class="form-control input-sm" (change)="setLimite(limiteControl.value)">
+                          <option value="10" selected>10</option>
+                          <option value="25">25</option>
+                          <option value="50">50</option>
+                          <option value="100">100</option>
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </form>
+
+              <div class="table-responsive">
+                <table cellpadding="0" cellspacing="0" border="0"
+                       class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example"
+                       aria-describedby="jq-datatables-example_info">
+                  <thead>
+                  <tr role="row">
+                    <th
+                      *ngFor="let columna of columnas"
+                      [ngClass]="{
+                                          'sorting_desc': columna.sort === 'desc',
+                                          'sorting_asc': columna.sort === 'asc',
+                                          'sorting': columna.sort !== false
+                                        }"
+                      (click)="sortChanged(columna)"
+                    >
+                      {{columna.titulo}}
+                    </th>
+                  </thead>
+                  <tbody *ngIf="registros.length === 0">
+                  <tr class="gradeA odd">
+                    <th class="text-center" colspan="5">
+                      No hay Registros
+                    </th>
+                  </tr>
+                  </tbody>
+                  <tbody *ngIf="registros.length !== 0">
+
+                  <tr class="gradeA odd" *ngFor="let registro of registros"
+                      [ngClass]="{
+                                      'seleccionado': rowSeleccionado(registro)}"
+                      (click)="rowSeleccion(registro)"
+                  >
+                    <td class="center">{{registro?.primerApellido}} {{registro?.segundoApellido}} {{registro?.nombre}}
+                    </td>
+                    <td class="center">{{registro?.email}}</td>
+                    <td class="center">{{registro?.idProgramaDocente.descripcion}}</td>
+                    <td  *ngIf="authService.hasRol('COORDINADOR')"  class="center">{{registro?.pais?.valor}}</td>
+                    <td class="center">{{obtenerFecha(registro?.fechaSolicitud)}}</td>
+                    <td class="center">{{registro?.estatus?.valor}}</td>
+
+                  </tr>
+
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="table-footer clearfix">
+                <div class="DT-pagination" *ngIf="isSetPaginacion()">
+                  <div class="dataTables_paginate paging_simple_numbers">
+                    <pagination
+                      class="pagination"
+                      [totalItems]="paginacion.registrosTotales"
+                      [itemsPerPage]="limite"
+                      [maxSize]="maxSizePags"
+                      [rotate]="false"
+                      [(ngModel)]="paginaActual"
+                      (pageChanged)="cambiarPagina($event)"
+                      previousText="Anterior"
+                      nextText="Siguiente"
+                    >
+                    </pagination>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-12 padding-sm" *ngIf="!oculto">
+          <div class="row">
+            <button [disabled]="desactivarBotonConvocatoria" (click)="enviarConvocatoriaByProgramaDocente('enviar')"
+                    class="btn btn-labeled btn-success pull-right"><span class="btn-label icon fa fa-check"></span>Enviar
+              convocatoria
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalRegistr>
+  <form role="form" (ngSubmit)="enviarFormulario($event)" [formGroup]="formulario">
+    <modal-header class="text-left" [show-close]="true">
+      <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cerrarModal()">×</button>-->
+      <h4 class="modal-title">Registro interesado</h4>
+    </modal-header>
+    <modal-body>
+      <div class="row">
+        <div class="col-md-12 text-right-lg text-right-md text-left-sm text-left-xs">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <div
+                      [ngClass]="{'has-error': getControlErrors('nombre')}">
+                      <label class="col-md-6" for="nombre">Nombre:*</label>
+                      <div class="col-md-6">
+                        <input id="nombre" #nombre formControlName="nombre" type="text" class="form-control"
+                               placeholder="Nombre" ngControl="nombre" maxlength="50">
+                      <span id="helpBlock2" class="help-block " *ngIf="(getControlErrors('nombre'))">
+                                                         {{errorMessage(getControl('nombre'))}}
+                                                 </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <div
+                      [ngClass]="{
+                                         'has-error': getControlErrors('primerApellido')
+                                        }">
+                      <label class="col-md-6" for="primerApellido">Primer apellido:*</label>
+                      <div class="col-md-6">
+                        <input id="primerApellido" type="text" class="form-control"
+                               placeholder="Primer apellido" #primerApellido formControlName="primerApellido"
+                               ngControl="primerApellido" maxlength="50">
+                      <span id="helpBlock2" class="help-block " *ngIf="(getControlErrors('primerApellido'))">
+                                                         {{errorMessage(getControl('primerApellido'))}}
+                                                 </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row" [ngClass]="{
+                               'has-error': getControlErrors('segundoApellido')
+                              }">
+
+                    <label class="col-md-6" for="segundoApellido">Segundo apellido:</label>
+                    <div class="col-md-6">
+                      <input id="segundoApellido" type="text" class="form-control" formControlName="segundoApellido"
+                             #segundoApellido
+                             placeholder="Segundo apellido" ngControl="segundoApellido" maxlength="50">
+                      <span id="helpBlock2" class="help-block " *ngIf="(getControlErrors('segundoApellido'))">
+                        {{errorMessage(getControl('segundoApellido'))}}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <div
+                      [ngClass]="{
+                                     'has-error': getControlErrors('email')
+                                    }">
+                      <label class="col-md-6" for="correo">Correo electrónico:*</label>
+                      <div id="correo" class="col-md-6">
+                        <input type="text" #email formControlName="email" class="form-control"
+                               placeholder="Correo electrónico" ngControl="email" maxlength="50">
+                      <span id="helpBlock2" class="help-block " *ngIf="(getControlErrors('email'))">
+                                                     {{errorMessage(getControl('email'))}}
+                                             </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row" [ngClass]="{
+                               'has-error': getControlErrors('telefono')
+                              }">
+                    <label class="col-md-6" for="telefono">Tel&eacute;fono:</label>
+                    <div class="col-md-6">
+                      <input id="telefono" type="text" class="form-control" formControlName="telefono" #telefono
+                             placeholder="000-000-0000" ngControl="telefono" maxlength="19">
+                    <span id="helpBlock2" class="help-block " *ngIf="(getControlErrors('telefono'))">
+                                                     {{errorMessage(getControl('telefono'))}}
+                                             </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row" [ngClass]="{
+                               'has-error': getControlErrors('celular')
+                              }">
+                    <label class="col-md-6" for="celular">Celular:</label>
+                    <div class="col-md-6">
+                      <input id="celular" type="text" class="form-control" formControlName="celular" #celular
+                             placeholder="000-000-0000" ngControl="celular" maxlength="18">
+                    <span id="helpBlock2" class="help-block " *ngIf="(getControlErrors('celular'))">
+                                                     {{errorMessage(getControl('celular'))}}
+                                             </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <div
+                      [ngClass]="{
+                                     'has-error': getControlErrors('idPais')
+                                    }">
+                      <label class="col-md-6">Pa&iacute;s
+                        de origen:*</label>
+                      <div class="col-md-6">
+                        <select ngControl="idPais" class="form-control" id="idPais" #idPais formControlName="idPais">
+                          <option value="" disabled selected> Selecciona...</option>
+                          <option *ngFor="let paisOrigen of opcionSelectPais" value="{{paisOrigen.id}}">
+                            {{paisOrigen.text}}
+                          </option>
+                        </select>
+                      <span id="helpBlock2" class="help-block " *ngIf="(getControlErrors('idPais'))">
+                                              {{errorMessage(getControl('idPais'))}}
+                                      </span>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <div
+                      [ngClass]="{
+                                     'has-error': getControlErrors('idProgramaDocente')
+                                    }">
+                      <label class="col-md-6" for="programaDocente">Programa docente de inter&eacute;s:*</label>
+                      <div class="col-md-6">
+                        <select formControlName="idProgramaDocente" #idProgramaDocente value="" id="idProgramaDocente"
+                                class="form-control" ngControl="idProgramaDocente" (change)="getPromocionNuevoInteresado(idProgramaDocente.value)">
+                          <option value="" disabled selected> Selecciona...</option>
+                          <option *ngFor="let programa of opcionSelectProgramaDocente" value="{{programa.id}}">
+                            {{programa.text}}
+                          </option>
+                        </select>
+                      <span id="helpBlock2" class="help-block " *ngIf="(getControlErrors('idProgramaDocente'))">
+                                              {{errorMessage(getControl('idProgramaDocente'))}}
+                                      </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row" [ngClass]="{
+                                 'has-error': getControlErrors('institucion')
+                                }">
+                    <label class="col-md-6" for="medio">
+                      Instituci&oacute;n de procedencia:</label>
+                    <div class="col-md-6">
+                      <input id="institucion" type="text" class="form-control" formControlName="institucion"
+                             #institucion
+                             placeholder="Institución de procedencia" ngControl="institucion" maxlength="75">
+                    <span id="helpBlock2" class="help-block " *ngIf="(getControlErrors('institucion'))">
+                                                     {{errorMessage(getControl('institucion'))}}
+                                             </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <div [ngClass]="{
+                                                   'has-error': getControlErrors('idMedioDifucion')
+                                                  }">
+                      <label class="col-md-6" for="medio">&iquest;Por qu&eacute; medio te enteraste de COLSAN?:*</label>
+                      <div class="col-md-6">
+                        <select id="idMedioDifucion" #idMedioDifucion formControlName="idMedioDifucion"
+                                class="form-control"
+                                ngControl="idMedioDifucion">
+                          <option value="" disabled selected> Selecciona...</option>
+                          <option *ngFor="let medio of opcionSelectMedioDifusion" value="{{medio.id}}">{{medio.text}}
+                          </option>
+
+                        </select>
+                      <span id="helpBlock2" class="help-block " *ngIf="(getControlErrors('idMedioDifucion'))">
+                                                  {{errorMessage(getControl('idMedioDifucion'))}}
+                                          </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6"></div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="mostraOtroService()" class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <div [ngClass]="{
+                                                       'has-error': getControlErrors('auxiliarOtroMedio')
+                                                      }">
+                      <label class="col-md-6" for="otro">Otro:*</label>
+                      <div class="col-md-6">
+                        <input id="otroMedio" type="text" class="form-control" formControlName="otroMedio" #otroMedio
+                               placeholder="Por favor especifique" ngControl="otroMedio" maxlength="50">
+                      <span id="helpBlock2" class="help-block " *ngIf="(getControlErrors('auxiliarOtroMedio'))">
+                                                               {{errorMessage(getControl('auxiliarOtroMedio'))}}
+                                                       </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="row" [ngClass]="{
+                                         'has-error': getControlErrors('comentarios')
+                                        }">
+                <label class="col-md-3 " for="comentarios">Comentarios:</label>
+                <div class=" col-md-9 text-left">
+                <textarea id="comentarios" class="form-control" placeholder="Comentarios" rows="3"
+                          ngControl="comentarios" maxlength="250" formControlName="comentarios" #comentarios></textarea>
+                <span id="helpBlock2" class="help-block " *ngIf="(getControlErrors('comentarios'))">
+                                    {{errorMessage(getControl('comentarios'))}}
+                            </span>
+                  <label class="control-label text-right" style="float: right">
+                    (M&aacute;ximo 250 caracteres)
+                  </label>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </modal-body>
+    <modal-footer>
+      <div class="text-right">
+        <button type="button" class="btn btn-default" (click)="cerrarModal()"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancelar
+        </button>
+        <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;&nbsp;Registrar</button>
+      </div>
+    </modal-footer>
+  </form>
+
+</modal>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalDetalle>
+  <modal-header class="text-left" [show-close]="true">
+    <!--&lt;!&ndash;<button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cerrarModal1()">×</button>&ndash;&gt;-->
+    <h4 class="modal-title">Detalle del interesado</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row form-horizontal">
+                <label class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre:</label>
+                <div class="col-md-6 text-left">{{entidadInteresado?.nombre}} {{entidadInteresado?.primerApellido}}
+                  {{entidadInteresado?.segundoApellido}}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row form-horizontal">
+                <label class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Correo
+                  electr&oacute;nico:</label>
+                <div class="col-md-6 text-left">{{entidadInteresado?.email}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row form-horizontal">
+                <label class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Tel&eacute;fono:</label>
+                <div class="col-md-6 text-left">{{entidadInteresado?.telefono ? entidadInteresado?.telefono : '-' }}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row form-horizontal">
+                <label class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Celular:</label>
+                <div class="col-md-6 text-left">{{entidadInteresado?.celular ? entidadInteresado?.celular : '-'}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row form-horizontal">
+                <label class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente de inter&eacute;s:</label>
+                <div class="col-md-6 text-left">{{entidadInteresado?.idProgramaDocente?.descripcion}}</div>
+              </div>
+            </div>
+
+
+
+            <div class="col-md-6 form-group-margin">
+              <div class="row form-horizontal">
+                <label class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Instituci&oacute;n de
+                  procedencia:</label>
+                <div class="col-md-6 text-left">{{entidadInteresado?.institucion ? entidadInteresado?.institucion : '-'
+                  }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row form-horizontal">
+                <label class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Medio de contacto:</label>
+                <div class="col-md-6 text-left">{{entidadInteresado?.medioDifucion?.valor}}</div>
+              </div>
+            </div>
+
+            <div class="col-md-6 form-group-margin">
+              <div class="row form-horizontal">
+                <label class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha de registro:</label>
+                <div class="col-md-6 text-left">{{obtenerFecha(entidadInteresado?.fechaSolicitud)}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row form-horizontal">
+                <label class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estatus:</label>
+                <div class="col-md-6 text-left">{{entidadInteresado?.estatus?.valor}}</div>
+              </div>
+            </div>
+
+         <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row form-horizontal">
+                <label class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">País:</label>
+                <div class="col-md-6 text-left">{{entidadInteresado?.pais?.valor}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        </div>
+
+        <div class="col-md-12 form-group-margin">
+          <div class="row form-horizontal">
+            <label class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Comentarios:</label>
+            <div class="col-md-9 text-left">
+              <textarea class="form-control" placeholder="Comentarios" readonly="" rows="3">{{entidadInteresado?.comentarios}}</textarea>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button
+      class="btn btn-default"
+      data-dismiss="modal"
+      type="button"
+      (click)="cerrarModal1()">
+      <i class="fa fa-close"></i> Cerrar
+    </button>
+  </modal-footer>
+</modal>
+

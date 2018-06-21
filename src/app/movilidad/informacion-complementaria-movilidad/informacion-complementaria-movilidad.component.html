@@ -1,0 +1,418 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12 text-center text-left-sm">
+      <h1>Agregar información complementaria</h1>
+      <p>
+        <small>Agregar información complementaria del estudiante para movilidad.</small>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel">
+      <div class="panel-body">
+        <form class="form-horizontal" [formGroup]="formularioInformacion">
+
+          <h6 class="form-heading text-muted text-semibold text-sm">Detalle del estudiante</h6>
+
+          <div class="col-xs-12 col-sm-12 col-md-12 ">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estudiante:</dt>
+                    <dd class="col-md-6">{{entidadMovilidadCurricular?.estudiante?.datosPersonales?.getNombreCompleto()}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Matr&iacute;cula:</dt>
+                    <dd class="col-md-6">{{entidadMovilidadCurricular?.estudiante?.matricula?.matriculaCompleta}}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-12 col-md-12 ">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Promoci&oacute;n:</dt>
+                    <dd class="col-md-6">{{entidadMovilidadCurricular?.estudiante?.promocion?.getClavePromocion()}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente:</dt>
+                    <dd class="col-md-6">{{entidadMovilidadCurricular?.estudiante?.promocion?.programaDocente?.descripcion}}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-12 col-md-12 ">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Asignatura que acredit&oacute;:</dt>
+                    <!--<dd class="col-md-6">{{entidadMovilidadCurricular?.estudianteMateriaImpartida?.materiaImpartida?.materia?.descripcion}}</dd>-->
+                    <dd class="col-md-6">{{entidadMovilidadCurricular?.materia?.descripcion}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Clave de asignatura:</dt>
+                    <!--<dd class="col-md-6">{{entidadMovilidadCurricular?.estudianteMateriaImpartida?.materiaImpartida?.materia?.clave}}</dd>-->
+                    <dd class="col-md-6">{{entidadMovilidadCurricular?.materia?.clave}}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-12 col-md-12 ">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Modalidad de movilidad:</dt>
+                    <dd class="col-md-6">{{entidadMovilidadCurricular?.tipoMovilidad?.valor}}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h6 class="form-heading text-muted text-semibold text-sm">Información complementaria</h6>
+
+          <div class="col-xs-12 col-sm-12 col-md-12 ">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Cr&eacute;ditos COLSAN:</dt>
+                    <dd class="col-md-6">
+                      <!--<input ngControl='creditos' class="form-control" type="text" class="form-control">-->
+                      {{entidadMovilidadCurricular?.materia?.creditos}}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha de inicio:</dt>
+                    <dd class="col-md-6">
+                      <!--<select class="form-control form-group-margin" ngControl='idPeriodo'>
+                      <option value="" selected>Selecciona...</option>
+                      <option *ngFor="#opcionCatalogoPeriodoEscolar of opcionesCatalogoPeriodoEscolar"
+                              value="{{opcionCatalogoPeriodoEscolar.id}}">
+                          {{opcionCatalogoPeriodoEscolar.text}}</option>
+                      </select>-->
+                      {{entidadMovilidadCurricular?.estudianteMateriaImpartida?.materiaImpartida?.periodoEscolar?.inicioCurso ?
+                      entidadMovilidadCurricular?.estudianteMateriaImpartida?.materiaImpartida?.periodoEscolar?.inicioCurso : '--' }}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12 ">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fin de cursos:</dt>
+                    <dd class="col-md-6">
+                      <!--<select class="form-control form-group-margin" ngControl='idPeriodo'>
+                      <option value="" selected>Selecciona...</option>
+                      <option *ngFor="#opcionCatalogoPeriodoEscolar of opcionesCatalogoPeriodoEscolar"
+                              value="{{opcionCatalogoPeriodoEscolar.id}}">
+                          {{opcionCatalogoPeriodoEscolar.text}}</option>
+                      </select>-->
+                      {{entidadMovilidadCurricular?.estudianteMateriaImpartida?.materiaImpartida?.periodoEscolar?.finCurso ?
+                      entidadMovilidadCurricular?.estudianteMateriaImpartida?.materiaImpartida?.periodoEscolar?.finCurso : '--'}}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!--<div class="col-xs-12 col-sm-12 col-md-12 ">
+          <div class="row">
+              <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                      <dl class="form-horizontal">
+                          <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Calendario COLSAN:</dt>
+                          <dd class="col-md-6">
+                              <input ngControl='calendario' class="form-control" type="text" class="form-control">
+                          </dd>
+                      </dl>
+                  </div>
+              </div>
+          </div>
+        </div>-->
+
+          <!--<div class="col-xs-12 col-sm-12 col-md-12 ">
+          <div class="row">
+              <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                      <dl class="form-horizontal">
+                          <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Observaciones COLSAN:</dt>
+                          <dd class="col-md-6">
+                              <textarea ngControl='observaciones' class="form-control" type="text" class="form-control"></textarea>
+                          </dd>
+                      </dl>
+                  </div>
+              </div>
+          </div>
+        </div>-->
+
+          <h6 class="form-heading text-muted text-semibold text-sm">Datos de instituci&oacute;n receptora</h6>
+
+          <div class="col-xs-12 col-sm-12 col-md-12 ">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <br>
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Convenio:</dt>
+                    <dd class="col-md-6">{{entidadMovilidadCurricular?.convenio?.descripcion}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <div  [ngClass]="{'has-error': getControlErrors('periodoInstitucion')}">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Per&iacute;odo de la instituci&oacute;n: *</dt>
+                      <dd class="col-md-6">
+                        <input ngControl='periodoInstitucion' class="form-control" type="text" class="form-control"
+                               maxlength="200" #periodoInstitucion formControlName="periodoInstitucion">
+                                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('periodoInstitucion'))" >
+                                        {{errorMessage(getControl('periodoInstitucion'))}}
+                                </span>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12 ">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <div  [ngClass]="{'has-error': getControlErrors('institucionReceptora')}">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Instituci&oacute;n receptora: *</dt>
+                      <dd class="col-md-6">
+                        <input ngControl='institucionReceptora' class="form-control" type="text" class="form-control"
+                               maxlength="400" #institucionReceptora formControlName="institucionReceptora">
+                                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('institucionReceptora'))" >
+                                            {{errorMessage(getControl('institucionReceptora'))}}
+                                    </span>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <div  [ngClass]="{'has-error': getControlErrors('calendarioInstitucion')}">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Calendario de la instituci&oacute;n: *</dt>
+                      <dd class="col-md-6">
+                        <input ngControl='calendarioInstitucion' class="form-control" type="text" class="form-control"
+                               maxlength="400" #calendarioInstitucion formControlName="calendarioInstitucion">
+                                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('calendarioInstitucion'))" >
+                                            {{errorMessage(getControl('calendarioInstitucion'))}}
+                                    </span>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12 ">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <div  [ngClass]="{'has-error': getControlErrors('abreviadoInstitucion')}">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Abreviado de la instituci&oacute;n: *</dt>
+                      <dd class="col-md-6">
+                        <input ngControl='abreviadoInstitucion' class="form-control" type="text" class="form-control"
+                               maxlength="400" #abreviadoInstitucion formControlName="abreviadoInstitucion">
+                                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('abreviadoInstitucion'))" >
+                                            {{errorMessage(getControl('abreviadoInstitucion'))}}
+                                    </span>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <div  [ngClass]="{'has-error': getControlErrors('programaDocenteInstitucion')}">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente: *</dt>
+                      <dd class="col-md-6">
+                        <input ngControl='programaDocenteInstitucion' class="form-control" type="text" class="form-control"
+                               maxlength="400" #programaDocenteInstitucion formControlName="programaDocenteInstitucion">
+                                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('programaDocenteInstitucion'))" >
+                                            {{errorMessage(getControl('programaDocenteInstitucion'))}}
+                                    </span>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12 ">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <br>
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Asignatura que cursar&aacute;:</dt>
+                    <dd class="col-md-6">{{entidadMovilidadCurricular?.materiaCursar}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <div  [ngClass]="{'has-error': getControlErrors('profesorUno')}">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Profesor titular: *</dt>
+                      <dd class="col-md-6">
+                        <input ngControl='profesorUno' class="form-control" type="text" class="form-control"
+                               maxlength="400" #profesorUno formControlName="profesorUno">
+                                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('profesorUno'))" >
+                                            {{errorMessage(getControl('profesorUno'))}}
+                                    </span>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12 ">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <div  [ngClass]="{'has-error': getControlErrors('profesorDos')}">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Profesor adjunto: </dt>
+                      <dd class="col-md-6">
+                        <input ngControl='profesorDos' class="form-control" type="text" class="form-control"
+                               maxlength="400" #profesorDos formControlName="profesorDos">
+                                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('profesorDos'))" >
+                                            {{errorMessage(getControl('profesorDos'))}}
+                                    </span>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <div  [ngClass]="{'has-error': getControlErrors('creditosInstitucion')}">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Cr&eacute;ditos en la instituci&oacute;n: *</dt>
+                      <dd class="col-md-6">
+                        <input ngControl='creditosInstitucion' class="form-control" type="text" class="form-control"
+                               maxlength="400" #creditosInstitucion formControlName="creditosInstitucion">
+                                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('creditosInstitucion'))" >
+                                            {{errorMessage(getControl('creditosInstitucion'))}}
+                                    </span>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12 ">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <br>
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Calificaci&oacute;n:</dt>
+                    <dd class="col-md-6">{{entidadMovilidadCurricular?.estudianteMateriaImpartida?.calificacionOrdinaria}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin" *ngIf="entidadMovilidadCurricular?.pais?.id != 82">
+                <div class="row">
+                  <div  [ngClass]="{'has-error': getControlErrors('calificacionColsanEquivalencia')}">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Calificaci&oacute;n equivalencia: </dt>
+                      <dd class="col-md-6">
+                        <input ngControl='calificacionColsanEquivalencia' class="form-control" type="text" class="form-control"
+                               maxlength="100" #calificacionColsanEquivalencia formControlName="calificacionColsanEquivalencia">
+                                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('calificacionColsanEquivalencia'))" >
+                                            {{errorMessage(getControl('calificacionColsanEquivalencia'))}}
+                                    </span>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-12 col-md-12 ">
+            <div class="row">
+              <div class="col-md-6 form-group-margin" *ngIf="entidadMovilidadCurricular?.tipoMovilidad?.id == 3">
+                <div class="row">
+                  <br>
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Trabajo de campo:</dt>
+                    <dd class="col-md-6">{{entidadMovilidadCurricular?.trabajoCampo}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <br>
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Registro de fecha de conclusi&oacute;n:</dt>
+                    <dd class="col-md-6">{{entidadMovilidadCurricular?.estudianteMateriaImpartida?.getFechaConFormato()}}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+
+      </div><!--fin del panel-body-->
+      <div class="panel-footer text-right">
+        <button (click)="regresarListaHistorialSolicitudes()" class="btn btn-default" type="button">
+          <i class="fa fa-times"></i>&nbsp;&nbsp;Cancelar
+        </button>
+        <button (click)="guardarInformacionComplementaria()" class="btn btn-success" type="button">
+          <i class="fa fa-plus"></i>&nbsp;&nbsp;Guardar
+        </button>
+      </div>
+    </div><!--Fin del panel-->
+  </div><!--fin del col-md-12-->
+</div><!--fin del row-->

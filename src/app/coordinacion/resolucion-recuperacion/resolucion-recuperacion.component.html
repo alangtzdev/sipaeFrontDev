@@ -1,0 +1,194 @@
+<div class="page-header">
+    <div class="row">
+        <div class="col-md-12 text-center text-left-sm">
+            <h1>Resolución para trabajo de recuperaci&oacute;n</h1>
+            <p><small>Detalle de recuperaci&oacute;n.</small></p>
+        </div>
+    </div>
+</div>
+<div class="panel ">
+    <div class="panel-body">
+        <h5 class="form-heading text-muted text-semibold text-sm">DETALLE DEL ESTUDIANTE</h5>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre del estudiante:</dt>
+                                <dd class="col-md-6">{{entidadSolicitudExamenTrabajo?.estudiante?.datosPersonales?.getNombreCompleto()}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Matr&iacute;cula:</dt>
+                                <dd class="col-md-6">{{entidadSolicitudExamenTrabajo?.estudiante?.matricula?.matriculaCompleta}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 form-group-margin">
+                <div class="row">
+                    <dl class="form-horizontal">
+                        <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente:</dt>
+                        <dd class="col-md-9">{{entidadSolicitudExamenTrabajo?.estudiante?.promocion?.programaDocente?.descripcion}}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <h5 class="form-heading text-muted text-semibold text-sm">INCONFORMIDAD</h5>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Materia:</dt>
+                                <dd class="col-md-6">{{entidadSolicitudExamenTrabajo?.materiaImpartida?.materia?.descripcion}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Clave de asignatura:</dt>
+                                <dd class="col-md-6">{{entidadSolicitudExamenTrabajo?.materiaImpartida?.materia?.clave}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Titular:</dt>
+                                <dd class="col-md-6">{{entidadSolicitudExamenTrabajo?.profesor?.getNombreCompleto()}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Periodo:</dt>
+                                <dd class="col-md-6">{{entidadSolicitudExamenTrabajo?.materiaImpartida?.periodoEscolar?.getPeriodo()}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Calificación original:</dt>
+                                <dd class="col-md-6">{{entidadSolicitudExamenTrabajo?.calificacionOriginal}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 form-group-margin">
+                <div class="row">
+                    <dl class="form-horizontal">
+                        <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Descripción general de la inconformidad:</dt>
+                        <dd class="col-md-9">
+                            <textarea class="form-control" rows="6" cols="200" maxlength="500" disabled="" style="height: 80px; overflow: scroll; border:2px #e4e4e4 solid; text-align:justify;">
+                                    {{entidadSolicitudExamenTrabajo?.descripcion}}
+                                </textarea>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <h5 class="form-heading text-muted text-semibold text-sm">RESOLUCIÓN</h5>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-striped table-condensed">
+                            <thead>
+                                <tr role="row">
+                                    <th *ngFor="let columna of columnas" [ngClass]="{
+							        		'sorting_desc': columna.sort === 'desc',
+							        		'sorting_asc': columna.sort === 'asc',
+							        		'sorting': columna.sort !== false
+							        	}" (click)="sortChanged(columna)">
+                                        {{columna.titulo}}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let registro of profesoresResolucion" class="gradeA odd">
+                                    <td class="center">{{registro?.profesor?.getNombreCompleto()}}</td>
+                                    <td class="center">{{registro?.calificacionDefinitiva}}</td>
+                                    <td class="center">{{registro?.comentariosEvaluacion}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <form [formGroup]="formulario">
+                    <div [ngClass]="{'has-error': getControlErrors('comentariosFinales')}">
+
+                        <div class="col-md-12 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Calificación definitiva: </dt>
+                                    <dd class="col-md-6">{{calificaciones}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="row">
+                                <dt>Comentarios finales: *</dt>
+                            </div>
+                            <div class="row">
+                                <textarea id="comentariosFinales" formControlName="comentariosFinales" class="form-control" rows="6" cols="200" maxlength="500" style="height: 80px; overflow: scroll; border:2px #e4e4e4 solid; text-align:justify;">
+                                        </textarea>
+                                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('comentariosFinales'))">
+                                                {{errorMessage(getControl('comentariosFinales'))}}
+                                        </span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div class="text-right">
+            <a class="btn btn-labeled btn-success" (click)="openmodalconfirmarResolucionRecuperacion()"><span class="btn-label icon fa fa-check"></span>Resolver recurso de revisión</a>
+        </div>
+    </div>
+</div>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalConfirmarResolucionRecuperacion class="modal-alert modal-success">
+    <div class=" modal-content">
+        <div class="modal-header">
+            <i class="fa fa-check-circle"></i>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12 modal-title">¿Está seguro que desea dar resoluci&oacute;n al trabajo-examen de recuperaci&oacute;n?</div>
+        <form class="form-horizontal" [formGroup]="formulario">
+            <input id="idEstatus" name="idEstatus" ngControl="idEstatus" class="form-control" type="hidden" value="102">
+            <div class="col-md-12 col-sm-12 col-xs-12 modal-footer">
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closemodalconfirmarResolucionRecuperacion()">No</button>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" (click)="enviarFormulario()">Sí</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</modal>

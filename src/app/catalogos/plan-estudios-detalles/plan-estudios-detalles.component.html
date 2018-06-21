@@ -1,0 +1,45 @@
+<div class="page-header">
+  <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+    <h1>Detalle plan de estudios</h1>
+    <p>
+      <small>{{detallePlanEstudios}}</small>
+    </p>
+  </div>
+</div>
+<div class="row">
+
+  <div class="col-md-12">
+
+    <div class="panel colourable">
+      <div class="panel-body">
+
+        <tabset>
+          <tab heading="Datos generales">
+            <datosGenerales [entidadPlanEstudios] = "entidadPlanEstudiosDetalle"></datosGenerales>
+          </tab>
+          <tab heading="Documentación">
+            <documentacionPlanEstudios [entidadPlanEstudios] = "entidadPlanEstudiosDetalle"></documentacionPlanEstudios>
+          </tab>
+          <tab heading="Idiomas">
+            <idiomasPlanEstudios></idiomasPlanEstudios>
+          </tab>
+          <tab heading="Materias">
+            <materiasPlanEstudios [entidadPlanEstudios] = "entidadPlanEstudiosDetalle"></materiasPlanEstudios>
+          </tab>
+        </tabset>
+      </div>
+
+      <div class="panel-footer">
+        <div class="text-right">
+          <button class="btn btn-labeled btn-default form-group-margin" type="button"
+                  (click)="regresarCatalogoPlanEstudios()"><i class="btn-label icon fa fa-arrow-circle-o-left"></i>Regresar
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>

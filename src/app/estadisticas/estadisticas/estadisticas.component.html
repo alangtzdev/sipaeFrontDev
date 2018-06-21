@@ -1,0 +1,62 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+      <h1>Estadísticas y reportes</h1>
+      <p><small>Lista de estadísticas y reportes.</small></p>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel colourable">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-12">
+
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <ul id="uidemo-tabs-default-demo" class="nav nav-pills nav-stacked">
+                    <h5 class="form-heading text-muted text-semibold text-sm">Estadísticas</h5>
+                    <li class=""><a (click)="cambiarFiltros('911')" data-toggle="tab">911</a></li>
+                    <li class=""><a (click)="cambiarFiltros('eficiencia')" data-toggle="tab">Eficiencia terminal</a></li>
+                    <li class=""><a (click)="cambiarFiltros('indiceTitulacion')" data-toggle="tab">Índice de titulación</a></li>
+                    <li class=""><a (click)="cambiarFiltros('indicadores')" data-toggle="tab">Indicadores institucionales</a></li>
+                    <li class=""><a (click)="cambiarFiltros('estudiantesExtranjeros')" data-toggle="tab">Estudiantes extranjeros</a></li>
+                    <li class=""><a (click)="cambiarFiltros('concentrado')" data-toggle="tab">Concentrado de semestres</a></li>
+                    <li class=""><a (click)="cambiarFiltros('registroAspirantes')" data-toggle="tab">Registro de aspirantes</a></li>
+                    <li class=""><a (click)="cambiarFiltros('registroOptativas')" data-toggle="tab">Registro de optativas</a></li>
+                  </ul>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <principal911 *ngIf="mostrarFiltros911">
+                    </principal911>
+                    <eficienciaTerminal *ngIf="mostrarFiltrosEficiencia">
+                    </eficienciaTerminal>
+                    <indiceTitulacion *ngIf="mostrarFiltrosIndiceTitulacion">
+                    </indiceTitulacion>
+                    <estudianteExtranjeros *ngIf="mostrarFiltrosEstudianteExtranjeros">
+                    </estudianteExtranjeros>
+                    <concentradoSemestre *ngIf="mostrarFiltrosConcentrado">
+                    </concentradoSemestre>
+                    <optativas *ngIf="mostrarFiltrosRegistroOptativas">
+                    </optativas>
+                    <indicadoresInstitucionales *ngIf="mostrarFiltrosIndicadores">
+                    </indicadoresInstitucionales>
+                    <registroAspirantes *ngIf="mostrarFiltrosRegistroAspirantes">
+                    </registroAspirantes>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- / .tab-content -->
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,326 @@
+<div class="panel-body tab-content tab-content-bordered">
+
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <h1>{{nombreMateria}}</h1>
+        <!--<h1>{{programaDocente}}</h1>-->
+        <h3>{{nombreProfesor}}</h3>
+        <h4>{{nombreMateria}}</h4>        
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="barChartData[0]" class="col-md-6">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <h6>1. ¿Presentó los objetivos y el contenido del programa al inicio del curso?</h6>
+        </div>
+      </div>
+      <div class="col-md-12 no-margin">
+        <div class="row">
+          <canvas style="width: 419px; height: 209px;"
+            baseChart
+            class="chart"
+            [data]="barChartData[0]"
+            [labels]="barChartSeries"
+            [options]="barChartOptions"
+            [colors]="barChartColors"
+            [chartType]="barChartType"
+            >
+          </canvas>
+        </div>
+      </div>
+      <div class="col-md-12 no-padding-t">
+            <h6 class="text-light-gray text-semibold text-xs">Respuestas</h6>
+            <label class="label label-success label-tag">Excelente</label>
+            <label class="label label-primary label-tag">Muy Bien</label>
+            <label class="label label-tag">Bien</label>           
+            <label class="label label-warning label-tag">Regular</label>
+            <label class="label label-danger label-tag">Mal</label>
+            <label style="background-color:#085B75;" class="label label">
+              No contestaron
+            </label>
+            <hr class="panel-wide">
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="barChartData[1]" class="col-md-6">
+    <div class="row">
+      <div class="col-md-12" style="min-height:46px;">
+        <div class="row">
+          <h6>2. ¿Prepara sus clases?</h6>
+        </div>
+      </div>
+      <div class="col-md-12 no-margin">
+        <div class="row">
+          <canvas style="width: 419px; height: 209px;"
+            baseChart
+            class="chart"
+            [data]="barChartData[1]"
+            [labels]="barChartSeries"
+            [options]="barChartOptions"
+            [colors]="barChartColors"
+            [chartType]="barChartType"
+            >
+          </canvas>
+        </div>
+      </div>
+      <div class="col-md-12 no-padding-t">
+            <h6 class="text-light-gray text-semibold text-xs">Respuestas</h6>
+            <label class="label label-success label-tag">Excelente</label>
+            <label class="label label-primary label-tag">Muy Bien</label>
+            <label class="label label-tag">Bien</label>           
+            <label class="label label-warning label-tag">Regular</label>
+            <label class="label label-danger label-tag">Mal</label>
+            <hr class="panel-wide">
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="barChartData[2]" class="col-md-6">
+    <div class="row">
+      <div class="col-md-12" style="min-height:46px;">
+        <div class="row">
+          <h6>3. ¿Utilizó ejercicios y actividades orales y escritas?</h6>
+        </div>
+      </div>
+      <div class="col-md-12 no-margin">
+        <div class="row">
+          <canvas style="width: 419px; height: 209px;"
+            baseChart
+            class="chart"
+            [data]="barChartData[2]"
+            [labels]="barChartSeries"
+            [options]="barChartOptions"
+            [colors]="barChartColors"
+            [chartType]="barChartType"
+            
+            
+            >
+          </canvas>
+        </div>
+      </div>
+      <div class="col-md-12 no-padding-t">
+            <h6 class="text-light-gray text-semibold text-xs">Respuestas</h6>
+            <label class="label label-success label-tag">Excelente</label>
+            <label class="label label-primary label-tag">Muy Bien</label>
+            <label class="label label-tag">Bien</label>           
+            <label class="label label-warning label-tag">Regular</label>
+            <label class="label label-danger label-tag">Mal</label>
+            <hr class="panel-wide">
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="barChartData[3]" class="col-md-6">
+    <div class="row">
+      <div class="col-md-12" style="min-height:46px;">
+        <div class="row">
+          <h6>4. ¿Ofrece y usa con frecuencia el {{(nombreMateria)?nombreMateria:"idioma"}}?</h6>
+        </div>
+      </div>
+      <div class="col-md-12 no-margin">
+        <div class="row">
+          <canvas style="width: 419px; height: 209px;"
+            baseChart
+            class="chart"
+            [data]="barChartData[3]"
+            [labels]="barChartSeries"
+            [options]="barChartOptions"
+            [colors]="barChartColors"
+            [chartType]="barChartType"
+            
+            
+            >
+          </canvas>
+        </div>
+      </div>
+      <div class="col-md-12 no-padding-t">
+            <h6 class="text-light-gray text-semibold text-xs">Respuestas</h6>
+            <label class="label label-success label-tag">Excelente</label>
+            <label class="label label-primary label-tag">Muy Bien</label>
+            <label class="label label-tag">Bien</label>           
+            <label class="label label-warning label-tag">Regular</label>
+            <label class="label label-danger label-tag">Mal</label>
+            <hr class="panel-wide">
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="barChartData[4]" class="col-md-6">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <h6>5. ¿Utilizó materiales curriculares y ofreció actividades interesantes?</h6>
+        </div>
+      </div>
+      <div class="col-md-12 no-margin">
+        <div class="row">
+          <canvas style="width: 419px; height: 209px;"
+            baseChart
+            class="chart"
+            [data]="barChartData[4]"
+            [labels]="barChartSeries"
+            [options]="barChartOptions"
+            [colors]="barChartColors"
+            [chartType]="barChartType"
+            
+            
+            >
+          </canvas>
+        </div>
+      </div>
+      <div class="col-md-12 no-padding-t">
+            <h6 class="text-light-gray text-semibold text-xs">Respuestas</h6>
+            <label class="label label-success label-tag">Excelente</label>
+            <label class="label label-primary label-tag">Muy Bien</label>
+            <label class="label label-tag">Bien</label>           
+            <label class="label label-warning label-tag">Regular</label>
+            <label class="label label-danger label-tag">Mal</label>
+            <hr class="panel-wide">
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="barChartData[5]" class="col-md-6">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <h6>6. ¿Se interesa por los alumnos y reciben un trato adecuado?</h6>
+        </div>
+      </div>
+      <div class="col-md-12 no-margin">
+        <div class="row">
+          <canvas style="width: 419px; height: 209px;"
+            baseChart
+            class="chart"
+            [data]="barChartData[5]"
+            [labels]="barChartSeries"
+            [options]="barChartOptions"
+            [colors]="barChartColors"
+            [chartType]="barChartType"
+            
+            
+            >
+          </canvas>
+        </div>
+      </div>
+      <div class="col-md-12 no-padding-t">
+            <h6 class="text-light-gray text-semibold text-xs">Respuestas</h6>
+            <label class="label label-success label-tag">Excelente</label>
+            <label class="label label-primary label-tag">Muy Bien</label>
+            <label class="label label-tag">Bien</label>           
+            <label class="label label-warning label-tag">Regular</label>
+            <label class="label label-danger label-tag">Mal</label>
+            <hr class="panel-wide">
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="barChartData[6]" class="col-md-6">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <h6>7. ¿Estimula la participación?</h6>
+        </div>
+      </div>
+      <div class="col-md-12 no-margin">
+        <div class="row">
+          <canvas style="width: 419px; height: 209px;"
+            baseChart
+            class="chart"
+            [data]="barChartData[6]"
+            [labels]="barChartSeries"
+            [options]="barChartOptions"
+            [colors]="barChartColors"
+            [chartType]="barChartType"
+            
+            
+            >
+          </canvas>
+        </div>
+      </div>
+      <div class="col-md-12 no-padding-t">
+            <h6 class="text-light-gray text-semibold text-xs">Respuestas</h6>
+            <label class="label label-success label-tag">Excelente</label>
+            <label class="label label-primary label-tag">Muy Bien</label>
+            <label class="label label-tag">Bien</label>           
+            <label class="label label-warning label-tag">Regular</label>
+            <label class="label label-danger label-tag">Mal</label>
+            <hr class="panel-wide">
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="barChartData[7]" class="col-md-6">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <h6>8. ¿Utilizó variedad de técnicas para la evaluación?</h6>
+        </div>
+      </div>
+      <div class="col-md-12 no-margin">
+        <div class="row">
+          <canvas style="width: 419px; height: 209px;"
+            baseChart
+            class="chart"
+            [data]="barChartData[7]"
+            [labels]="barChartSeries"
+            [options]="barChartOptions"
+            [colors]="barChartColors"
+            [chartType]="barChartType"
+            
+            
+            >
+          </canvas>
+        </div>
+      </div>
+      <div class="col-md-12 no-padding-t">
+            <h6 class="text-light-gray text-semibold text-xs">Respuestas</h6>
+            <label class="label label-success label-tag">Excelente</label>
+            <label class="label label-primary label-tag">Muy Bien</label>
+            <label class="label label-tag">Bien</label>           
+            <label class="label label-warning label-tag">Regular</label>
+            <label class="label label-danger label-tag">Mal</label>
+            <hr class="panel-wide">
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="barChartData[8]" class="col-md-6">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <h6>9. ¿Domina la materia?</h6>
+        </div>
+      </div>
+      <div class="col-md-12 no-margin">
+        <div class="row">
+          <canvas style="width: 419px; height: 209px;"
+            baseChart
+            class="chart"
+            [data]="barChartData[8]"
+            [labels]="barChartSeries"
+            [options]="barChartOptions"
+            [colors]="barChartColors"
+            [chartType]="barChartType"
+            
+            
+            >
+          </canvas>
+        </div>
+      </div>
+      <div class="col-md-12 no-padding-t">
+            <h6 class="text-light-gray text-semibold text-xs">Respuestas</h6>
+            <label class="label label-success label-tag">Excelente</label>
+            <label class="label label-primary label-tag">Muy Bien</label>
+            <label class="label label-tag">Bien</label>           
+            <label class="label label-warning label-tag">Regular</label>
+            <label class="label label-danger label-tag">Mal</label>
+            <hr class="panel-wide">
+      </div>
+    </div>
+  </div>

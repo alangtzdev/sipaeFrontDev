@@ -1,0 +1,670 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-6 col-sm-6 col-xs-12 text-center text-left-sm">
+      <h1>Aspirantes Aceptados</h1>
+      <p>
+        <small>Gesti&oacute;n de Aspirantes Aceptados</small>
+      </p>
+    </div>
+    <div class="col-md-6 col-sm-6 col-xs-12 text-right">
+      <hr class="visible-xs no-grid-gutter-h">
+      <button (click)="descargarFormatoActa(promocion.value)" *ngIf="mostratGenerarActa" class="btn btn-labeled btn-success texto-xl"><span
+        class="btn-label icon fa fa-plus"></span>Generar acta de comit&eacute; de admisi&oacute;n
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12">
+  <div class="row">
+    <div class="panel">
+      <div class="panel-body">
+        <div class="col-md-12" *ngIf="erroresConfirmacion !== 0">
+          <alert
+            *ngFor="let alerta of alertas;let i = index"
+            [type]="alerta.type"
+            dismissible="true"
+            (close)="cerrarAlerta(i)"
+            dismissOnTimeout="7000">
+            {{ alerta?.msg }}
+          </alert>
+        </div>
+        <form [formGroup]="formulario">
+          <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+
+                  <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                    <label>Programa Docente:</label>
+                    <select #programaDocenteSelection class="form-control" ngControl="idProgramaDocente" formControlName="idProgramaDocente"
+                            (change)="cambioProgramaDocenteFiltro(programaDocenteSelection.value)"
+                            (change)="activarBotonBuscar(2)" [disabled]="desahabilitarSelectorCoordiancion">
+                      <option value="" disabled selected> Selecciona...</option>
+                      <option *ngFor="let programaDocenteItem of opcionesProgramaDocente"
+                              [value]="programaDocenteItem.id">
+                        {{programaDocenteItem.text}}
+                      </option>
+                    </select>
+                  </div>
+
+                  <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                    <label for="promocion">Promoción:</label>
+                    <select #promocion class="form-control" (change)="activarBotonBuscar(1)">
+                      <option value="" selected> Selecciona...</option>
+                      <option *ngFor="let promocionItem of opcionesPromociones"
+                              [value]="promocionItem.id">
+                        {{promocionItem.text}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+              <button class="btn" (click)="buscarCriteriosCabezera(promocion.value)"
+                      [disabled]="!botonBuscarActivo">
+                Buscar <span class="fa fa-search"></span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12">
+  <div class="row">
+    <div class="panel">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-12">
+
+            <div class="col-md-10">
+
+              <div class="text-right">
+                <button *ngIf="estadoBotonAgregarTutor" type="button"
+                        class="btn btn-primary form-group-margin" (click)="modalAsignarTutor('designar')">
+                                    <span class="btn-label icon fa fa-user">
+                                    </span> Asignar tutor
+                </button>
+
+                <button *ngIf="botonEditarTutor" type="button"
+                        class="btn btn-labeled btn-warning form-group-margin" (click)="modalAsignarTutor('editar')">
+                                    <span class="btn-label icon fa fa-edit">
+                                    </span> Editar tutor
+                </button>
+
+                <button *ngIf="estadoBotonEditarTutor"
+                        class="btn btn-labeled btn-default form-group-margin"
+                        (click)="modalDetalleTutor()">
+                  <span class="btn-label icon fa fa-eye"></span>Detalle
+                </button>
+                <button *ngIf="estadoBotonEditarPrioridad" type="button"
+                        class="btn btn-labeled btn btn-success form-group-margin"
+                        (click)="modalEditarPrioridad()">
+                                    <span class="btn-label icon fa fa-pencil">
+                                    </span> Editar prioridad
+                </button>
+                <button *ngIf="mostratGenerarActa && listaLicenciatura" [disabled]="!estadoBotonGenerarResultados" type="button"
+                        class="btn btn-success form-group-margin" (click)="generarResultados(promocion.value)">
+                                    <span class="btn-label icon fa fa-file">
+                                    </span> Generar resultados
+                </button>
+              </div>
+
+            </div><!-- cont-botones-->
+            ​
+            <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+              <div class="row">
+                <div class="col-md-12 pull-right text-right">
+                  <div class="row">
+                    <input
+                      #filtro
+                      type="text"
+                      class="form-control"
+                      id="buscar"
+                      placeholder="Buscar..."
+                      (keyup.enter)="filtroChanged(filtro.value)"
+                      (blur)="limpiarFiltroBusqueda(); filtro.value=''"
+                    >
+                  </div>
+                </div>
+              </div>
+            </div> <!-- cont-buscar-->
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div role="grid" class="dataTables_wrapper form-inline">
+              <div class="table-header clearfix">
+                <div class="table-caption">Lista de aspirantes aceptados</div>
+                <div class="DT-lf-right">
+                  <div class="DT-per-page">
+                    <div class="dataTables_length" id="jq-datatables-example_length">
+                      <label>
+                        Registros por página:
+                        <select #limiteControl
+                                name="jq-datatables-example_length"
+                                aria-controls="jq-datatables-example"
+                                class="form-control input-sm"
+                                (change)="setLimite(limiteControl.value)"
+                        >
+                          <option value="10">10</option>
+                          <option value="25">25</option>
+                          <option value="50">50</option>
+                          <option value="100">100</option>
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table cellpadding="0" cellspacing="0" border="0"
+                       class="table table-striped table-bordered dataTable no-footer"
+                       id="jq-datatables-example"
+                       aria-describedby="jq-datatables-example_info">
+                  <thead>
+                  <tr role="row" *ngIf="!listaLicenciatura">
+                    <th
+                      *ngFor="let columna of columnas"
+                      [ngClass]="{
+							        		'sorting_desc': columna.sort === 'desc',
+							        		'sorting_asc': columna.sort === 'asc',
+							        		'sorting': columna.sort !== false
+							        	}"
+                      (click)="sortChanged(columna)"
+                    >
+                      {{columna.titulo}}
+                    </th>
+                  </tr>
+                  <tr role="row" *ngIf="listaLicenciatura">
+                    <th
+                      *ngFor="let columna of columnasLicenciatura"
+                      [ngClass]="{
+							        		'sorting_desc': columna.sort === 'desc',
+							        		'sorting_asc': columna.sort === 'asc',
+							        		'sorting': columna.sort !== false
+							        	}"
+                      (click)="sortChanged(columna)"
+                    >
+                      {{columna.titulo}}
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody *ngIf="registros.length === 0">
+                  <tr class="gradeA odd">
+                    <th class="text-center" colspan="5">
+                      Cambie sus criterios de busqueda
+                    </th>
+                  </tr>
+                  </tbody>
+                  <tbody *ngIf="registros.length !== 0">
+                  <tr
+                    *ngFor="let registro of registros"
+                    class="gradeA odd"
+                    [ngClass]="{
+                        'seleccionado': rowSeleccionado(registro)
+                      }"
+                    (click)="rowSeleccion(registro)"
+                  >
+                    <td class="center">{{registro.estudiante?.foliosSolicitud?.folioCompleto}}</td>
+                    <td class="center">
+                      {{registro.estudiante?.datosPersonales?.getNombreCompleto()}}
+                    </td>
+                    <td class="center" *ngIf="listaLicenciatura">{{registro?.calificacionFinal}}</td>
+                    <td class="center">{{registro?.prioridad === 0 ? '---' : registro?.prioridad}}</td>
+                    <td class="center" *ngIf="!listaLicenciatura">{{registro?.dictamen ? 'Aceptado' : 'No aceptado'}}</td>
+                    <td class="center" *ngIf="listaLicenciatura">{{registro?.estudiante?.estatus?.valor}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-footer clearfix">
+                <div class="DT-pagination" *ngIf="isSetPaginacion()">
+                  <div class="dataTables_paginate paging_simple_numbers">
+                    <pagination
+                      class="pagination"
+                      [totalItems]="paginacion.registrosTotales"
+                      [itemsPerPage]="limite"
+                      [maxSize]="maxSizePags"
+                      [rotate]="false"
+                      [(ngModel)]="paginaActual"
+                      (pageChanged)="cambiarPagina($event)"
+                      previousText="Anterior"
+                      nextText="Siguiente"
+                    >
+                    </pagination>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalDetalle>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModal()"
+            aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Detalle de designacion de tutor</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="col-md-12">
+          <div class="row">
+            <h5 class="form-heading text-muted text-semibold text-sm">ASPIRANTE</h5>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre: </dt>
+                  <dd class="col-md-6">{{registroSeleccionado?.estudiante?.datosPersonales?.getNombreCompleto()}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente: </dt>
+                  <dd class="col-md-6">{{registroSeleccionado?.estudiante?.promocion?.programaDocente?.descripcion}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Promoci&oacute;n: </dt>
+                  <dd class="col-md-6">{{registroSeleccionado?.estudiante?.promocion?.getClavePromocion()}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <h5 class="form-heading text-muted text-semibold text-sm">TUTOR</h5>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Tutor: </dt>
+                  <dd class="col-md-6">{{registroSeleccionado?.estudiante?.tutor?.profesor?.getNombreCompleto()}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">LGAC: </dt>
+                  <dd class="col-md-6">{{registroSeleccionado?.estudiante?.lgac?.denominacion}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Anteproyecto:</dt>
+                  <dd class="col-md-6">{{registroSeleccionado?.estudiante?.tutor?.nombreTrabajo}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <div class="text-right">
+      <button type="button" class="btn btn-default" (click)="cerrarModal()"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancelar</button>
+    </div>
+  </modal-footer>
+</modal>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #asignarTutor>
+
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalEditarTutor()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">Asignaci&oacute;n de tutor</h4>
+  </modal-header>
+  <modal-body>
+    <alert
+      *ngFor="let alerta of alertasModalTutor;let i = index"
+      [type]="alerta.type"
+      dismissible="true"
+      (close)="cerrarAlerta(i)">
+      {{ alerta?.msg }}
+    </alert>
+    <form role="form-horizontal" [formGroup]="modalTutor">
+      <div class="row">
+
+        <div class="col-md-12">
+          <h5 class="form-heading text-muted text-semibold text-sm">ASPIRANTE</h5>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre: </dt>
+                  <dd class="col-md-6">{{registroSeleccionado?.estudiante?.datosPersonales?.getNombreCompleto()}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente: </dt>
+                  <dd class="col-md-6">{{registroSeleccionado?.estudiante?.promocion?.programaDocente?.descripcion}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Promoci&oacute;n: </dt>
+                  <dd class="col-md-6">{{registroSeleccionado?.estudiante?.promocion?.getClavePromocion()}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <h5 class="form-heading text-muted text-semibold text-sm">Tutor</h5>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div [ngClass]="{'has-error': getControlErrorsAsignatTutor('idLgac')}">
+              <div class="col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label for="idLgac" class="col-md-6 control-label">LGAC:*</label>
+                  <div class="col-md-6">
+                    <select type="text" id="idLgac" name="idLgac" placeholder="idLgac" (change)="obtenerProfesorLGAC(idLgac.value)"
+                            ngControl="idLgac" class="form-control" #idLgac formControlName="idLgac">
+                      <option value="" selected>Selecciona...</option>
+                      <option *ngFor="let catalogoItem of lgacSelect"
+                              value="{{catalogoItem.id}}">{{catalogoItem.text}}
+                      </option>
+                    </select>
+                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrorsAsignatTutor('idLgac'))">
+                                                    {{errorMessage(getControlAsignatTutor('idLgac'))}}
+                                                </span>
+                  </div>
+                </div>
+              </div> <!--fin col-md-6-->
+            </div>
+            <div [ngClass]="{'has-error': getControlErrorsAsignatTutor('idProfesor')}">
+              <div class=" col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label for="idProfesor" class="col-md-6 control-label">Tutor:*</label>
+                  <div class="col-md-6">
+                    <select id="idProfesor" name="idProfesor" #idProfesor formControlName="idProfesor" (change)="verificarTutorado(idProfesor.value)"
+                            ngControl="idProfesor" class="form-control">
+                      <option value="" selected>Selecciona...</option>
+                      <option *ngFor="let catalogoItem of profesorSelect"
+                              value="{{catalogoItem.id}}">{{catalogoItem.text}}
+                      </option>
+                    </select>
+                    <span id="helpBlock1" class="help-block" *ngIf="(getControlErrorsAsignatTutor('idProfesor'))">
+                                                    {{errorMessage(getControlAsignatTutor('idProfesor'))}}
+                                                </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div [ngClass]="{'has-error': getControlErrorsAsignatTutor('nombreTrabajo')}">
+              <div class=" col-md-12 padding-xs-vr">
+                <div class="row">
+                  <label for="nombreTrabajo" class="col-md-3 control-label">Anteproyecto:*</label>
+                  <div class="col-md-9">
+                  <textarea class="form-control" id="nombreTrabajo" name="nombreTrabajo"
+                            maxlength="500" #nombreTrabajo formControlName="nombreTrabajo"
+                            ngControl="nombreTrabajo" placeholder="Nombre del anteproyecto"></textarea>
+                    <span id="helpBlock3" class="help-block" *ngIf="(getControlErrorsAsignatTutor('nombreTrabajo'))">
+                                        {{errorMessage(getControlAsignatTutor('nombreTrabajo'))}}
+                                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> <!--fin row-->
+        </div>
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <div class="text-right">
+      <button type="button" class="btn btn-default" (click)="cerrarModalEditarTutor()"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancelar</button>
+      <button type="submit" class="btn btn-success" [disabled]="!deshabilitarActualizarGuardarTutor" (click)="agregarTutor()"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;{{idEstudianteConTutor ? 'Actualizar' : 'Guardar'}}</button>
+    </div>
+  </modal-footer>
+</modal>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #editarPrioridadModal>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalEditarPrioridad()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">Editar prioridad</h4>
+  </modal-header>
+  <modal-body>
+    <alert
+      *ngFor="let alerta of alertas;let i = index"
+      [type]="alerta.type"
+      dismissible="true"
+      (close)="cerrarAlerta(i)">
+      {{ alerta?.msg }}
+    </alert>
+    <form class="form-horizontal" [formGroup]="formularioEditarPrioridad">
+      <div class="row">
+
+        <div class="col-md-12">
+          <h5 class="form-heading text-muted text-semibold text-sm">ASPIRANTE</h5>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                    Nombre:
+                  </dt>
+                  <dd class="col-md-6">
+                    {{registroSeleccionado?.estudiante?.datosPersonales?.getNombreCompleto()}}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                    Programa docente:
+                  </dt>
+                  <dd class="col-md-6">
+                    {{registroSeleccionado?.estudiante?.promocion?.programaDocente?.descripcion}}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                    Promoci&oacute;n:
+                  </dt>
+                  <dd class="col-md-6">
+                    {{registroSeleccionado?.estudiante?.promocion?.getClavePromocion()}}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                    Decisi&oacute;n:
+                  </dt>
+                  <dd class="col-md-6">{{registroSeleccionado?.dictamen
+                    ? 'Aceptado' : 'No aceptado'}}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 form-group-margin">
+          <div class="row">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">
+                  Consideraciones:
+                </dt>
+                <dd class="col-md-9">
+                  {{registroSeleccionado?.consideraciones}}
+                </dd>
+              </dl>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                    Prioridad:
+                  </dt>
+                  <dd class="col-md-6">
+                    {{registroSeleccionado?.prioridad}}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <h5 class="form-heading text-muted text-semibold text-sm">Asignar nueva prioridad</h5>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 padding-xs-vr">
+              <div [ngClass]="{'has-error': getControlErrorsEditarPrioridad('prioridad')}">
+
+                <div class="row">
+                  <label for="prioridad" class="col-md-6 control-label">Prioridad:*</label>
+                  <div class="col-md-6">
+                    <input class="form-control" id="prioridad" name="prioridad" maxlength="50"
+                           ngControl="prioridad" placeholder="Prioridad" type="number" min="1"
+                           #prioridad formControlName="prioridad"
+                           ngModel="{{registroSeleccionado?.prioridad}}" />
+                                    <span id="helpBlock3" class="help-block" *ngIf="(getControlErrorsEditarPrioridad('prioridad'))">
+                                        {{errorMessage(getControlEditarPrioridad('prioridad'))}}
+                                    </span>
+                  </div>
+                </div>
+
+              </div>
+            </div> <!--fin row-->
+          </div> <!--fin row-->
+        </div>
+      </div>
+    </form>
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModalEditarPrioridad()"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancelar
+    </button>
+    <button type="button" class="btn btn-success" (click)="enviarFormularioEditarPrioridad()">
+      <i class="fa fa-floppy-o"></i>{{idEstudianteConTutor? 'Actualizar' : 'Guardar'}}
+    </button>
+  </modal-footer>
+</modal>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-alert modal-success" #generarResultadosModalCom  >
+  <modal-header>
+    <button type="button" class="close" (click)="closeModalGenerarResultados()" aria-hidden="true">×</button>
+    <i class="fa fa-check-circle"></i>
+  </modal-header>
+  <modal-body>
+    <div class="col-md-12 col-sm-12 col-xs-12 modal-title">
+      ¿Estás seguro que deseas generar los resultados?
+    </div>
+
+      <div class="checkbox" style="margin: 0;">
+        <label>
+          <input type="checkbox" value="" name="verificar" id="verificar" class="px" #aceptacion>
+                <span class="lbl">Nota : Una vez generados los resultados para esta promoción no podran generar otra vez,
+                    ¿seguro que desea continuar?</span>
+        </label>
+      </div>
+  </modal-body>
+  <modal-footer>
+    <div class="col-md-6 col-sm-6 col-xs-6">
+      <button type="button" class="btn btn-danger" (click)="closeModalGenerarResultados()">No</button>
+    </div>
+    <div class="col-md-6 col-sm-6 col-xs-6">
+      <button type="button" class="btn btn-success" [disabled]="!aceptacion.checked" data-dismiss="modal"
+              (click)="generarResultados()">Sí
+      </button>
+    </div>
+  </modal-footer>
+</modal>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-alert modal-danger" #errorGeneracionesultadosModal  >
+  <modal-header>
+    <button type="button" class="close" (click)="closeModalError()" aria-hidden="true">×</button>
+    <i class="fa fa-times-circle"></i>
+  </modal-header>
+  <modal-body>
+    <div class="col-md-12 text-center">
+      <span class="col-md-12 tab-content-padding"><strong>Lo sentimos, no se generarón los resultados.</strong></span>
+      <div class="col-md-12 text-center tab-content-padding">
+        <button type="button" class="btn btn-default" (click)="closeModalError()"><i class="fa fa-times"></i>&nbsp;&nbsp;Cerrar
+        </button>
+      </div>
+      <br><br>
+    </div>
+  </modal-body>
+  <modal-footer>
+  </modal-footer>
+</modal>

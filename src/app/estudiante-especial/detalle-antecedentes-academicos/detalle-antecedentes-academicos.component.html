@@ -1,0 +1,82 @@
+<div class="panel">
+  <div class="tab-content tab-content-bordered">
+    <div class="tab-pane fade active in" id="tab1">
+      <div class="row">
+
+        <div class="col-md-12">
+          <h6 class="form-heading text-muted text-semibold text-sm">Antecedentes academicos</h6>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa acad&eacute;mico que cursa actualmente:</dt>
+                  <dd class="col-md-6">{{entidadEstudianteMovilidad?.datosAcademicos?.programaAcademico}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Instituci&oacute;n:
+                  </dt>
+                  <dd class="col-md-6">{{entidadEstudianteMovilidad?.datosAcademicos?.institucion}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Facultad
+
+                  </dt>
+                  <dd class="col-md-6">{{entidadEstudianteMovilidad?.datosAcademicos?.facultad }}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Total de semestres:</dt>
+                  <dd class="col-md-6">{{entidadEstudianteMovilidad?.datosAcademicos?.totalSemestre}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Semestre que cursa:
+                  </dt>
+                  <dd class="col-md-6">
+                    {{entidadEstudianteMovilidad?.datosAcademicos?.semestre}}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Promedio general:
+                  </dt>
+                  <dd class="col-md-6">{{entidadEstudianteMovilidad?.datosAcademicos?.promedioGeneral}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+

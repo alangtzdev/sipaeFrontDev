@@ -1,0 +1,31 @@
+<div class="panel-body tab-content tab-content-bordered">
+  <div class="col-md-12">
+    <div class="col-md-12 text-left ">
+      <dl >¿Le gustaría tomar otro curso con el profesor?</dl>
+    </div>
+
+    <div class="col-md-10 ">
+      <canvas 
+        style="width: 643px; height: 321px;"
+        baseChart 
+        class="chart"
+        [data]="pieChartData"
+        [labels]="pieChartLabels"
+        [colors]="pieChartColors"
+        [chartType]="pieChartType"
+      >
+      </canvas>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-12 no-padding-t">
+          <h6 class="text-light-gray text-semibold text-xs">Respuestas</h6>
+          <label class="label label-success label-tag">Si {{darFormatoPorcentajeSi(porcentajeSi)}}%</label>
+          <label class="label label-danger label-tag">No {{darFormatoPorcentajeNo(porcentajeNo)}}%</label>
+          <label style="background-color:#085B75;" class="label label-default label-tag">No contesto {{darFormatoProcentaTotalAlumnos(porcentajeNumeroAlumnos)}}%</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

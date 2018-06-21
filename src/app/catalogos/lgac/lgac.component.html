@@ -1,0 +1,585 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12 text-center text-left-sm">
+      <h1>Administraci&oacute;n de cat&aacute;logos</h1>
+      <p>
+        <small>Cat&aacute;logo de lineas de generaci&oacute;n y/o aplicaciones del conocimiento.</small>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel colourable">
+      <div class="panel-body">
+        <div class="col-md-12" *ngIf="erroresConsultas !== 0">
+          <alert
+            *ngFor="let alerta of erroresConsultas"
+            [type]="alerta.tipo"
+            dismissible="true">
+            {{ alerta?.mensaje }}
+          </alert>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+
+            <div class="col-md-10">
+              <div class="text-right">
+                <button *ngIf="ocultarOpcionActivar()"
+                        class="btn btn-labeled btn-success form-group-margin"
+                        (click)="cambiarEstatusLGAC('activar')">
+                  <span class="btn-label icon fa fa-plus-circle"></span>Activar
+                </button>
+                <button *ngIf="ocultarOpcionDesactivar()"
+                        class="btn btn-labeled btn-danger form-group-margin"
+                        (click)="cambiarEstatusLGAC('desactivar')">
+                  <span class="btn-label icon fa fa-minus-circle"></span>Desactivar
+                </button>
+                <button *ngIf="registroSeleccionado" class="btn btn-labeled btn-warning form-group-margin"
+                        (click)="modalAgregarActualizarLGAC('editar')">
+                  <span class="btn-label icon fa fa-pencil-square-o"></span>Editar
+                </button>
+                <button *ngIf="registroSeleccionado" class="btn btn-labeled btn-default form-group-margin"
+                        (click)="modalDetalles()">
+                  <span class="btn-label icon fa fa-eye"></span>Detalle
+                </button>
+                <button class="btn btn-labeled btn-success form-group-margin"
+                        (click)="modalAgregarActualizarLGAC('agregar')">
+                  <span class="btn-label icon fa fa-plus"></span>Agregar
+                </button>
+                
+            <div class="btn-group form-group-margin" dropdown>
+                  <button id="split-button" type="button" class="btn btn-conacyt dropdown-toggle">
+                    <span class="btn-label icon fa fa-download"></span> Exportar </button>
+                  <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                    <i class="fa fa-caret-down"></i>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li role="menuitem"><a class="dropdown-item" (click)="exportar('Excel')">Exportar a Excel</a></li>
+                    <li class="divider dropdown-divider"></li>
+                    <li role="menuitem" ><a class="dropdown-item" (click)="exportar('PDF')">Exportar a PDF</a></li>
+                  </ul>
+                </div>
+<!--                <div class="btn-group form-group-margin" dropdown>
+                  <button id="split-button" type="button" class="btn btn-conacyt"><span
+                    class="btn-label icon fa fa-download"></span> Exportar
+                  </button>
+                  <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                    <i class="fa fa-caret-down"></i>
+                  </button>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+                    <li role="menuitem">
+                      <a
+                        class="dropdown-item"
+                        (click)="exportar('Excel')"
+                      >
+                        Exportar a Excel
+                      </a>
+                    </li>
+                    <li class="divider dropdown-divider"></li>
+                    <li role="menuitem">
+                      <a
+                        class="dropdown-item"
+                        (click)="exportar('PDF')"
+                      >
+                        Exportar a PDF
+                      </a>
+                    </li>
+                  </ul>
+                </div>-->
+              </div>
+            </div>
+
+            <div class="col-md-2 form-group-margin">
+              <div class="row">
+                <div class="col-md-12 pull-right text-right">
+                  <div class="row">
+                    <input type="text"
+                           #filtro
+                           class="form-control pull-right" id="exampleInputPassword1"
+                           placeholder="Buscar..."
+                           (keyup.enter)="filtroChanged(filtro.value)"
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="table-default">
+              <div role="grid" class="dataTables_wrapper form-inline">
+                <div class="table-header clearfix">
+                  <div class="table-caption">Lista de lineas de generaci&oacute;n y/o aplicaci&oacute;n
+                    del conocimiento
+                  </div>
+
+                  <div class="DT-lf-right">
+                    <div class="DT-per-page">
+                      <div class="dataTables_length" id="jq-datatables-example_length">
+                        <label>Registros por página:
+                          <select name="jq-datatables-example_length"
+                                  #limiteControl
+                                  aria-controls="jq-datatables-example"
+                                  class="form-control input-sm"
+                                  (change)="setLimite(limiteControl.value)">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                          </select>
+                        </label>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <table cellpadding="0" cellspacing="0" border="0"
+                         class="table table-striped table-bordered dataTable no-footer"
+                         id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                    <thead>
+                    <tr role="row">
+                      <th
+                        *ngFor="let columna of columnas"
+                        [ngClass]="{
+                                        'sorting_desc': columna.sort === 'desc',
+                                        'sorting_asc': columna.sort === 'asc',
+                                        'sorting': columna.sort !== false
+                                    }"
+                        (click)="sortChanged(columna)"
+                      >
+                        {{columna.titulo}}
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="registros.length === 0">
+                    <tr class="gradeA odd">
+                      <th class="text-center" colspan="4">
+                        No hay Registros
+                      </th>
+                    </tr>
+                    </tbody>
+                    <tbody *ngIf="registros.length !== 0">
+                    <tr
+                      *ngFor="let registro of registros"
+                      class="gradeA odd"
+                      [ngClass]="{
+                                                            'seleccionado': rowSeleccionado(registro)
+                                                        }"
+                      (click)="rowSeleccion(registro)"
+                    >
+                      <td class="text-left">{{registro.denominacion}}</td>
+                      <td class="text-left">{{registro.programaDocente.descripcion}}</td>
+                      <td class="text-left">{{obtenerFecha(registro.ultimaActualizacion)}}</td>
+                      <td class="text-left">{{registro.estatus.valor}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="table-footer clearfix">
+                  <div class="DT-pagination" *ngIf="isSetPaginacion()">
+                    <div class="dataTables_paginate paging_simple_numbers">
+                      <pagination
+                        class="pagination"
+                        [totalItems]="paginacion.registrosTotales"
+                        [itemsPerPage]="limite"
+                        [maxSize] = "maxSizePags"
+                        [rotate]="false"
+                        [(ngModel)]="paginaActual"
+                        (pageChanged)="cambiarPagina($event)"
+                        previousText="Anterior"
+                        nextText="Siguiente"
+                      >
+                      </pagination>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<modal [animation]="animation" [keyboard]="keyboard" 
+  [backdrop]="backdrop" #modalAgregarEditarLGAC>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalAgregarEditar()">×</button>
+    <h4 class="modal-title">{{edicionFormulario ? 'Editar l&iacute;nea de generaci&oacute;n y/o aplicaci&oacute;n del conocimiento' : 'Agregar  l&iacute;nea de generaci&oacute;n y/o aplicaci&oacute;n del conocimiento'}}</h4>
+  </modal-header>
+  <modal-body>
+    <div class="col-md-12" *ngIf="erroresConsultas.lenght !== 0" >
+        <alert
+                *ngFor="let alerta of erroresConsultas"
+                [type]="alerta.tipo"
+                dismissible="true">
+            {{ alerta?.mensaje }}
+        </alert>
+    </div>
+    <div class="col-md-12">
+        <alert
+                *ngFor="let alerta of alertas;let i = index"
+                [type]="alerta.type"
+                dismissible="true"
+                (close)="cerrarAlerta(i)"
+                dismissOnTimeout="7000">
+            {{ alerta?.msg }}
+        </alert>
+    </div>
+    <form class="form-horizontal" [formGroup]="formularioLGAC">
+        <div class="row">
+            <div class="col-md-12">
+                <h6 class="form-heading text-muted text-semibold text-sm">CAT&Aacute;LOGO DE L&iacute;NEAS DE GENERACI&Oacute;N Y/O APLICACI&Oacute;N DEL
+                    CONOCIMIENTO</h6>
+            </div>
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12 padding-xs-vr">
+                            <div class="row">
+                                <div class="col-md-12 padding-xs-vr">
+                                    <div class="row">
+                                        <div [ngClass]="{'has-error': getControlErrors('denominacion')}">
+                                            <label for="denominacion" class="col-md-3 control-label text-left">Denominaci&oacute;n LGAC:*</label>
+                                            <div class="col-md-9">
+                                                <textarea class="form-control" id="denominacion" name="denominacion" formControlName="denominacion"
+                                                       ngControl="denominacion" placeholder="" maxlength="250" rows="2"></textarea>
+                                                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('denominacion'))">
+                                                    {{errorMessage(getControl('denominacion'))}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="padding-xs-vr" [ngClass]="{'has-error': getControlErrors('tematica')}">
+                                    <label for="tematica" class="col-md-3 control-label text-left">Tem&aacute;tica:*</label>
+                                    <div class="col-md-9">
+                                        <textarea class="form-control" id="tematica" rows="12"
+                                                  ngControl="tematica" formControlName="tematica" maxlength="1000"></textarea>
+                                        <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('tematica'))">
+                                            {{errorMessage(getControl('tematica'))}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+
+                        <div class="col-md-6 padding-xs-vr">
+                            <div class="row">
+                                <label class="col-md-6 control-label text-left" for="fecha">Fecha inicio: </label>
+                                <div class="col-md-6">
+                                    <div class="dropdown" dropdown autoClose="outsideClick">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="fechaInicio" name="fechaInicio" readonly="readonly"
+                                                   *ngIf="dt" value="{{ getDate()}}" ngControl="fechaInicio"
+                                                   
+                                            >
+                                            <span class="input-group-btn">
+                                                <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                            </span>
+                                        </div>
+                                        <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" dropdownMenu >
+                                            <li>
+                                                <div style="display:inline-block;">
+                                                    <datepicker [(ngModel)]="dt" [minDate]="minDate" [showWeeks]="true"
+                                                    [ngModelOptions]="{standalone: true}" [dateDisabled]="dateDisabled"></datepicker>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6 padding-xs-vr">
+                            <div class="row">
+                                <label class="col-md-6 control-label text-left" for="fechafin">Fecha fin: </label>
+                                <div class="col-md-6">
+                                    <div class="dropdown" dropdown autoClose="outsideClick">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="fechaFin" name="fechaFin" readonly="readonly"
+                                              *ngIf="dt2" value="{{ getDateFecha()}}" ngControl="fechaFin">
+                                        <span class="input-group-btn">
+                                            <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu2" data-toggle="dropdown" dropdownToggle></button>
+                                        </span>
+                                        </div>
+                                        <ul class="dropdown-menu dropdown-menu-right" role="menu2" aria-labelledby="menu1" dropdownMenu >
+                                            <li>
+                                                <div style="display:inline-block;">
+                                                    <datepicker [(ngModel)]="dt2" [minDate]="minDate" [showWeeks]="true"
+                                                    [ngModelOptions]="{standalone: true}" [dateDisabled]="dateDisabled"></datepicker>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 padding-xs-vr">
+                        <div class="row">
+                            <div [ngClass]="{'has-error': getControlErrors('idProgramaDocente')}">
+                                <label for="idProgramaDocente" class="col-md-6 control-label text-left">Programa docente:*</label>
+                                <div class="col-md-6">
+                                    <select id="idProgramaDocente" name="idProgramaDocente"
+                                            ngControl="idProgramaDocente" formControlName="idProgramaDocente" class="form-control"
+                                    >
+                                        <option value="" selected>Selecciona...</option>
+                                        <option
+                                                *ngFor="let catalogoProgramaDocenteItem of opcionesCatalogoProgramaDocente "
+                                                value="{{catalogoProgramaDocenteItem.id}}"
+                                        >
+                                            {{catalogoProgramaDocenteItem?.text}}
+                                        </option>
+                                    </select>
+                                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idProgramaDocente'))">
+                                        {{errorMessage(getControl('idProgramaDocente'))}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 padding-xs-vr">
+                        <div class="row">
+                            <div [ngClass]="{'has-error': getControlErrors('idEstatus')}">
+                                <label for="idEstatus" class="col-md-6 control-label text-left">Estatus:*</label>
+                                <div class="col-md-6">
+                                    <select id="idEstatus" name="idEstatus"
+                                            ngControl="idEstatus" formControlName="idEstatus" class="form-control">
+                                        <option value="" selected>Selecciona...</option>
+                                        <option
+                                                *ngFor="let catalogoItem of opcionesCatalogoEstatus"
+                                                value="{{catalogoItem.id}}"
+                                        >
+                                            {{catalogoItem?.text}}
+                                        </option>
+                                    </select>
+                                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idEstatus'))">
+                                    {{errorMessage(getControl('idEstatus'))}}
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+
+            <div class="col-md-12" *ngIf="registroLGACEditar">
+                <h6 class="form-heading text-muted text-semibold text-sm">INTEGRANTES (NAB)</h6>
+                    <div class="row">
+                        <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12 col-xs-12 padding-xs-vr">
+                                <div class="row">
+                                    <label class="col-md-6 control-label text-left" for="lgac">
+                                        Integrante(NAB):*
+                                    </label>
+                                    <div class="col-md-6">
+                                        <select id="idProfesor" (change)="cambioProfesor(idProfesor.value)"
+                                                ngControl="idProfesor" formControlName="idProfesor" #idProfesor class="form-control"
+                                        >
+                                            <option value="" selected> Selecciona... </option>
+                                            <option value="{{profesor.id}}" *ngFor="let profesor of opcionesCatalogoProfesores">
+                                                {{profesor?.getNombreCompleto()}}
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                                <div class="col-md-6  col-sm-12 col-xs-12 text-right">
+                                    <button class="btn btn-labeled btn-success form-group-margin" *ngIf="mostrarBotonAgregar()" (click)="agregarProfesor()" type="button">
+                                        <span class="btn-label icon fa fa-plus"></span>Agregar
+                                    </button>
+                                    <button *ngIf="ocultarOpcionEliminar()" (click)="eliminarProfesor()" class="btn btn-danger form-group-margin" type="button">
+                                        <span class="glyphicon glyphicon-remove"></span> Eliminar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <div class="col-md-12">
+                    <h5 class="form-heading text-muted text-semibold text-sm text-left">
+                        LISTA DE INTEGRANTES
+                    </h5>
+                </div>
+                <div class="col-md-12 padding-xs-vr">
+                    <div class="table-default  table-scroll-modal">
+                        <table cellpadding="0" cellspacing="0" border="0"
+                               class="table table-striped table-bordered dataTable no-footer table-responsive"
+                               id="jq-datatables-example2"
+                               aria-describedby="jq-datatables-example_info">
+                            <thead>
+                            <tr role="row">
+                                <th *ngFor="let columna of columnasIntegrantesLGAC" class="text-center">
+                                    {{columna?.titulo}}
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody *ngIf="registrosIntegrantesLGAC.length === 0">
+                            <tr class="gradeA odd">
+                                <th class="text-center" colspan="4">
+                                    No hay Registros
+                                </th>
+                            </tr>
+                            </tbody>
+                            <tbody *ngIf="registrosIntegrantesLGAC.length !== 0">
+                            <tr
+                                    *ngFor="let registro of registrosIntegrantesLGAC"
+                                    class="gradeA odd"
+                                    [ngClass]="{
+                                                  'seleccionado': rowSeleccionadoTablaModalAgregarEditar(registro)
+                                                }"
+                                    (click)="rowSeleccionTablaModalAgregarEditar(registro)"
+                            >
+                                <td class="center">{{registro?.profesor?.getNombreCompleto()}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModalAgregarEditar()"><i class="fa fa-close"></i> Cerrar</button>
+    <button class="btn btn-success" type="button" (click)="enviarFormulario()">
+        <i class="fa fa-floppy-o"></i> {{edicionFormulario ? '&nbsp;&nbsp;Actualizar' : '&nbsp;&nbsp;Guardar'}}
+    </button>
+  </modal-footer>
+</modal>
+
+<!-- M<ODAL DE DETALLE DE LGAC -->
+<modal [animation]="animation" [keyboard]="keyboard" 
+  [backdrop]="backdrop" #modalDetalleLGAC>
+    <modal-header>
+        <button type="button" class="close" (click)="cerrarModalDetalleLgac()" aria-hidden="true">×</button>
+        <h4 class="modal-title">Detalle de l&iacute;nea de generaci&oacute;n y/o aplicaci&oacute;n del conocimiento</h4>
+    </modal-header>
+    <modal-body>
+        <div class="col-md-12" *ngIf="erroresConsultas.lenght !== 0">
+            <alert
+                    *ngFor="let alerta of erroresConsultas"
+                    [type]="alerta.tipo"
+                    dismissible="true">
+                {{ alerta?.mensaje }}
+            </alert>
+        </div>
+        <div class="col-md-12 form-group-margin">
+            <div class="row">
+                <dl class="form-horizontal">
+                    <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente:</dt>
+                    <dd class="col-md-9">{{registroLGACDetalle?.programaDocente?.descripcion}}</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="col-md-12 form-group-margin">
+            <div class="row">
+                <dl class="form-horizontal">
+                    <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Denominaci&oacute;n:</dt>
+                    <dd class="col-md-9">{{registroLGACDetalle?.denominacion}}</dd>
+                </dl>
+
+            </div>
+        </div>
+        <div class="col-md-12 form-group-margin">
+            <div class="row">
+                <dl class="form-horizontal">
+                    <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">
+                        Tem&aacute;tica:
+                    </dt>
+                    <dd class="col-md-9">{{registroLGACDetalle?.tematica}}</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                        <dl class="form-horizontal">
+                            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estatus:</dt>
+                            <dd class="col-md-6">{{registroLGACDetalle?.estatus?.valor}}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                        <dl class="form-horizontal">
+                            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha inicio:
+                            </dt>
+                            <dd class="col-md-6">{{obtenerFechaDetalle(registroLGACDetalle?.fechaInicio)}}</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                        <dl class="form-horizontal">
+                            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha fin:</dt>
+                            <dd class="col-md-6">{{obtenerFechaDetalle(registroLGACDetalle?.fechaFin)}}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h5 class="form-heading text-muted text-semibold text-sm">LISTA DE INTEGRANTES</h5>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+
+                    <table
+                            class="table table-bordered table-hover table-striped table-condensed">
+                        <thead class="panel-title">
+                        <tr class="panel-title">
+                            <th class="text-center">Nombre de integrante</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr
+                                *ngFor="let registro of registrosIntegrantesDetalle"
+                                class="gradeA odd"
+                        >
+                            <td class="center">{{registro?.profesor?.getNombreCompleto()}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </modal-body>
+    <modal-footer>
+
+    </modal-footer>
+</modal>
+<!-- FIN DEL MODAL DE DETALL LGAC -->
+

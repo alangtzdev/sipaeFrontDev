@@ -1,0 +1,110 @@
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalDetDir>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModal()" aria-hidden="true">×</button>
+    <h4 class="modal-title">Detalle direcci&oacute;n</h4>
+  </modal-header>
+  <modal-body>
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Tipo de dirección:
+                  </dt>
+                  <dd class="col-md-6">{{entidadDireccion?.tipo?.valor}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">País:</dt>
+                  <dd class="col-md-6">{{entidadDireccion?.pais?.valor}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin" *ngIf="mostrarDireccionPais()">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estado:
+                  </dt>
+                  <dd class="col-md-6">{{entidadDireccion?.entidadFederativa?.valor}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12" *ngIf="mostrarDireccionPais()">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Municipio:</dt>
+                  <dd class="col-md-6">{{entidadDireccion?.municipio?.valor}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">C&oacute;digo postal:
+                  </dt>
+                  <dd class="col-md-6">{{entidadDireccion?.codigoPostal}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">{{validarPaisMexico ? 'Calle y N&uacute;mero' : 'Dirección' }}:</dt>
+                  <dd class="col-md-6">{{entidadDireccion?.calle}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin" *ngIf="mostrarDireccionPais()">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Colonia:
+                  </dt>
+                  <dd class="col-md-6">{{entidadDireccion?.colonia}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Tel&eacute;fono de domicilio:</dt>
+                  <dd class="col-md-6">{{entidadDireccion?.telefono}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <button class="btn btn-default" type="submit" (click)="cerrarModal()"><i class="fa fa-close"></i> Cerrar</button>
+  </modal-footer>
+</modal>

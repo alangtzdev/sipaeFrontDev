@@ -1,0 +1,183 @@
+<form class="form-horizontal" [formGroup]="formulario">
+  <div class="row">
+
+    <div class="col-md-12">
+      <h6 class="form-heading text-muted text-semibold text-sm">Datos complementarios</h6>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+
+
+            <div class="col-md-6 padding-xs-vr">
+              <div class="row">
+                <label class="col-md-6 control-label text-left" for="fechaNacimiento">Fecha de nacimiento: </label>
+                <div class="col-md-6">
+                  <div class="dropdown" dropdown autoClose="disabled">
+                    <div class="input-group">
+                      <input id="fechaNacimiento"  disabled="disabled" name="fechaNacimiento" type="text" class="form-control"
+                             value="{{ getFechaNacimiento()}}" >
+                      <span class="input-group-btn">
+                                                    <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu" data-toggle="dropdown" dropdownToggle></button>
+                                                </span>
+                    </div>
+
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="menu" dropdownMenu >
+                      <li>
+                        <div style="display:inline-block;">
+                          <datepicker [(ngModel)]="dtNacimiento" [maxDate]="maxDate" [ngModelOptions]="{standalone: true}" [showWeeks]="true"></datepicker>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div [ngClass]="{'has-error': getControlErrors('lugarNacimiento')}">
+              <div class=" col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label class="col-md-6 control-label" for="lugarNacimiento">Lugar de nacimiento:
+                  </label>
+                  <div class="col-md-6">
+                    <input type="text" placeholder="Lugar de nacimiento" name="lugarNacimiento" #lugarNacimiento formControlName="lugarNacimiento"
+                           maxlength="50"
+                           id="lugarNacimiento" ngControl="lugarNacimiento" class="form-control">
+                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('lugarNacimiento'))">
+                                            {{errorMessage(getControl('lugarNacimiento'))}}
+                                        </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+
+            <div [ngClass]="{'has-error': getControlErrors('curp')}">
+              <div class=" col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label class="col-md-6 control-label" for="curp">CURP: </label>
+                  <div class="col-md-6">
+                    <input type="text" placeholder="CURP" name="curp" id="curp" ngControl="curp" #curp formControlName="curp"
+                           class="form-control" maxlength="18">
+                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('curp'))">
+                                            {{errorMessage(getControl('curp'))}}
+                                        </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div [ngClass]="{'has-error': getControlErrors('idEstadoCivil')}">
+              <div class=" col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label class="col-md-6 control-label" for="idEstadoCivil">Estado civil:
+                  </label>
+                  <div class="col-md-6">
+                    <select name="idEstadoCivil" id="idEstadoCivil" ngControl="idEstadoCivil" #idEstadoCivil formControlName="idEstadoCivil"
+                            class="form-control">
+                      <option value="" disabled selected>Selecciona...</option>
+                      <option *ngFor="let catEstadodCivil of opcionesEstadoCivil"
+                              value="{{catEstadodCivil.id}}">
+                        {{catEstadodCivil.text}}
+                      </option>
+                    </select>
+                    <span id="helpBlock3" class="help-block" *ngIf="(getControlErrors('idEstadoCivil'))">
+                                            {{errorMessage(getControl('idEstadoCivil'))}}
+                                        </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="col-md-12">
+      <h6 class="form-heading text-muted text-semibold text-sm">Datos asignación</h6>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 padding-xs-vr">
+              <div [ngClass]="{'has-error': getControlErrors('idEstatus')}"
+                   class="form-group">
+                <label for="idEstatus"
+                       class="col-lg-6 col-md-6 control-label text-right">Estatus: *</label>
+                <div class="col-lg-6 col-md-6">
+                  <select name="idEstatus" id="idEstatus" ngControl="idEstatus" #idEstatus formControlName="idEstatus" class="form-control">
+                    <option value="" disabled selected>Selecciona...</option>
+                    <option *ngFor="let estatus of opcionesEstatus" value="{{estatus.id}}">
+                      {{estatus.text}}
+                    </option>
+                  </select>
+                  <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idEstatus'))">
+                                    {{errorMessage(getControl('idEstatus'))}}
+                                </span>
+                </div>
+
+              </div>
+
+            </div>
+            <div class="col-md-6 padding-xs-vr">
+              <div class="form-group">
+                <label for="idTipoTiempoTrabajo"
+                       class="col-lg-6 col-md-6 control-label text-right">Tiempo: </label>
+                <div class="col-lg-6 col-md-6">
+                  <select name="idTipoTiempoTrabajo" id="idTipoTiempoTrabajo" #idTipoTiempoTrabajo formControlName="idTipoTiempoTrabajo"
+                          ngControl="idTipoTiempoTrabajo" class="form-control">
+                    <option value="" disabled selected>Selecciona...</option>
+                    <option *ngFor="let catTipoTiempo of opcionesTipotiempo"
+                            value="{{catTipoTiempo.id}}">{{catTipoTiempo.text}}
+                    </option>
+                  </select>
+                  <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idTipoTiempoTrabajo'))">
+                                        {{errorMessage(getControl('idTipoTiempoTrabajo'))}}
+                                    </span>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+
+
+            <div class="col-md-6 padding-xs-vr">
+              <div class="row">
+                <label class="col-md-6 control-label text-left" for="fechaNacimiento">Fecha de ingreso: </label>
+                <div class="col-md-6">
+                  <div class="dropdown" dropdown autoClose="disabled">
+                    <div class="input-group">
+                      <input id="fechaIngreso"  disabled="disabled" name="fechaIngreso" type="text" class="form-control"
+                             value="{{ getFechaIngreso()}}" >
+                      <span class="input-group-btn">
+                                                        <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                                    </span>
+                    </div>
+
+                    <ul class="dropdown-menu" role="menu1" aria-labelledby="menu1" dropdownMenu >
+                      <li>
+                        <div style="display:inline-block;">
+                          <datepicker [(ngModel)]="dtIngreso" [minDate]="minDate" [ngModelOptions]="{standalone: true}" [showWeeks]="true"></datepicker>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</form>

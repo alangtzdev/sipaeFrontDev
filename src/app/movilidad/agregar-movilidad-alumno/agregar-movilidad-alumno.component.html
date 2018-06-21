@@ -1,0 +1,1137 @@
+<div class="page-header">
+  <div class="col-md-12 text-center text-left-sm">
+    <div class="row">
+      <h1>Movilidad acad&eacute;mica</h1>
+      <p><small>Descripciones y solicitudes de movilidad</small></p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel">
+      <div class="panel-body ">
+        <div class="col-md-6 col-sm-6" style="padding: 0">
+          <h5 class="form-heading text-muted text-semibold text-sm">MATR&Iacute;CULA:
+            {{entidadEstudiante?.matricula?.matriculaCompleta}}</h5>
+        </div>
+        <div class="col-md-6  col-sm-6 text-left" style="padding: 0">
+          <h5 class="form-heading text-muted text-semibold text-sm text-right-sm">ESTUDIANTE:
+            {{entidadEstudiante?.datosPersonales?.getNombreCompleto()}}</h5>
+        </div>
+
+        <div id="actionbuttons" class="col-md-12 text-right">
+          <div *ngIf="!permisoDocencia" class="row">
+            <button class="btn btn-labeled btn-success form-group-margin" (click)="modalSolicitarMovilidad()"><span class="btn-label icon fa fa-plus"></span>Carga curricular</button>
+            <button class="btn btn-labeled btn-success form-group-margin" (click)="modalEstanciasInvestigacion()"><span class="btn-label icon fa fa-plus"></span>Estancia de investigaci&oacute;n</button>
+            <button class="btn btn-labeled btn-success form-group-margin" (click)="modalTrabajoCampo()"><span class="btn-label icon fa fa-plus"></span>Trabajo de Campo</button>
+          </div>
+        </div>
+
+        <h6 class="form-heading text-muted text-semibold text-sm">Descripciones</h6>
+
+        <accordion [closeOthers]="true" class="panel-group">
+          <accordion-group #uno [isOpen]="false">
+            <div accordion-heading class="text-left">
+              Carga curricular
+              <i class="pull-right fa fa-info-circle"
+                 [ngClass]="{'glyphicon-chevron-down': uno?.isOpen, 'glyphicon-chevron-right': !uno?.isOpen}"></i>
+            </div>
+            El objetivo de este tipo de movilidad consiste en que como estudiantes tomen cursos en otras instituciones de educación superior nacional o internacional, dentro de los periodos semestrales señalados en el calendario institucional. Es requisito que exista un convenio específico con el COLSAN para que las materias que se cursen reciban créditos oficiales y puedan obtener acceso a los servicios que ofrece la institución receptora. Referente a los Lineamientos de Becas y Ayudas Económicas de El COLSAN, las ayudas económicas a los estudiantes de posgrado para movilidad nacional o internacional serán concurrentes al Programa de Becas Mixtas del CONACYT. Y se otorgarán una sola ocasión durante la vigencia del plan de estudios.
+          </accordion-group>
+          <accordion-group #dos [isOpen]="false">
+            <div accordion-heading class="text-left">
+              Estancia de investigaci&oacute;n
+              <i class="pull-right fa fa-info-circle"
+                 [ngClass]="{'glyphicon-chevron-down': dos?.isOpen, 'glyphicon-chevron-right': !dos?.isOpen}"></i>
+            </div>
+            El objetivo de este tipo de movilidad consiste en que como estudiantes realicen actividades en otras instituciones bajo la supervisión de un co-tutor/a, quien orientará respecto al desarrollo de su investigación. Referente a los Lineamientos de Becas y Ayudas Económicas de El COLSAN, las ayudas económicas a los estudiantes de posgrado para movilidad nacional o internacional serán concurrentes al Programa de Becas Mixtas del CONACYT. Y se otorgarán una sola ocasión durante la vigencia del plan de estudios.
+          </accordion-group>
+          <accordion-group #tres [isOpen]="false">
+            <div accordion-heading class="text-left">
+              Trabajo de campo
+              <i class="pull-right fa fa-info-circle"
+                 [ngClass]="{'glyphicon-chevron-down': uno?.isOpen, 'glyphicon-chevron-right': !uno?.isOpen}"></i>
+            </div>
+            El objetivo de este tipo de movilidad es una actividad extracurricular que consiste en que como estudiantes desarrollen trabajo de campo, consulta en fuentes, recopilación en fuentes y actividades de asignatura que complementen la formación académica y el proceso de su investigación. Referente a los Lineamientos de Becas y Ayudas Económicas de El COLSAN, para actividades relacionadas con trabajos de campo y de archivo se otorgará en periodos definidos en el plan de estudios en el ciclo escolar que corresponda. En los casos de los programas de maestría la ayuda se otorgará en una sola ocasión durante su periodo de formación y en el de doctorado hasta un máximo de dos apoyos durante su periodo de formación.
+          </accordion-group>
+        </accordion>
+
+        <div class="tab-content-padding">
+          <h6 class="form-heading text-muted text-semibold text-sm form-group-margin">Lista de movilidades</h6>
+        </div>
+
+        <div *ngIf="registros.length !== 0">
+          <div class="row">
+            <div class="col-md-12">
+              <div *ngIf="!permisoDocencia" class="text-right">
+                <button class="btn btn-labeled btn-success form-group-margin" (click)="modalImportarDocumentos()" [disabled]="!registroSeleccionado"><span class="btn-label icon fa fa-plus"></span>Anexar documentaci&oacute;n</button>
+                <button class="thumbnail" class="btn btn-labeled btn-default form-group-margin" [disabled]="seleccion" (click)="redireccionarDetalle()"><span class="btn-label icon fa fa-eye"></span>Detalle</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-default">
+            <div role="grid" class="dataTables_wrapper form-inline">
+              <div class="table-header clearfix">
+                <div class="table-caption">Lista de solicitudes</div>
+                <div class="DT-lf-right">
+                  <div class="DT-per-page">
+                    <div class="dataTables_length" id="jq-datatables-example_length">
+                      <label>Registros por p&aacute;gina:
+                        <select name="jq-datatables-example_length" aria-controls="jq-datatables-example" class="form-control input-sm">
+                          <option value="10">10</option>
+                          <option value="25">25</option>
+                          <option value="50">50</option>
+                          <option value="100">100</option>
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                  <thead>
+                  <tr role="row">
+                    <th *ngFor="let columna of columnas"
+                        class="text-center"
+                        [ngClass]="{
+                                        'sorting_desc': columna.sort === 'desc',
+                                        'sorting_asc': columna.sort === 'asc',
+                                        'sorting': columna.sort !== false
+                                      }">
+                      {{columna.titulo}}
+                    </th>
+                  </tr>
+                  </thead>
+
+                  <tbody *ngIf = "registros.length !== 0">
+                  <tr
+                    *ngFor="let registro of registros"
+                    class="gradeA odd"
+                    [ngClass]="{
+                                          'seleccionado': rowSeleccionado(registro)
+                                        }"
+                    (click) = "rowSeleccion(registro)"
+                  >
+                    <td class="text-center">{{registro?.tipoMovilidad?.valor}}</td>
+                    <td class="text-center">{{registro?.institucionInteres ? registro?.institucionInteres : registro?.convenio?.institucion?.nombre ? registro?.convenio?.institucion?.nombre : registro?.lugar }}</td>
+                    <td class="text-center">{{registro?.estatus?.valor}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-footer clearfix">
+                <div class="DT-pagination" *ngIf="isSetPaginacion()">
+                  <div class="dataTables_paginate paging_simple_numbers">
+                    <pagination
+                      class="pagination"
+                      [totalItems] = "paginacion.registrosTotales"
+                      [itemsPerPage] = "paginacion.registrosPagina"
+                      [(ngModel)] = "paginaActual"
+                      (pageChanged) = "cambiarPagina($event)"
+                      previousText = "Anterior"
+                      nextText = "Siguiente"
+                    >
+                    </pagination>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-->MODAL SOLICITUD CAMPO TRABAJO</!-->
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalTrabajoCampos  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalAgregar()">×</button>
+    <h4 class="modal-title">Solicitud de movilidad por trabajo de campo</h4>
+  </modal-header>
+  <modal-body>
+    <form class="form-horizontal" [formGroup]="formulario">
+      <div class="row text-right-lg text-left-md text-left-sm text-left-xs">
+
+
+        <div [ngClass]="{'has-error': getControlErrors('trabajoCampo')}">
+          <div class="col-md-12 padding-xs-vr">
+            <div class="row">
+              <label for="nombreTrabajoCampo" class="col-md-3 control-label">Trabajo de campo:*</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" id="nombreTrabajoCampo" name="trabajoCampo" placeholder="Trabajo de campo" formControlName="trabajoCampo"
+                       maxlength="400">
+                <span
+                  id="helpBlock2"
+                  class="help-block"
+                  *ngIf="(getControlErrors('trabajoCampo'))">
+                                    {{errorMessage(getControl('trabajoCampo'))}}
+                                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div [ngClass]="{'has-error': getControlErrors('lugar')}">
+          <div class="col-md-12 padding-xs-vr">
+            <div class="row">
+              <label for="lugarTrabajoCampo" class="col-md-3 control-label">Lugar:*</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" id="Otro" placeholder="Lugar" formControlName="lugar" maxlength="400">
+                <span
+                  id="helpBlock2"
+                  class="help-block"
+                  *ngIf="(getControlErrors('lugar'))">
+                                    {{errorMessage(getControl('lugar'))}}
+                                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+            <label class="col-lg-6 col-md-6 control-label">Fecha de inicio: </label>
+            <div class="col-lg-6 col-md-6">
+              <div class="dropdown" dropdown autoClose="outsideClick">
+                <div class="input-group">
+                  <input type="text" class="form-control" value="{{getFechaInicio()}}" disabled>
+                  <span class="input-group-btn">
+                                <button class="btn dropdown-toggle fa fa-calendar" (click)="elegirFechaInicio()" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                              </span>
+                </div>
+                ​
+                <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1" dropdownMenu >
+                  <li>
+                    <div style="display:inline-block;">
+                      <datepicker [(ngModel)]="dt" [minDate]="fechaMaxima" [ngModelOptions]="{standalone: true}" [showWeeks]="true"></datepicker>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+            <label class="col-md-6 control-label">Fecha de fin:</label>
+            <div class="col-md-6">
+              <div class="dropdown" dropdown autoClose="outsideClick">
+                <div class="input-group">
+                  <input type="text" class="form-control" value="{{getFechaFin()}}" disabled>
+                  <span class="input-group-btn">
+                                <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu2" data-toggle="dropdown" dropdownToggle></button>
+                              </span>
+                </div>
+                ​
+                <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu2" dropdownMenu >
+                  <li>
+                    <div style="display:inline-block;">
+                      <datepicker [(ngModel)]="dt2" [minDate]="fechaMinima" [ngModelOptions]="{standalone: true}" (click)="elegirFechaFin()" [showWeeks]="true"></datepicker>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <h6 class="form-heading text-muted text-semibold text-sm">Documentos</h6>
+      <div class="row">
+        <div class="col-md-12">
+          <alert
+            *ngFor="let alerta of alertas;let i = index"
+            [type]="alerta.type"
+            dismissible="true"
+            (close)="cerrarAlerta(i)">
+            {{ alerta?.msg }}
+          </alert>
+        </div>
+
+
+        <div class="col-md-6">
+          <div class="row">
+            <div class="col-md-12 padding-xs-vr">
+              <div class="row text-right-lg text-left-md text-left-sm text-left-xs">
+                <label for="Option" class="col-md-6 control-label">Selecciona documento: *</label>
+                <div class="col-md-6">
+                  <select  #doc class="form-control" (change)="habilitarOtro(doc.value)" (change)="agregarDocumento(doc.value)" formControlName="seteador">
+                    <option disabled selected value="">Selecciona...</option>
+                    <option *ngFor="let doc of listaDocumentos" value="{{doc.id+'-'+doc.text}}">{{doc.text}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 padding-xs-vr">
+              <div class="row">
+                <div *ngIf="!otro" class="form-group">
+                  <div [ngClass]="{ 'has-error': getControlErrors('auxiliarOtro') }" >
+                    <label for="Input" class="col-md-6 control-label">Otro: *</label>
+                    <div class="col-md-6">
+                      <input type="text" class="form-control" placeholder="Por favor especifique" formControlName="otroTipoDocumento" (keyup)="cambiarAuxiliar()">
+                      <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('auxiliarOtro'))" >
+                                        {{errorMessage(getControl('auxiliarOtro'))}}
+                                </span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12 padding-xs-vr">
+              <div *ngIf="tipoArchivo" id="dropzonejs-example"
+                   class="dropzone-box dz-clickable dropzone-custome"
+                   style="min-height: 185px;">
+                <div class="dz-default dz-message " ngFileSelect [options]="options"
+                     (onUpload)="handleDropUpload($event)">
+                  <i class="fa fa-cloud-upload"></i>
+                  Arrastre archivos aquí<br><span class="dz-text-small">o de clic para seleccionarlo manualmente</span>
+                </div>
+                <input type="file" ngFileSelect [options]="options"
+                       (onUpload)="handleBasicUpload($event)">
+              </div>
+              <div class="progress">
+                <div
+                  *ngIf="enableBasic()"
+                  class="progress-bar"
+                  role="progressbar"
+                  aria-valuenow="basicProgress"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  [style.width]="basicProgress + '%'">
+                  {{basicProgress}}%
+                </div>
+
+                <div
+                  *ngIf="enableDrop()"
+                  class="progress-bar"
+                  role="progressbar"
+                  aria-valuenow="dropProgress"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  [style.width]="dropProgress + '%'">
+                  {{dropProgress}}%
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+
+            <div class="col-md-12">
+              <div class="text-right">
+                <button type="button" class="btn btn-danger form-group-margin" *ngIf="mostrarBotones()" (click)="eliminarRegistro()"><i class="fa fa-times"></i> Eliminar</button>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="table-default table-responsive">
+                <div [ngClass]="{ 'has-error': getControlErrors('auxiliar') }" >
+                  <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                    <thead>
+                    <tr role="row">
+                      <th *ngFor="let columna of columnas2"
+                          class="text-center"
+                          [ngClass]="{
+                                  'sorting_desc': columna.sort === 'desc',
+                                  'sorting_asc': columna.sort === 'asc',
+                                  'sorting': columna.sort !== fechaMinimafalse
+                                }">
+                        {{columna.titulo}}
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf = "registros2.length === 0">
+                    <tr class="gradeA odd">
+                      <th class="text-center" colspan="2">
+                        No hay Registros
+                      </th>
+                    </tr>
+                    </tbody>
+
+                    <tbody *ngIf = "registros2.length !== 0">
+                    <tr
+                      *ngFor="let registro of registros2"
+                      class="gradeA odd"
+                      [ngClass]="{
+                                'seleccionado': rowSeleccionado2(registro)
+                              }"
+                      (click) = "rowSeleccion2(registro)"
+                    >
+                      <td class="text-center">{{registro?.nombre}}</td>
+                      <td class="text-center">{{fechaConFormato}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                  <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('auxiliar'))" >
+                                  Es necesario adjuntar al menos un archivo.
+                          </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <button class="btn btn-default" type="button" (click)="cerrarModalAgregar()"><i class="fa fa-times"></i> Cancelar</button>
+    <button type="button" class="btn btn-success" (click)="enviarFormulario()"><i class="fa fa-check"></i>&nbsp;&nbsp;Enviar solicitud</button>
+  </modal-footer>
+</modal>
+<!-->FIN DE MODAL SOLICITUD CAMPO TRABAJO</!-->
+
+<!-->MODAL SOLICITUD MOVILIDAD ESTANCIA DE INVESTIGACION</!-->
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalEstanciaInvestigacion  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModal1()">×</button>
+    <h4 class="modal-title" id="myModalLabel">Solicitud de movilidad en estancia de investigación</h4>
+  </modal-header>
+  <modal-body>
+    <form class="form-horizontal" [formGroup]="formulario2">
+      <div class="row text-right-lg text-left-md text-left-sm text-left-xs">
+
+        <div class="col-md-12">
+          <div class="row">
+
+            <div [ngClass]="{'has-error': getControlErrors2('estancia')}">
+              <div class=" col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label for="Input" class="col-md-6 control-label">Estancia: *</label>
+                  <div class="col-md-6">
+                    <input type="text" class="form-control" id="estancia" name="estancia" formControlName="estancia" maxlength="400">
+                    <span
+                      id="helpBlock2"
+                      class="help-block"
+                      *ngIf="(getControlErrors2('estancia'))">
+                                  {{errorMessage(getControl2('estancia'))}}
+                              </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class=" col-md-6 padding-xs-vr">
+              <div class="row">
+                <label for="Option" class="col-md-6 control-label">Convenio institucional:</label>
+                <div class="col-md-6">
+                  <select #convenioSelected class="form-control" (change)="habilitarInstitucion(convenioSelected.value)" formControlName="idConvenio">
+                    <option disabled selected value="">Selecciona...</option>
+                    <option *ngFor="let convenio of listaConvenios" value="{{convenio.id}}">{{convenio.text}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-12 padding-xs-vr">
+          <div class="row">
+            <div [ngClass]="{ 'has-error': getControlErrors2('institucionInteres')}">
+              <label for="Input" class="col-md-3 control-label">Institución en la que está interesado:</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" formControlName="institucionInteres" placeholder="Institución">
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors2('institucionInteres'))" maxlength="400">
+                                  {{errorMessage(getControl2('institucionInteres'))}}
+                          </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div [ngClass]="{ 'has-error': getControlErrors2('nombreContacto') }">
+          <div class="col-md-12 padding-xs-vr">
+            <div class="row">
+              <label for="Input" class="col-md-3 control-label">Profesor anfitrión: *</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" formControlName="nombreContacto" placeholder="Profesor anfitrión" maxlength="400">
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors2('nombreContacto'))" >
+                                    {{errorMessage(getControl2('nombreContacto'))}}
+                            </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class=" col-md-6 padding-xs-vr">
+              <div class="row">
+                <label class="col-md-6 control-label">Fecha de inicio: </label>
+                <div class="col-md-6">
+                  <div class="dropdown" dropdown autoClose="outsideClick">
+                    <div class="input-group">
+                      <input type="text" class="form-control" value="{{getFechaInicio2()}}" disabled>
+                      <span class="input-group-btn">
+                                    <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" (click)="elegirFechaInicio()" data-toggle="dropdown" dropdownToggle></button>
+                                  </span>
+                    </div>
+                    ​
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1" dropdownMenu >
+                      <li>
+                        <div style="display:inline-block;">
+                          <datepicker [(ngModel)]="dt" [minDate]="fechaMaxima" [ngModelOptions]="{standalone: true}" [showWeeks]="true"></datepicker>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class=" col-md-6 padding-xs-vr">
+              <div class="row">
+                <label class="col-md-6 control-label">Fecha de fin: </label>
+                <div class="col-md-6">
+                  <div class="dropdown" dropdown autoClose="outsideClick">
+                    <div class="input-group">
+                      <input type="text" class="form-control" value="{{getFechaHasta()}}" disabled>
+                      <span class="input-group-btn">
+                                <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                              </span>
+                    </div>
+                    ​
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1" dropdownMenu >
+                      <li>
+                        <div style="display:inline-block;">
+                          <datepicker [(ngModel)]="dt2" [minDate]="fechaMinima" [ngModelOptions]="{standalone: true}" [showWeeks]="true" (click)="elegirFechaFin()"></datepicker>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+      </div>
+
+      <h6 class="form-heading text-muted text-semibold text-sm">Documentos</h6>
+
+      <div class="row">
+        <div class="col-md-12">
+          <alert
+            *ngFor="let alerta of alertas;let i = index"
+            [type]="alerta.type"
+            dismissible="true"
+            (close)="cerrarAlerta(i)">
+            {{ alerta?.msg }}
+          </alert>
+        </div>
+
+        <div class="col-md-6">
+          <div class="row">
+            <div class="col-md-12 padding-xs-vr">
+              <div class="row text-right-lg text-left-md text-left-sm text-left-xs">
+                <label for="Option" class="col-md-6 control-label">Selecciona documento: *</label>
+                <div class="col-md-6">
+                  <select #documentoInv class="form-control" (change)="habilitarOtro2(documentoInv.value)" (change)="agregarDocumento(documentoInv.value)" formControlName="seteador">
+                    <option disabled selected value="">Selecciona...</option>
+                    <option *ngFor="let doc of listaDocumentos" value="{{doc.id+'-'+doc.text}}">{{doc.text}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 padding-xs-vr">
+              <div class="row">
+                <div *ngIf="!otro" class="form-group">
+                  <div [ngClass]="{ 'has-error': getControlErrors2('auxiliarOtro') }" >
+                    <label for="Input" class="col-md-6 control-label">Otro: *</label>
+                    <div class="col-md-6">
+                      <input type="text" class="form-control" placeholder="Por favor especifique" formControlName="otroTipoDocumento" (keyup)="cambiarAuxiliar2()">
+                      <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors2('auxiliarOtro'))" >
+                                        {{errorMessage(getControl2('auxiliarOtro'))}}
+                                </span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12 padding-xs-vr">
+              <div *ngIf="tipoArchivo" id="dropzonejs-example"
+                   class="dropzone-box dz-clickable dropzone-custome"
+                   style="min-height: 185px;">
+                <div class="dz-default dz-message " ngFileSelect [options]="options"
+                     (onUpload)="handleDropUpload($event)">
+                  <i class="fa fa-cloud-upload"></i>
+                  Arrastre archivos aquí<br><span class="dz-text-small">o de clic para seleccionarlo manualmente</span>
+                </div>
+                <input type="file" ngFileSelect [options]="options"
+                       (onUpload)="handleBasicUpload2($event)">
+              </div>
+              <div class="progress">
+                <div
+                  *ngIf="enableBasic()"
+                  class="progress-bar"
+                  role="progressbar"
+                  aria-valuenow="basicProgress"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  [style.width]="basicProgress + '%'">
+                  {{basicProgress}}%
+                </div>
+
+                <div
+                  *ngIf="enableDrop()"
+                  class="progress-bar"
+                  role="progressbar"
+                  aria-valuenow="dropProgress"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  [style.width]="dropProgress + '%'">
+                  {{dropProgress}}%
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+
+            <div class="col-md-12">
+              <div class="text-right">
+                <button type="button" class="btn btn-danger form-group-margin" (click)="eliminarRegistro2()" *ngIf="registroSeleccionado3"><i class="fa fa-times"></i> Eliminar
+                </button>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="table-default table-responsive">
+                <div
+                  [ngClass]="{
+                                       'has-error': getControlErrors2('auxiliar')
+                                     }"
+                >
+                  <table cellpadding="0" cellspacing="0" border="0"
+                         class="table table-striped table-bordered dataTable no-footer"
+                         id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                    <thead>
+                    <tr role="row">
+                      <th *ngFor="let columna of columnas3"
+                          class="text-center"
+                          [ngClass]="{
+                                             'sorting_desc': columna.sort === 'desc',
+                                             'sorting_asc': columna.sort === 'asc',
+                                             'sorting': columna.sort !== false
+                                           }">
+                        {{columna.titulo}}
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf = "registros3.length === 0">
+                    <tr class="gradeA odd">
+                      <th class="text-center" colspan="2">
+                        No hay Registros
+                      </th>
+                    </tr>
+                    </tbody>
+                    <tbody *ngIf = "registros3.length !== 0">
+                    <tr
+                      *ngFor="let registro of registros3"
+                      class="gradeA odd"
+                      [ngClass]="{
+                                             'seleccionado': rowSeleccionado3(registro)
+                                           }"
+                      (click) = "rowSeleccion3(registro)"
+                    >
+                      <td class="text-center">{{registro?.nombre}}</td>
+                      <td class="text-center">{{fechaConFormato}}</td>
+                    </tr>
+                    </tbody>
+
+                  </table>
+                  <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors2('auxiliar'))" >
+                                        Es necesario adjuntar al menos un archivo.
+                                </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <button class="btn " (click)="cerrarModal1()"><i class="fa fa-times"></i> Cancelar</button>
+    <button class="btn btn-success" type="button" (click)="enviarFormulario2()"><i class="fa fa-check"></i>&nbsp;&nbsp;Enviar solicitud
+    </button>
+    <!--<button class="btn btn-success" type="button" (click)="editarFormularioSolicitudMovilidad2()"><i class="fa fa-check"></i>&nbsp;&nbsp;Editar
+      solicitud
+    </button>-->
+  </modal-footer>
+</modal>
+<!-->FIN MODAL SOLICITUD MOVILIDAD ESTANCIA DE INVESTIGACION</!-->
+
+<!-->MODAL SOLICITUD MOVILIDAD CARGAR CURRICULAR</!-->
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalCurricular  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModal2()" aria-hidden="true">×</button>
+    <h4 class="modal-title" id="myModalLabel">Solicitud de movilidad con carga curricular</h4>
+  </modal-header>
+  <modal-body>
+    <form [formGroup]="formulario3">
+      <div class="row text-right-lg text-right-md text-left-sm text-left-xs">
+
+        <div class="col-md-12">
+          <div class="row">
+            <div [ngClass]="{ 'has-error': getControlErrors3('idConvenio') }">
+              <div class="col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label for="Input" class="col-md-6 control-label">Convenio institucional:</label>
+                  <div class="col-md-6">
+                    <select #convenio class="form-control" (change)="habilitarInstitucion(convenio.value)" formControlName="idConvenio">
+                      <option selected disabled value="">Selecciona...</option>
+                      <option *ngFor="let convenio of listaConvenios" value="{{convenio.id}}">{{convenio.text}}</option>
+                    </select>
+                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors3('idConvenio'))" >
+                                    {{errorMessage(getControl3('idConvenio'))}}
+                            </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div [ngClass]="{'has-error': getControlErrors3('idPais') }">
+              <div class="col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label for="Input" class="col-md-6 control-label">País: *</label>
+                  <div class="col-md-6">
+                    <select  id="Option" class="form-control" formControlName="idPais">
+                      <option selected disabled value="">Selecciona...</option>
+                      <option *ngFor="let pais of listaPaises" value="{{pais.id}}">{{pais.text}}</option>
+                    </select>
+                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors3('idPais'))" >
+                                    {{errorMessage(getControl3('idPais'))}}
+                            </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12 padding-xs-vr"> 
+        
+          <div class="row">
+            <div [ngClass]="{ 'has-error': getControlErrors3('institucionInteres')}">
+              <label for="Input" class="col-md-3 control-label">Institución en la que está interesado: *</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" maxlength="400" formControlName="institucionInteres" placeholder="Institución">
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors3('institucionInteres'))" maxlength="400">
+                                  {{errorMessage(getControl3('institucionInteres'))}}
+                          </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div [ngClass]="{ 'has-error': getControlErrors3('idMateria')}">
+          <div class="col-md-12 padding-xs-vr">
+            <div class="row">
+              <label for="Input" class="col-md-3 control-label">Materia: *</label>
+              <div class="col-md-9">
+                <select  id="idMateria" class="form-control" formControlName="idMateria">
+                  <option selected disabled value="">Selecciona...</option>
+                  <option *ngFor="let materiaPlan of listaMaterias" value="{{materiaPlan.materia.id}}">{{materiaPlan.materia.descripcion}}</option>
+                </select>
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors3('idMateria'))" >
+                                  {{errorMessage(getControl3('idMateria'))}}
+                          </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div [ngClass]="{ 'has-error': getControlErrors3('materiaCursar')}">
+          <div class="col-md-12 padding-xs-vr">
+            <div class="row">
+              <label for="Input" class="col-md-3 control-label">Materia con la que convalida: *</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" id="Input" formControlName="materiaCursar" placeholder="Materia">
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors3('materiaCursar'))" maxlength="400">
+                                  {{errorMessage(getControl3('materiaCursar'))}}
+                          </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div [ngClass]="{ 'has-error': getControlErrors3('nombreContacto') }">
+          <div class="col-md-12 padding-xs-vr">
+            <div class="row">
+              <label for="Input" class="col-md-3 control-label">Nombre del contacto: *</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" formControlName="nombreContacto" placeholder="Contacto">
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors3('nombreContacto'))" maxlength="400">
+                                    {{errorMessage(getControl3('nombreContacto'))}}
+                            </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div [ngClass]="{ 'has-error': getControlErrors3('puestoContacto') }">
+          <div class="col-md-12 padding-xs-vr" >
+            <div class="row">
+              <label for="Input" class="col-md-3 control-label">Puesto del contacto: *</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" formControlName="puestoContacto" placeholder="Puesto del contacto">
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors3('puestoContacto'))" maxlength="400">
+                                    {{errorMessage(getControl3('puestoContacto'))}}
+                            </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+
+            <div class=" col-md-6 padding-xs-vr">
+              <div class="row">
+                <label class="col-md-6 control-label">Fecha de inicio: </label>
+                <div class="col-md-6">
+                  <div class="dropdown" dropdown autoClose="outsideClick">
+                    <div class="input-group">
+                      <input type="text" class="form-control" value="{{getFechaInicio3()}}" 
+                        disabled>
+                      <span class="input-group-btn">
+                                <button (click)="elegirFechaInicio()" class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                              </span>
+                    </div>
+                    ​
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1" dropdownMenu >
+                      <li>
+                        <div style="display:inline-block;">
+                          <datepicker [(ngModel)]="dt" [minDate]="fechaMaxima" [ngModelOptions]="{standalone: true}" [showWeeks]="true"></datepicker>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class=" col-md-6 padding-xs-vr">
+              <div class="row">
+                <label class="col-md-6 control-label">Fecha de fin: </label>
+                <div class="col-md-6">
+                  <div class="dropdown" dropdown autoClose="outsideClick">
+                    <div class="input-group">
+                      <input type="text" class="form-control" value="{{getFechaFin3()}}" 
+                        disabled>
+                      <span class="input-group-btn">
+                            <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                          </span>
+                    </div>
+                    ​
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1" dropdownMenu >
+                      <li>
+                        <div style="display:inline-block;">
+                          <datepicker [(ngModel)]="dt2"  [minDate]="fechaMinima" [ngModelOptions]="{standalone: true}" [showWeeks]="true" (click)="elegirFechaFin()"></datepicker>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+      </div>
+
+      <h6 class="form-heading text-muted text-semibold text-sm">DOCUMENTOS</h6>
+
+      <div class="row text-right-lg text-right-md text-left-sm text-left-xs">
+
+        <div class="col-md-12">
+          <div class="row">
+            <alert
+              *ngFor="let alerta of alertas;let i = index"
+              [type]="alerta.type"
+              dismissible="true"
+              (close)="cerrarAlerta(i)">
+              {{ alerta?.msg }}
+            </alert>
+
+            <div class=" col-md-6">
+              <div class="row">
+
+                <div class="col-md-12 padding-xs-vr">
+                  <div class="row">
+                    <label for="Input" class="col-md-6 control-label">Selecciona documento: *</label>
+                    <div class="col-md-6">
+                      <select #documentoCurricular class="form-control" (change)="habilitarOtro3(documentoCurricular.value)" (change)="agregarDocumento(documentoCurricular.value)" formControlName="seteador">
+                        <option disabled selected value="">Selecciona...</option>
+                        <option *ngFor="let doc of listaDocumentos" value="{{doc.id+'-'+doc.text}}">{{doc.text}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 padding-xs-vr">
+                  <div class="row">
+                    <div *ngIf="!otro" class="form-group">
+                      <div [ngClass]="{ 'has-error': getControlErrors3('auxiliar') }"  >
+                        <label for="Input" class="col-md-6 control-label">Otro: *</label>
+                        <div class="col-md-6">
+                          <input type="text" class="form-control" placeholder="Por favor especifique" formControlName="otroTipoDocumento" (keyup)="cambiarAuxiliar3()">
+                          <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors3('auxiliar'))" >
+                                        {{errorMessage(getControl3('auxiliar'))}}
+                                </span>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12 padding-xs-vr">
+                  <div *ngIf="tipoArchivo" id="dropzonejs-example"
+                       class="dropzone-box dz-clickable dropzone-custome"
+                       style="min-height: 185px;">
+                    <div class="dz-default dz-message " ngFileSelect [options]="options"
+                         (onUpload)="handleDropUpload($event)">
+                      <i class="fa fa-cloud-upload"></i>
+                      Arrastre archivos aquí<br><span class="dz-text-small">o de clic para seleccionarlo manualmente</span>
+                    </div>
+                    <input type="file" ngFileSelect [options]="options"
+                           (onUpload)="handleBasicUpload3($event)">
+                  </div>
+                  <div class="progress">
+                    <div
+                      *ngIf="enableBasic()"
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="basicProgress"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      [style.width]="basicProgress + '%'">
+                      {{basicProgress}}%
+                    </div>
+                    <div
+                      *ngIf="enableDrop()"
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="dropProgress"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      [style.width]="dropProgress + '%'">
+                      {{dropProgress}}%
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-md-6 padding-xs-vr">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="text-right">
+                    <button type="button" class="btn btn-danger form-group-margin" *ngIf="mostrarBotones2()" (click)="eliminarRegistro3()"><i class="fa fa-times"></i> Eliminar</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="row">
+
+                  <div class="table-default table-responsive">
+                    <div
+                      [ngClass]="{
+                                       'has-error': getControlErrors3('auxiliar')
+                                     }"
+                    >
+                      <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                        <thead>
+                        <tr role="row">
+                          <th *ngFor="let columna of columnas4"
+                              class="text-center"
+                              [ngClass]="{
+                                      'sorting_desc': columna.sort === 'desc',
+                                      'sorting_asc': columna.sort === 'asc',
+                                      'sorting': columna.sort !== false
+                                    }">
+                            {{columna.titulo}}
+                          </th>
+                        </tr>
+                        </thead>
+                        <tbody *ngIf = "registros4.length === 0">
+                        <tr class="gradeA odd">
+                          <th class="text-center" colspan="2">
+                            No hay Registros
+                          </th>
+                        </tr>
+                        </tbody>
+                        <tbody *ngIf = "registros4.length !== 0">
+                        <tr
+                          *ngFor="let registro of registros4"
+                          class="gradeA odd"
+                          [ngClass]="{
+                                      'seleccionado': rowSeleccionado4(registro)
+                                    }"
+                          (click) = "rowSeleccion4(registro)"
+                        >
+                          <td class="text-center">{{registro?.nombre}}</td>
+                          <td class="text-center">{{fechaConFormato}}</td>
+                        </tr>
+                        </tbody>
+                      </table>
+                      <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors3('auxiliar'))" >
+                                      Es necesario adjuntar al menos un archivo.
+                              </span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+
+          </div>
+        </div>
+
+
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <button class="btn " (click)="cerrarModal2()"><i class="fa fa-times"></i> Cancelar</button>
+    <button class="btn btn-success" type="submit" (click)="enviarFormulario3()"><i class="fa fa-check"></i>&nbsp;&nbsp;Enviar solicitud</button>
+  </modal-footer>
+</modal> 
+
+
+<!-->MODAL AGREGAR DOCUMENTACION</!-->
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalAnexoDocumentos  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModal3()">×</button>
+    <h4 class="modal-title">Agregar documento</h4>
+  </modal-header>
+  <modal-body>
+    <form [formGroup]="formulario4">
+      <div class="row">
+
+        <div class="col-md-12">
+          <div class="row">
+            <div [ngClass]="{ 'has-error': getControlErrors4('idTipoDocumento') }">
+              <div  class="col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label for="Option" class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Documento: *</label>
+                  <div class="col-md-6">
+                    <select #documento class="form-control" (change)="habilitarOtro4(documento.value)"
+                    (change)="agregarDocumento(documento.value)" formControlName="idTipoDocumento">
+                      <option disabled selected value="">Selecciona...</option>
+                      <option *ngFor="let doc of listaDocumentos" value="{{doc.id}}">{{doc.text}}</option>
+                    </select>
+                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors4('idTipoDocumento'))" >
+                                      {{errorMessage(getControl4('idTipoDocumento'))}}
+                              </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div *ngIf="!otro" class="form-group">
+              <div [ngClass]="{ 'has-error': getControlErrors4('auxiliar') }"  >
+                <div  class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <label for="Input" class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Otro: *</label>
+                    <div class="col-md-6">
+                      <input type="text" class="form-control" placeholder="Por favor especifique" formControlName="otroTipoDocumento" (keyup)="cambiarAuxiliar4()">
+                      <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors4('auxiliar'))" >
+                                          {{errorMessage(getControl4('auxiliar'))}}
+                                  </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row-centered">
+          <label *ngIf="archivoNombre" class="col-md-12 text-left" for="archivos">Documento:*</label>
+          <div class="col-md-12 text-left">
+            <div style="overflow:hidden; word-wrap:break-word">{{archivoNombre}}</div>
+          </div>
+          <div class="col-md-12">
+            <div *ngIf="tipoArchivo" id="dropzonejs-example"
+                class="dropzone-box dz-clickable dropzone-custome"
+                style="min-height: 185px;">
+              <div class="dz-default dz-message " ngFileSelect [options]="options"
+                  (onUpload)="handleDropUpload($event)">
+                <i class="fa fa-cloud-upload"></i>
+                Arrastre archivos aquí<br><span class="dz-text-small">o de clic para seleccionarlo manualmente</span>
+              </div>
+              <input type="file" ngFileSelect [options]="options"
+                    (onUpload)="handleBasicUpload4($event)">
+            </div>
+            <div class="progress">
+              <div
+                *ngIf="enableBasic()"
+                class="progress-bar"
+                role="progressbar"
+                aria-valuenow="basicProgress"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [style.width]="basicProgress + '%'">
+                {{basicProgress}}%
+              </div>
+
+              <div
+                *ngIf="enableDrop()"
+                class="progress-bar"
+                role="progressbar"
+                aria-valuenow="dropProgress"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [style.width]="dropProgress + '%'">
+                {{dropProgress}}%
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!--<div class="col-md-12">
+            <div class="text-right">
+                <button type="button" class="btn btn-danger"><i class="fa fa-times"></i> Eliminar</button>
+            </div>
+        </div>-->
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModal3()"><i class="fa fa-close"></i> Cancelar</button>
+    <button type="button" class="btn btn-success" (click)="enviarFormulario4()"><i class="fa fa-plus"></i> Agregar</button>
+  </modal-footer>
+</modal>
+<!-->FIN MODAL AGREGAR DOCUMENTACION</!-->

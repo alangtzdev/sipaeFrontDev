@@ -1,0 +1,740 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12 text-center text-left-sm">
+      <h1>Estudiantes en movilidad externa</h1>
+      <p>
+        <small>Lista de estudiantes en movilidad externa.</small>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="row">
+              <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                <label>Programa docente:</label>
+                <select #programaDocente class="form-control"
+                        (change)="cambioProgramaDocenteFiltro(programaDocente.value)">
+                  <option value="" selected>Selecciona...</option>
+                  <option *ngFor="let catalogoProgramaDocente of opcionesSelectProgramaDocente"
+                          value="{{catalogoProgramaDocente.id}}">
+                    {{catalogoProgramaDocente.text}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                <label>Promoción:</label>
+                <select #promocion class="form-control">
+                  <option value="" selected>Selecciona...</option>
+                  <option *ngFor="let catalogoItem of  opcionesSelectPromocion"
+                          value="{{catalogoItem.id}}">
+                    {{catalogoItem.getClavePromocion()}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                <label>Nacionalidad:</label>
+                <select #nacionalidad class="form-control"
+                        (change)="cambioNacionalidadFiltro(nacionalidad.value)">
+                  <option value="" selected>Selecciona...</option>
+                  <option *ngFor="let catalogoItem of  opcionSelectNacionalidad"
+                          value="{{catalogoItem.id}}">
+                    {{catalogoItem.text}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+            <button class="btn btn-default" (click)="buscarCriteriosCabezera(
+							programaDocente.value,
+							promocion.value,
+							nacionalidad.value)"
+                    [disabled]="botonBuscar"
+            > Buscar <span class="fa fa-search"></span>
+            </button>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-body">
+        <div class="col-md-12" *ngIf="erroresConsultas.length !== 0">
+          <alert
+            *ngFor="let alerta of erroresConsultas"
+            [type]="alerta.tipo"
+            dismissible="true">
+            {{ alerta?.mensaje }}
+          </alert>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+
+            <div class="col-md-10"><!-- cont-botones-->
+              <div class="text-right">
+                <button *ngIf="habilitarBotonAgregarDetalle()" (click)="modalAgregarMaterias()"
+                        class="btn btn-labeled btn-success form-group-margin"><span
+                  class="btn-label icon fa fa-plus"></span>Agregar materia
+                </button>
+                <button *ngIf="habilitarBotonAgregarDetalle()"
+                        class="btn btn-labeled btn-default form-group-margin"
+                        (click)="modalDetalleAspirante()"><span class="btn-label icon fa fa-eye"></span>Detalle
+                </button>
+                <button class="btn btn-labeled btn-success form-group-margin"
+                        *ngIf="registroSeleccionado && registroSeleccionado?.matricula?.id && !registroSeleccionado?.usuario?.ldap"
+                        (click)="generarCorreo()"><span
+                  class="btn-label icon fa fa-check"></span>Asignar correo
+                </button>
+                <button *ngIf="generarMatricula && (registroSeleccionado?.estatus?.id == 1006)" (click)="confirmarGenerarMatricula()"
+                        class="btn btn-labeled btn-success form-group-margin">
+                  <span class="btn-label icon fa fa-credit-card"></span>Generar mátricula
+                </button>
+                <button *ngIf="generarCredencial" (click)="modalExpedirCredencial()"
+                        class="btn btn-labeled btn-success form-group-margin">
+                  <span class="btn-label icon fa fa-credit-card"></span>Generar credencial
+                </button>
+
+                <div class="btn-group form-group-margin" dropdown>
+                  <button class="btn btn-conacyt dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span class="btn-label icon fa fa-download"></span> Exportar </button>
+                    <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                    <i class="fa fa-caret-down"></i>
+                  </button>
+                     <ul class="dropdown-menu">
+                    <li role="menuitem"><a class="dropdown-item" (click)="exportar('Excel')" href="#">Exportar a Excel</a></li>
+                    <li class="divider dropdown-divider"></li>
+                    <li role="menuitem" ><a class="dropdown-item" (click)="exportar('PDF')" href="#">Exportar a PDF</a></li>
+                  </ul>
+                </div>
+                <!--<div class="btn-group form-group-margin" dropdown>
+                  <button id="split-button" type="button" class="btn btn-conacyt"><span
+                    class="btn-label icon fa fa-download"></span> Exportar
+                  </button>
+                  <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                    <i class="fa fa-caret-down"></i>
+                  </button>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+                    <li role="menuitem">
+                      <a
+                        class="dropdown-item"
+                        (click)="exportar('Excel')"
+                      >
+                        Exportar a Excel
+                      </a>
+                    </li>
+                    <li class="divider dropdown-divider"></li>
+                    <li role="menuitem">
+                      <a
+                        class="dropdown-item"
+                        (click)="exportar('PDF')"
+                      >
+                        Exportar a PDF
+                      </a>
+                    </li>
+                  </ul>
+                </div>-->
+              </div>
+            </div> <!-- cont-botones-->
+            ​
+            <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+              <div class="row">
+                <div class="col-md-12 pull-right text-right">
+                  <div class="row">
+                    <input
+                      #filtro
+                      type="text"
+                      class="form-control"
+                      id="buscar"
+                      placeholder="Buscar..."
+                      (keyup.enter)="filtroChanged(filtro.value)"
+                    >
+                  </div>
+                </div>
+              </div>
+            </div> <!-- cont-buscar-->
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div role="grid" id="jq-datatables-example_wrapper"
+                 class="dataTables_wrapper form-inline no-footer table-responsive">
+              <div class="table-header clearfix">
+                <div class="table-caption">Lista de estudiantes en movilidad externa</div>
+                <div class="DT-lf-right">
+                  <div class="DT-per-page">
+                    <div class="dataTables_length">
+                      <label>Registros por página:
+                        <select #limiteControl name="jq-datatables-example_length"
+                                aria-controls="jq-datatables-example"
+                                class="form-control input-sm"
+                                (change)="setLimite(limiteControl.value)">
+                          <option value="10">10</option>
+                          <option value="25">25</option>
+                          <option value="50">50</option>
+                          <option value="100">100</option>
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table cellpadding="0" cellspacing="0" border="0"
+                       class="table table-striped table-bordered dataTable no-footer"
+                       id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                  <thead>
+                  <tr role="row">
+                    <th
+                      *ngFor="let columna of columnas"
+                      [ngClass]="{
+											'sorting_desc': columna.sort === 'desc',
+											'sorting_asc': columna.sort === 'asc',
+											'sorting': columna.sort !== false
+										}"
+                      (click)="sortChanged(columna)">
+                      {{columna.titulo}}
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody *ngIf="registros.length === 0">
+                  <tr class="gradeA odd">
+                    <th class="text-center" colspan="5">
+                      Cambie sus criterios de búsqueda
+                    </th>
+                  </tr>
+                  </tbody>
+                  <tbody *ngIf="registros.length !== 0">
+                  <tr
+                    *ngFor="let registro of registros"
+                    class="gradeA odd"
+                    [ngClass]="{'seleccionado': rowSeleccionado(registro)}"
+                    (click)="rowSeleccion(registro)">
+                    <td class="center">{{registro?.matricula?.matriculaCompleta}}</td>
+                    <td class="center">{{registro?.datosPersonales?.getNombreCompleto()}}</td>
+                    <td class="center">{{registro?.usuario?.email}}</td>
+                    <td class="center">{{registro?.datosAcademicos?.institucion}}</td>
+                    <td class="center">{{registro?.getUltimaActualizacionFormato()}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-footer clearfix">
+                <div class="DT-pagination" *ngIf="isSetPaginacion()">
+                  <div class="dataTables_paginate paging_simple_numbers">
+                    <pagination
+                      class="pagination"
+                      [totalItems]="paginacion.registrosTotales"
+                      [itemsPerPage]="limite"
+                      [maxSize]="maxSizePags"
+                      [rotate]="false"
+                      [(ngModel)]="paginaActual"
+                      (pageChanged)="cambiarPagina($event)"
+                      previousText="Anterior"
+                      nextText="Siguiente"
+                    >
+                    </pagination>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-alert modal-success" #modalAsignarCorreo  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalCorreo()" aria-hidden="true">×</button>
+    <i class="fa fa-check-circle"></i>
+    <h5 class="col-md-12 text-center">
+      ¿Estás seguro de generar el correo para el estudiante <strong> {{estudianteMovilidad?.getNombreCompleto()}}</strong>?
+    </h5>
+  </modal-header>
+  <modal-body>
+    <div class="checkbox" style="margin: 0;">
+      <label>
+        <input type="checkbox" value=""  name="verificar" id="verificar" class="px" #aceptacion>
+        <span class="lbl">Nota : Una vez generado el correo no podrá ser modificado.</span>
+      </label>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModalCorreo()"><i class="fa fa-close"></i> Cerrar</button>
+    <button type="button" class="btn btn-success" [disabled]="!aceptacion.checked" data-dismiss="modal" (click)="crearCorreoEstudianteMovilidd()">Sí</button>
+
+  </modal-footer>
+</modal>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-success" #modalCredencial  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalCredencia()" aria-hidden="true">×</button>
+    <h4 class="modal-title">Expedición de credencial para estudiante</h4>
+  </modal-header>
+  <modal-body>
+    <div class="col-md-12" *ngIf="erroresConsultas.length !== 0" >
+      <alert
+        *ngFor="let alerta of erroresConsultas"
+        [type]="alerta.tipo"
+        dismissible="true">
+        {{ alerta?.mensaje }}
+      </alert>
+    </div>
+    <div class="col-md-12" *ngIf="!registroSeleccionado?.datosPersonales?.sexo?.id" >
+      <alert
+        [type]="danger"
+        dismissible="true">
+        No se ha definido el registro sexo de los datos personales
+      </alert>
+    </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h5 class="form-heading text-muted text-semibold text-sm">Datos del estudiante</h5>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre:</dt>
+                    <dd class="col-md-6">{{registroSeleccionado?.datosPersonales?.getNombreCompleto()}}</dd>
+                  </dl>
+                </div>
+              </div>
+
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente:</dt>
+                    <dd class="col-md-6">{{registroSeleccionado?.idProgramaDocente?.descripcion}}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Matr&iacute;cula:</dt>
+                    <dd class="col-md-6">{{registroSeleccionado?.matricula?.matriculaCompleta}}</dd>
+                  </dl>
+                </div>
+              </div>
+
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Promoción:</dt>
+                    <dd class="col-md-6">{{registroSeleccionado?.idPromocion?.getClavePromocion()}}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h5 class="form-heading text-muted text-semibold text-sm">Fecha Vigencia</h5>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 padding-xs-vr text-right-lg text-right-md text-left-sm text-left-xs">
+                <div class="row">
+                  <label class="col-md-6 control-label" for="fecha">De:</label>
+                  <div class="col-md-6">
+                    <div class="dropdown" dropdown autoClose="outsideClick">
+                      <div class="input-group">
+                        <input type="text" class="form-control" value="{{getFechaInicio()}}" disabled>
+                                            <span class="input-group-btn">
+                                                <button class="btn dropdown-toggle fa fa-calendar" (click)="elegirFechaInicio()" type="button" id="menu" data-toggle="dropdown" dropdownToggle></button>
+                                            </span>
+                      </div>
+                      ​
+                      <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu" dropdownMenu >
+                        <li>
+                          <div style="display:inline-block;">
+                            <datepicker [(ngModel)]="dt" [minDate]="fechaMinima" [showWeeks]="true"></datepicker>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 padding-xs-vr text-right-lg text-right-md text-left-sm text-left-xs">
+                <div class="row">
+                  <label class="col-md-6 control-label" for="fecha">A:</label>
+                  <div class="col-md-6">
+                    <div class="dropdown" dropdown autoClose="outsideClick">
+                      <div class="input-group">
+                        <input type="text" class="form-control" value="{{getFechaHasta()}}" disabled>
+                                            <span class="input-group-btn">
+                                                <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                            </span>
+                      </div>
+                      ​
+                      <ul class="dropdown-menu dropdown-menu-right" role="menu1" aria-labelledby="menu1" dropdownMenu >
+                        <li>
+                          <div style="display:inline-block;">
+                            <datepicker [(ngModel)]="dt2" [minDate]="fechaMaxima" [showWeeks]="true" (click)="elegirFechaFin()"></datepicker>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h5 class="form-heading text-muted text-semibold text-sm">Documentos del estudiante</h5>
+          <alert
+             *ngFor="let alerta of alertas;let i = index"
+             [type]="alerta.type"
+             class="col-md-12 text-center"
+             dismissible="true"
+             (close)="cerrarAlerta(i)">
+             {{ alerta?.msg }}
+           </alert>
+          <div [ngClass]="{'has-error': getControlErrors('idFoto')}">
+             <div class="col-md-6 padding-xs-vr">
+               <div class="col-md-12 text-left">
+                 <div class="row">
+                   <label for="archivos">Foto:*</label>&nbsp;&nbsp;
+                   {{nombreArchivoFotografia ? nombreArchivoFotografia : idEstudiante?.idArchivoFotografia?.nombre}}
+                 </div>
+               </div>
+               <div class="col-md-12">
+                 <div class="row">
+                   <div id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome">
+                     <div class="dz-default dz-message " ngFileSelect [options]="optionsJpg" (onUpload)="handleDropUploadJpg($event)">
+                       <i class="fa fa-cloud-upload"></i>
+                       Suelte el archivo aqu&iacute;<br><span class="dz-text-small">o da clic para subir manualmente</span>
+                     </div>
+                     <input type="file" name="file" ngFileSelect [options]="optionsJpg" (onUpload)="handleBasicUploadJpg($event, 'foto') "  accept="application/jpg">
+                   </div>
+
+                   <div class="progress no-padding">
+                     <div
+                       *ngIf="enableBasicJpg()"
+                       class="progress-bar"
+                       role="progressbar"
+                       aria-valuenow="basicProgressJpg"
+                       aria-valuemin="0"
+                       aria-valuemax="100"
+                       [style.width]="basicProgressJpg + '%'">
+                       {{basicProgressJpg}}%
+                     </div>
+
+                     <div
+                       *ngIf="enableDropJpg()"
+                       class="progress-bar"
+                       role="progressbar"
+                       aria-valuenow="dropProgressJpg"
+                       aria-valuemin="0"
+                       aria-valuemax="100"
+                       [style.width]="dropProgressJpg + '%'">
+                       {{dropProgressJpg}}%
+                     </div>
+                   </div>
+                 <span id="helpBlock5"
+                       class="alert alert-danger"
+                       *ngIf="(getControlErrors('idFoto'))">
+                             {{errorMessage(getControl('idFoto'))}}
+                 </span>
+                 </div>
+               </div>
+             </div>
+           </div>
+          <div [ngClass]="{'has-error': getControlErrors('idFirma')}">
+            <div class="col-md-6 padding-xs-vr">
+               <div class="col-md-12 text-left">
+                 <div class="row">
+                   <label>Firma del estudiante:* </label>&nbsp;&nbsp;
+                   {{nombrearchivoFirmaEstudiante ? nombrearchivoFirmaEstudiante : idEstudiante?.idArchivoFirma?.nombre}}
+                 </div>
+               </div>
+               <div class="col-md-12">
+
+                 <div id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome">
+                   <div class="dz-default dz-message " ngFileSelect [options]="optionsPNG" (onUpload)="handleDropUploadPNG($event)">
+                     <i class="fa fa-cloud-upload"></i>
+                     Suelte el archivo aqu&iacute;<br><span class="dz-text-small">o da clic para subir manualmente</span>
+                   </div>
+                   <input type="file" name="file" ngFileSelect [options]="optionsPNG" (onUpload)="handleBasicUploadPng($event, 'firmaEstudiante')" accept="application/png">
+                 </div>
+                 <div class="progress">
+                   <div
+                     *ngIf="enableBasicPng()"
+                     class="progress-bar"
+                     role="progressbar"
+                     aria-valuenow="basicProgressPng"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     [style.width]="basicProgressPng + '%'">
+                     {{basicProgressPng}}%
+                   </div>
+
+                   <div
+                     *ngIf="enableDropPng()"
+                     class="progress-bar"
+                     role="progressbar"
+                     aria-valuenow="dropProgressPng"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     [style.width]="dropProgressPng + '%'">
+                     {{dropProgressPng}}%
+                   </div>
+                 </div>
+                 <span id="helpBlock5"
+                                                class="alert alert-danger"
+                                                *ngIf="(getControlErrors('idFirma'))">
+                             {{errorMessage(getControl('idFirma'))}}
+                 </span>
+               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModalCredencia()"><i class="fa fa-close"></i> Cerrar</button>
+    <button class="btn btn-success" type="button" [disabled] ="!registroSeleccionado?.datosPersonales?.sexo?.id" (click)="generarCredencialFormatoPDF()"><i class="fa fa-credit-card"></i>&nbsp; Generar credencial
+    </button>
+  </modal-footer>
+</modal>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-default" #modalDetalle  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalDetalle()">×</button>
+    <h4 *ngIf="vistaDetalle" class="modal-title">Detalle de materias para estudiante movilidad externa</h4>
+    <h4 *ngIf="!vistaDetalle" class="modal-title">Agregar materias para estudiante movilidad externa</h4>
+  </modal-header>
+  <modal-body>
+    <h6 class="form-heading text-muted text-semibold text-sm">INFORMACI&Oacute;N DEL ESTUDIANTE</h6>
+    <div class="row">
+      <div class="col-md-12">
+        <!--<div class="row">-->
+        <div class="col-md-6 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre:</dt>
+              <dd class="col-md-6">{{registroSeleccionado?.datosPersonales?.getNombreCompleto()}}</dd>
+            </dl>
+          </div>
+        </div>
+        <div class="col-md-6 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Promoción:</dt>
+              <dd class="col-md-6">{{registroSeleccionado?.idPromocion?.getClavePromocion()}}</dd>
+            </dl>
+          </div>
+        </div>
+        <!--</div>-->
+      </div>
+      <div class="col-md-12">
+        <div class="col-md-6 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Pa&iacute;s de origen:</dt>
+              <dd class="col-md-6">{{registroSeleccionado?.usuario?.pais?.valor}}</dd>
+            </dl>
+          </div>
+        </div>
+        <div class="col-md-6 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Correo:</dt>
+              <dd class="col-md-6">{{registroSeleccionado?.usuario?.email}}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="col-md-6 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Periodo escolar:</dt>
+              <dd class="col-md-6">{{registroSeleccionado?.numPeriodoActual ? registroSeleccionado?.idPeriodoActual?.getPeriodoAnioConsecutivo() : '- -'}}</dd>
+            </dl>
+          </div>
+        </div>
+        <div class="col-md-6 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">N&uacute;mero periodo:</dt>
+              <dd class="col-md-6">{{registroSeleccionado?.numPeriodoActual ? registroSeleccionado?.numPeriodoActual : '- -'}}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div *ngIf="!vistaDetalle">
+
+      <h6 class="form-heading text-muted text-semibold text-sm">AGREGAR MATERIA ESPECIAL</h6>
+      <!--<div class="row">-->
+      <div class="col-md-6">
+        <div class="row form-group">
+          <label class="col-sm-6 text-right control-label" for="name">Periodo escolar: *</label>
+          <div class="col-sm-6">
+            <select #periodo *ngIf="registrosEstudianteMateria[0]?.materiaImpartida?.periodoEscolar?.getPeriodoAnioConsecutivo()" disabled class="form-control">
+              <option value="" selected>{{ registrosEstudianteMateria[0]?.materiaImpartida?.periodoEscolar?.getPeriodoAnioConsecutivo() }}</option>
+            </select>
+            <select #periodo *ngIf="!(registrosEstudianteMateria[0]?.materiaImpartida?.periodoEscolar?.getPeriodoAnioConsecutivo())" noSelection="['': 'Selecciona...']" class="form-control" (change)="obtenerMateriaProgramaDocente(periodo.value)">
+              <option value="" disabled selected>Selecciona...</option>
+              <option *ngFor="let opcionPeriodo of listaPromocionPeriodo"
+                      value="{{opcionPeriodo.idPeriodoEscolar.id}}">
+                {{opcionPeriodo?.idPeriodoEscolar?.getPeriodo()}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="row form-group">
+          <label class="col-sm-6 text-right control-label" for="name">Materia: *</label>
+          <div class="col-sm-6">
+            <select #materia noSelection="['': 'Selecciona...']" ngControl="seteador"  class="form-control" (change)="seleccionarMateria(materia.value)">
+              <option value="" disabled selected>Selecciona...</option>
+              <option *ngFor="let opcionSelectProfesorMateria of opcionesSelectProfesorMateria"
+                      value="{{opcionSelectProfesorMateria.materiaImpartida.id}}">
+                {{opcionSelectProfesorMateria?.materiaImpartida?.materia?.descripcion}} - {{opcionSelectProfesorMateria?.profesor?.getNombreCompleto()}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div *ngIf = "mostrarAlerta" class="alert alert-danger">
+          Este periodo aun no cuenta con gesti&oacute;n de materias.
+        </div>
+        <div *ngIf = "materiaAlerta" class="alert alert-danger">
+          Esta materia ya fue agregada.
+        </div>
+      </div>
+      <br>
+      <br>
+      <div class="col-md-12">
+        <div class="form-group text-right">
+          <button class="btn btn-labeled btn-success form-group-margin" *ngIf="habilitarBotonAgregar()"
+                  (click)="agregarMateriaMovilidadExterna()"><span class="btn-label icon fa fa-plus">
+                    </span>Agregar materia
+          </button>
+          <button class="btn btn-labeled btn-danger form-group-margin" *ngIf="habilitarBotonEliminar()"
+                  (click)="eliminarMateriaMovilidadExterna()"><i class="fa fa-times"></i>
+            &nbsp;&nbsp;Eliminar
+          </button>
+        </div>
+      </div>
+      <!--</div>-->
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="table-default table-responsive">
+          <div role="grid" class="dataTables_wrapper form-inline">
+            <div class="table-header clearfix">
+              <div class="table-caption">Lista de materias especiales</div>
+            </div>
+            <div class="table-scroll-modal">
+              <table cellpadding="0" cellspacing="0" border="0"
+                     class="table table-striped table-bordered dataTable no-footer"
+                     id="jq-datatables-example"
+                     aria-describedby="jq-datatables-example_info">
+                <thead>
+                <tr role="row">
+                  <th *ngFor="let columna of columnasDetalleMaterias" class="text-center">
+                    {{columna.titulo}}
+                  </th>
+                </tr>
+                </thead>
+                <tbody *ngIf = "registrosEstudianteMateria.length === 0">
+                <tr class="gradeA odd">
+                  <th class="text-center" colspan="3">
+                    No hay Registros
+                  </th>
+                </tr>
+                </tbody>
+                <tbody *ngIf = "registrosEstudianteMateria.length !== 0" >
+                <tr
+                  *ngFor="let registroMateria of registrosEstudianteMateria"
+                  class="gradeA odd"
+                  [ngClass]="{
+							'seleccionado': rowSeleccionadoMaterias(registroMateria)
+						}"
+                  (click) = "rowSeleccionMaterias(registroMateria)"
+                >
+                  <td class="text-center">{{registroMateria?.materiaImpartida?.materia?.descripcion}}</td>
+                  <td class="text-center">{{registroMateria?.materiaImpartida?.getProfesorTitular()}}</td>
+                  <td class="text-center">{{registroMateria?.calificacionOrdinaria ? registroMateria?.calificacionOrdinaria : '---'}}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModalDetalle()">
+      <i class="fa fa-close"></i>&nbsp;&nbsp;Cancelar
+    </button>
+    <!--<button type="button" class="btn btn-success" (click)="guardarSalas()">
+      <i class="fa fa-floppy-o"></i>{{edicionFormulario? '&nbsp;&nbsp;Actualizar' : '&nbsp;&nbsp;Guardar'}}
+    </button>-->
+  </modal-footer>
+</modal>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-alert modal-success" #modalMatriculaEI  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalMatricula()" aria-hidden="true">×</button>
+    <i class="fa fa-check-circle"></i>
+  </modal-header>
+  <modal-body>
+    <div class="col-md-12 col-sm-12 col-xs-12 modal-title">¿Est&aacute;s seguro de generar matrícula para el estudiante
+      {{registroSeleccionado?.datosPersonales?.getNombreCompleto()}}?</div>
+  </modal-body>
+  <modal-footer>
+    <button (click)="cerrarModalMatricula()" type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+    <button (click)="generarMatriculaEstudianteMovilidad()" type="button" class="btn btn-success" >S&iacute;</button>
+  </modal-footer>
+</modal>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-alert modal-success" #modalAgregarMateria  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalAgregarMateria()" aria-hidden="true">×</button>
+    <i class="fa fa-check-circle"></i>
+    <div class="col-md-12 col-sm-12 col-xs-12 modal-title">¿Est&aacute;s seguro que deseas agregar la materia?</div>
+  </modal-header>
+  <modal-body>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModalAgregarMateria()"><i class="fa fa-close"></i> No</button>
+    <button type="button" class="btn btn-success" data-dismiss="modal"
+            (click)="agregarMateria()">Sí</button>
+  </modal-footer>
+</modal>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-alert modal-danger" #modalEliminarMateria  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalEliminarMateria()" aria-hidden="true">×</button>
+    <i class="fa fa-exclamation-triangle"></i>
+    <div class="col-md-12 col-sm-12 col-xs-12 modal-title">¿Est&aacute;s seguro que deseas eliminar la materia?</div>
+  </modal-header>
+  <modal-body>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModalEliminarMateria()"><i class="fa fa-close"></i> No</button>
+    <button type="button" class="btn btn-success" data-dismiss="modal"
+            (click)="eliminarMateria()">Sí</button>
+  </modal-footer>
+</modal>

@@ -1,0 +1,695 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-6 text-center text-left-sm">
+      <h1>Servicio Social</h1>
+      <p><small>Informaci&oacute;n del servicio social y reportes de seguimiento</small></p>
+    </div>
+    <div class="col-md-6">
+      <hr class="visible-xs no-grid-gutter-h">
+      <button class="btn btn-labeled btn-success col-md-9 col-sm-10 col-xs-12 pull-right" [ngClass]="{
+                                                'disabled': !hayIdEstudiante()
+                                            }" (click)="modalAgregarSolicitudServicioSocial()"><span class="btn-label icon fa fa-plus"></span>Nueva solicitud de servicio social</button>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel">
+      <div class="panel-body" *ngIf="!hayUltimaSolicitud()">
+        <div class="note note-info">
+          <h4 class="note-title">Nota:</h4>
+          Actualmente no cuentas con algún servicio social vigente o alguna solicitud de servicio social.
+        </div>
+      </div>
+      <div class="panel-body" *ngIf="hayUltimaSolicitud()">
+        <h5 class="form-heading text-muted text-semibold text-sm">DATOS DE LA ÚLTIMA SOLICITUD DE SERVICIO SOCIAL</h5>
+
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estatus de la solicitud:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrEstatusSolicitud()}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Periodo:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrPeriodo()}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--cierre col-md-12-->
+
+        <div class="col-md-12">
+          <div class="row ">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre completo:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrNombreCompletoEstudiante()}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Colonia:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrColonia() ? ultimoServicio.getStrColonia() : 'No aplica'}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--cierre col-md-12-->
+
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Calle y n&uacute;mero:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrCalleNumero()}}</dd>
+                </dl>
+              </div>
+            </div>
+
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">C.P:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrCodigoPostal() ? ultimoServicio.getStrCodigoPostal() : 'No aplica'}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--cierre col-md-12-->
+        <div class="col-md-12">
+          <div class="row ">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Pa&iacute;s:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrPais()}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estado:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrEntidadFerderativa() ? ultimoServicio.getStrEntidadFerderativa() : 'No aplica'}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--cierre col-md-12-->
+        <div class="col-md-12">
+          <div class="row ">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Municipio:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrMunicipio() ? ultimoServicio.getStrMunicipio() : 'No aplica'}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Cargo:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrCargo()}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--cierre col-md-12-->
+
+        <!--cierre col-md-12-->
+
+        <div class="col-md-12">
+          <div class="row ">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Tel&eacute;fono:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrTelefono()}}</dd>
+                </dl>
+              </div>
+            </div>
+
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Beca o compensaci&oacute;n:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrBeca()}}</dd>
+                </dl>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!--cierre col-md-12-->
+
+
+        <div class="col-md-12">
+          <br class="hidden-xs">
+          <div class="row ">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Instituci&oacute;n:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrInstitucion()}}</dd>
+                </dl>
+              </div>
+            </div>
+
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Sector:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrSector()}}</dd>
+                </dl>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!--cierre col-md-12-->
+
+        <div class="col-md-12">
+          <div class="row ">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha de inicio:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrFechaInicio()}}</dd>
+                </dl>
+              </div>
+            </div>
+
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha fin:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrFechaFin()}}</dd>
+                </dl>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!--cierre col-md-12-->
+
+        <div class="col-md-12">
+          <div class="row ">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Horario:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrHorario()}}</dd>
+                </dl>
+              </div>
+            </div>
+
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">D&iacute;as de servicio:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrDias()}}</dd>
+                </dl>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!--cierre col-md-12-->
+
+        <div class="col-md-12">
+          <div class="row ">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">N&uacute;mero de horas reportadas:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getStrNumeroHoras()}}</dd>
+                </dl>
+              </div>
+            </div>
+
+            <div class="col-md-6 form-group-margin" *ngIf="ultimoServicio.getNumeroHorasServicio()!='_numeroHorasServicio'">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">N&uacute;mero de horas de servicio:</dt>
+                  <dd class="col-md-6">{{ultimoServicio.getNumeroHorasServicio()}}</dd>
+                </dl>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!--cierre col-md-12-->
+
+        <div class="col-md-12 form-group-margin" *ngIf="ultimoServicio.observaciones!='_'">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Comentarios:</dt>
+
+              <div class=" col-md-9"><textarea class="form-control " rows="6" cols="200" maxlength="500" disabled>{{ultimoServicio.observaciones}}</textarea></div>
+
+            </dl>
+          </div>
+        </div>
+
+        <div class="col-lg-12" *ngIf="registros.length>0">
+          <div class="row">
+            <h5 class="form-heading text-muted text-semibold text-sm">SOLICITUDES ANTERIORES</h5>
+
+            <div class="text-right">
+              <button (click)="modalDetalleSolicitudServicio(registroSeleccionado)" class="btn btn-default form-group-margin"
+                      [ngClass]="{'disabled':!registroSeleccionado}"
+              ><i class="fa fa-eye"></i>&nbsp;&nbsp;Detalle</button>
+
+            </div>
+
+            <div class="table-default table-responsive">
+              <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example"
+                     aria-describedby="jq-datatables-example_info">
+                <thead>
+                <tr role="row">
+                  <th class="sorting_asc" tabindex="0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column ascending">Fecha de solicitud</th>
+                  <th class="sorting" tabindex="0" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">Estatus</th>
+                </tr>
+                </thead>
+                <tbody *ngIf="registros.length < 1 ">
+                <tr class="gradeA odd">
+                  <th class="text-center" colspan="2">
+                    No hay Registros
+                  </th>
+                </tr>
+                </tbody>
+                <tbody *ngIf="registros.length !== 0">
+                <tr *ngFor="let registro of registros" class="gradeA odd" [ngClass]="{
+                                                'seleccionado': rowSeleccionado(registro)
+                                            }" (click)="rowSeleccion(registro)">
+                  <td class="center">{{registro?.getStrFechaSolicitud()}}</td>
+                  <td class="center">{{registro?.getStrEstatusSolicitud()}}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal-servicio-social #modalServSocial></app-modal-servicio-social>
+
+
+
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalServSocialDetalle>
+  <modal-header>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cerrarModalDetalle()">×</button>
+    <h4 class="modal-title"> Detalle solicitud de servicio social</h4>
+  </modal-header>
+  <modal-body>
+
+    <tabset *ngIf="servicioSocialElegido">
+      <tab heading="Datos generales">
+        <div class="tab-pane fade active in" id="tab1">
+          <div class="panel-body tab-content tab-content-bordered">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre completo:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrNombreCompletoEstudiante()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Per&iacute;odo:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrPeriodo()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h6 class="form-heading text-muted text-semibold text-sm">Datos de la institución donde realizará el servicio social</h6>
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Instituci&oacute;n:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrInstitucion()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Sector:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrSector()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Calle y n&uacute;mero:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrCalleNumero()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Colonia:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrColonia()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Pa&iacute;s:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrPais()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estado:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrEntidadFerderativa()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Municipio:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrMunicipio()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">CP:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrCodigoPostal()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Teléfono:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrTelefono()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Responsable:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrInstitucion()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Beca o compensación:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrBeca()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Cargo:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrCargo()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </tab>
+      <tab heading="Datos del servicio">
+        <div class="tab-pane fade active in" id="tab2">
+          <div class="panel-body tab-content tab-content-bordered">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha inicio:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrFechaInicio()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha fin:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrFechaFin()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h5 class="form-group-margin">El servicio social se cumplir&aacute;:</h5>
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">En el horario de:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrHorario()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">los d&iacute;as:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrDias()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h6 class="form-heading text-muted text-semibold text-sm">EVIDENCIAS DE PR&Aacute;CTICAS PROFESIONALES ANTERIORES AL SERVICIO SOCIAL</h6>
+            <div class="col-md-12 text-right ">
+              <div class="row">
+                <button class="btn btn-labeled form-group-margin" (click)="descargarArchivo()" [disabled]="!botonValido">
+                  <span class="btn-label icon fa fa-eye"></span>Visualizar
+                </button>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="row">
+                <div class="table-default table-responsive" *ngIf="registrosEvidencia">
+                  <div role="grid" class="dataTables_wrapper form-inline">
+                    <table class="table table-striped table-bordered dataTable no-footer">
+                      <thead>
+                      <tr>
+                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending"
+                            style="">Nombre</th>
+                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending"
+                            style="">Fecha de actualizaci&oacute;n</th>
+                      </tr>
+                      </thead>
+                      <tbody *ngIf="registrosEvidencia.length === 0">
+                      <tr class="gradeA odd">
+                        <th class="text-center" colspan="2">
+                          No hay Registros
+                        </th>
+                      </tr>
+                      </tbody>
+                      <tbody *ngIf="registrosEvidencia.length !== 0">
+                      <tr *ngFor="let registro of registrosEvidencia" class="gradeA odd" [ngClass]="{'seleccionado': rowSeleccionado(registro)}" (click)="rowSeleccion(registro)">
+                        <td class="center">{{registro?.archivo?.nombre}}</td>
+                        <td class="center">{{registro.getStrUltimaActualizacion()}}</td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12" *ngIf="registrosEvidencia">
+              <div class="row">
+                <div class="col-md-6 form-group-margin" *ngIf="registrosEvidencia.length !== 0">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Numero de horas:</dt>
+                      <dd class="col-md-6">{{servicioSocialElegido?.getStrNumeroHoras()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </tab>
+      <tab heading="Información del servicio social " *ngIf="isActiveDetalleSS">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel">
+              <div class="panel-body tab-content tab-content-bordered">
+
+                <div class="tab-pane fade" id="tabDatosGenerales">
+                </div>
+
+                <div class="tab-pane fade" id="tabDatosServicioSocial">
+                </div>
+
+                <div class="tab-pane fade active in" id="tabInfoServicioSocial">
+                  <div class="row">
+
+                    <div class="col-md-12">
+                      <dl class="col-md-12 dl-horizontal">
+                        <dt>Tipo de servicio:</dt>
+                        <dd>Servicio social</dd>
+                      </dl>
+                    </div>
+                    <div class="col-md-12">
+                      <dl class="col-md-6 dl-horizontal">
+                        <dt style="text-overflow:clip;">Proyecto a desarrollar:</dt>
+                        <dd>{{servicioSocialElegido?.proyecto}}</dd>
+                      </dl>
+                      <dl class="col-md-6 dl-horizontal">
+                        <dt>Area:</dt>
+                        <dd>{{servicioSocialElegido?.proyecto}}</dd>
+                      </dl>
+                    </div>
+
+                    <div class="col-md-12">
+                      <dl class="col-md-12 dl-horizontal">
+                        <dt>Actividades:</dt>
+                        <dd>{{servicioSocialElegido?.actividades}}</dd>
+                      </dl>
+                    </div>
+
+
+                    <div class="col-md-12">
+                      <dl class="col-md-6 dl-horizontal">
+                        <dt>Periodo del:</dt>
+                        <dd>{{servicioSocialElegido?.getStrFechaInicio()}}</dd>
+                      </dl>
+                      <dl class="col-md-6 dl-horizontal">
+                        <dt>Al:</dt>
+                        <dd>{{servicioSocialElegido?.getStrFechaFin()}}</dd>
+                      </dl>
+                    </div>
+
+
+                    <div class="col-md-12">
+                      <dl class="col-md-12 dl-horizontal">
+                        <dt>Observaciones:</dt>
+                        <dd>
+                          <textarea class="form-control" rows="6" cols="200" maxlength="500" disabled>{{servicioSocialElegido?.observaciones}}</textarea>
+                        <dd>
+                      </dl>
+                    </div>
+                    <div class="col-md-12">
+                      <dl>
+                        <dt class="col-xs-6 col-sm-3 col-md-3 control-left">
+                          Horas acumuladas del servicio:
+                        </dt>
+                        <dd>{{servicioSocialElegido?.getStrNumeroHoras()}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </tab>
+      <tab heading="Documentos"  *ngIf="isActiveDetalleSS">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel">
+              <div class="panel-body tab-content tab-content-bordered">
+                <div class="panel col-md-12">
+                  <br/>
+
+
+
+
+
+
+                </div>
+                <h5 class="form-heading text-muted text-semibold text-sm">Documentos en expediente y cartas de formalizaci&oacute;n</h5>
+                <div class="col-lg-12" style="height: 200px; overflow: scroll; border:2px #e4e4e4 solid; text-align:justify;"
+                     *ngIf="registrosEvidencia">
+                  <br>
+                  <div class="col-md-3 text-center" *ngFor="let registro of registrosEvidencia">
+                    <div class="thumbnail">
+                      <i class="fa fa-file-text-o fa-5x"></i>
+                      <p style="margin-top: 1em">{{registro?.archivo?.nombre}}</p>
+                      <hr>
+                      <button (click)="descargarArchivoGeneral(registro?.archivo?.id)" class="btn  btn-warning fa fa-download"></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--fin de row-->
+        </div>
+      </tab>
+      <!-- Inicio de la seccion reporte final -->
+      <tab heading="Reporte final" *ngIf="isActiveDetalleSS">
+
+      </tab>
+      <!-- Fin de la seccion de reporte final -->
+    </tabset>
+
+  </modal-body>
+  <modal-footer>
+  </modal-footer>
+</modal>
+

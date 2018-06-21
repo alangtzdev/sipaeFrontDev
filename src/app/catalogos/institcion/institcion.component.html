@@ -1,0 +1,351 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+      <h1>Datos generales de instituci&oacute;n</h1>
+      <p><small></small></p>
+    </div>
+  </div>
+</div>
+<div class="panel">
+  <div class="panel-body">
+    <h6 class="form-heading text-muted text-semibold text-sm">DETALLE</h6>
+    <div class="text-right">
+      <a class="btn btn-labeled btn-warning"  (click)="cambiarVista()"><span class="btn-label icon fa fa-pencil-square-o"></span>Editar</a>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Clave institución: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.claveInstitucion}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Clave de la escuela: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.claveEscuela}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Nombre de la escuela: </dt><!--institución-->
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.nombreInstitucion}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Vialidad principal: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.vialidadPrincipal}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Número exterior: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.numeroExterior}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Número interior: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.numeroInterior}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Vialidad derecha: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.vialidadDerecha}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Vialidad izquierda: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.vialidadIzquierda}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Vialidad posterior: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.vialidadPosterior}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Asentamiento humano: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.asentamientoHumano}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Código postal: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.codigoPostal}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Localidad: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.localidad}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="row">
+
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Municipio: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.municipio?.valor}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Entidad federativa: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.entidadFederativa?.valor}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="row">
+
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Tel&eacute;fono: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.telefono}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Extensión teléfono: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.extencion}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="row">
+
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Fax: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.fax}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Extensión fax: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.extencionFax}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Dependencia normativa: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.dependenciaNormativa}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Nombre institución pertenece: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.nombreInstitucionPertenece}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Nombre director de la escuela: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.nombreDirectorEscuela}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Página web: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.paginaWeb}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"> Email: </dt>
+                <dd class="col-md-6">
+                  {{entidadCOLSAN?.email}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <h5 class="form-heading text-muted text-semibold text-sm">DOCUMENTOS </h5>
+    <div class="col-md-12 padding-xs-vr">
+      <div class="row">
+
+
+        <div style="width:100%;height: 200px; overflow-y: scroll; margin: auto"  *ngIf="listaArchivos !== 0" class="panel">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-3 text-center" *ngFor="let archivo of listaArchivos">
+                <div class="thumbnail">
+                  <i class="fa fa-file-text-o fa-5x"></i>
+                  <h6>{{ archivo.nombre }}<br>&nbsp;</h6>
+                  <hr>
+                  <button class="btn  btn-warning fa fa-download" (click)="descargarArchivo(archivo.id)"></button>
+                  <button class="btn  btn-default fa fa-eye" (click)="verArchivo(archivo.id)"></button>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel" *ngIf="listaArchivos === 0">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-12 text-center">
+                No se encontr&oacute; documentaci&oacute;n adicional
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>

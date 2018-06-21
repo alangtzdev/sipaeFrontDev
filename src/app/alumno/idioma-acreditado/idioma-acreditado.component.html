@@ -1,0 +1,848 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 text-center text-left-sm">
+      <h1>Acreditación</h1>
+      <p><small>Listado de idiomas acreditados</small></p>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" *ngIf="vistaDocencia">
+      <hr class="visible-xs no-grid-gutter-h">
+      <button (click)="modalAcreditacionIdioma()" class="btn btn-labeled btn-success col-lg-6 col-md-9 col-sm-10 col-xs-12 pull-right"><span class="btn-label icon fa fa-plus"></span>Acreditar idioma</button>
+    </div>
+  </div>
+</div>
+
+<div class="panel" *ngIf="vistaDocencia">
+  <div class="panel-body">
+
+    <alert
+      *ngFor="let alerta of alertas;let i = index"
+      [type]="alerta.type"
+      dismissible="true"
+      (close)="cerrarAlerta(i)">
+      {{ alerta?.msg }}
+    </alert>
+    <div class="row">
+      <div class="col-md-8">
+        <div class="row">
+
+          <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+            <label> Programa Docente: </label>
+            <select programaDocenteSelection class="form-control"
+                    (change)="activarBotonBusqueda(2)"
+                    (change)="cambioProgramaDocenteFiltro(programaDocenteSelection.value)"
+            >
+              <option value="" disabled selected> Selecciona...</option>
+              <option *ngFor="let programaDocenteItem of opcionesSelectProgramaDocente"
+                      [value]="programaDocenteItem.id">
+                {{programaDocenteItem.text}}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+            <label>Promoción:</label>
+            <select class="form-control" #idPromocion (change)="activarBotonBusqueda(1)">
+              <option value="" selected>Selecciona...</option>
+              <option
+                *ngFor="let catalogoPromocion of opcionesSelectPromocion"
+                value="{{catalogoPromocion.id}}"
+              >
+                {{catalogoPromocion.text}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+        <button
+          class="btn" (click)="buscarCriteriosCabezera(
+                programaDocenteSelection.value,
+                idPromocion.value
+              )" [disabled]="!botonBuscar"
+        >
+          Buscar <span class="fa fa-search"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-body">
+    <div *ngIf="idUsuarioObjetivo" class="col-md-6 col-sm-6" style="padding: 0">
+      <h5 class="form-heading text-muted text-semibold text-sm">MATR&Iacute;CULA: {{entidadEstudiante?.matricula?.matriculaCompleta}}</h5>
+    </div>
+    <div *ngIf="idUsuarioObjetivo" class="col-md-6  col-sm-6 text-left" style="padding: 0">
+      <h5 class="form-heading text-muted text-semibold text-sm text-right-sm">ESTUDIANTE: {{entidadEstudiante?.datosPersonales?.getNombreCompleto()}}</h5>
+    </div>
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-10"><!-- cont-botones-->
+          <div class="text-right">
+            <!--button *ngIf="registroSeleccionado" class="btn btn-labeled btn-warning form-group-margin"
+                    (click)="openModalEditar()"><span
+              class="btn-label icon fa fa-edit"></span>Edici&oacute;n
+            </button-->
+            <button *ngIf="registroSeleccionado" class="btn btn-labeled btn-default form-group-margin"
+                    (click)="openModalDetalleIdioma()"><span
+              class="btn-label icon fa fa-eye"></span>Detalle
+            </button>
+          </div>
+        </div> <!-- cont-botones-->
+        ​
+        <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+          <div class="row">
+            <div class="col-md-12 pull-right text-right">
+              <div class="row">
+                <input
+                  #filtro
+                  type="text"
+                  class="form-control"
+                  id="buscar"
+                  placeholder="Buscar..."
+                  (keyup.enter)="filtroChanged(filtro.value)"
+                  (blur)="limpiarFiltroBusqueda(); filtro.value=''"
+                >
+              </div>
+            </div>
+          </div>
+        </div> <!-- cont-buscar-->
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="row">
+        <div class="table-default">
+          <div role="grid" class="dataTables_wrapper form-inline">
+            <div class="table-header clearfix">
+              <div class="table-caption">Listado de idiomas acreditados</div>
+              <div class="DT-lf-right">
+                <div class="DT-per-page">
+                  <div class="dataTables_length" id="jq-datatables-example_length">
+                    <label>Registros por página:
+                      <select #limiteControl name="jq-datatables-example_length"
+                              aria-controls="jq-datatables-example"
+                              class="form-control input-sm"
+                              (change)="setLimite(limiteControl.value)">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table cellpadding="0" cellspacing="0" border="0"
+                     class="table table-striped table-bordered dataTable no-footer"
+                     id="jq-datatables-example"
+                     aria-describedby="jq-datatables-example_info">
+                <thead *ngIf="!vistaDocencia">
+                <tr role="row">
+                  <th
+                    *ngFor="let columna of columnas"
+                    [ngClass]="{
+							        		'sorting_desc': columna.sort === 'desc',
+							        		'sorting_asc': columna.sort === 'asc',
+							        		'sorting': columna.sort !== false
+							        	}"
+                    (click)="sortChanged(columna)"
+                  >
+                    {{columna.titulo}}
+                  </th>
+                </tr>
+                </thead>
+                <thead *ngIf="vistaDocencia">
+                <tr role="row">
+                  <th
+                    *ngFor="let columna of columnasDocencia"
+                    [ngClass]="{
+                                                'sorting_desc': columna.sort === 'desc',
+                                                'sorting_asc': columna.sort === 'asc',
+                                                'sorting': columna.sort !== false
+                                            }"
+                    (click)="sortChanged(columna)"
+                  >
+                    {{columna.titulo}}
+                  </th>
+                </tr>
+                </thead>
+                <tbody *ngIf="registros.length === 0">
+                <tr class="gradeA odd">
+                  <th class="text-center" colspan="6">
+                    No hay Registros
+                  </th>
+                </tr>
+                </tbody>
+                <tbody *ngIf="registros.length !== 0">
+                <tr
+                  *ngFor="let registro of registros"
+                  class="gradeA odd"
+                  [ngClass]="{'seleccionado': rowSeleccionado(registro)}"
+                  (click)="rowSeleccion(registro)">
+                  <td *ngIf="vistaDocencia" class="text-center">
+                    {{registro?.estudiante?.getNombreCompleto()}}
+                  </td>
+                  <td class="text-center">{{registro?.idioma?.descripcion}}</td>
+                  <td class="text-center">{{registro?.documentoAcreditacion}}</td>
+                  <td class="text-center">{{registro?.aplicaVencimiento ? registro?.getFechaFormato(): 'N/A'}}</td>
+                  <td class="text-center">{{registro?.acreditado ? 'Acreditado' : 'No acreditado'}}
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-footer clearfix">
+              <div class="DT-pagination" *ngIf="isSetPaginacion()">
+                <div class="dataTables_paginate paging_simple_numbers">
+                  <pagination
+                    class="pagination"
+                    [totalItems]="paginacion.registrosTotales"
+                    [itemsPerPage]="limite"
+                    [maxSize]="maxSizePags"
+                    [rotate]="false"
+                    [(ngModel)]="paginaActual"
+                    (pageChanged)="cambiarPagina($event)"
+                    previousText="Anterior"
+                    nextText="Siguiente"
+                  >
+                  </pagination>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-default" #modalDetalleIdioma >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarDetalleModal()">×</button>
+    <h4 class="modal-title">
+      Detalle de acreditaci&oacute;n idioma
+    </h4>
+  </modal-header>
+  <modal-body>
+
+    <!-- SECCION-DETALLE -->
+    <div class="col-md-12" *ngIf="erroresConsultas.lenght !== 0">
+      <alert
+        *ngFor="let alerta of erroresConsultas"
+        [type]="alerta.tipo"
+        dismissible="true">
+        {{ alerta?.mensaje }}
+      </alert>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre:
+                  </dt>
+                  <dd class="col-md-6">{{entidadAcreditacion?.estudiante?.getNombreCompleto()}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa
+                    docente:
+                  </dt>
+                  <dd class="col-md-6">
+                    {{entidadAcreditacion?.estudiante?.promocion?.programaDocente?.descripcion}}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                    Promoción:
+                  </dt>
+                  <dd class="col-md-6">
+                    {{entidadAcreditacion?.estudiante?.promocion?.getClavePromocion()}}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Idioma:
+                  </dt>
+                  <dd class="col-md-6">{{entidadAcreditacion?.idioma?.descripcion}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                    Punto obtenidos en el certificado:
+                  </dt>
+                  <dd class="col-md-6">
+                    {{entidadAcreditacion?.puntosCertificado}}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha de vigencia:
+                  </dt>
+                  <dd class="col-md-6">{{entidadAcreditacion?.aplicaVencimiento ? entidadAcreditacion?.getFechaFormato(): 'N/A'}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                    Documento de acreditación:
+                  </dt>
+                  <dd class="col-md-6">
+                    {{entidadAcreditacion?.documentoAcreditacion}}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Observaciones generales:
+                  </dt>
+                  <dd class="col-md-6">{{entidadAcreditacion?.observaciones}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-12">
+        <h6 class="form-heading text-muted text-semibold text-sm">Documentos de acreditación de idioma</h6>
+      </div>
+
+      <div class="col-md-12">
+        <div class="panel" style="width:100%;height: 250px; overflow-y: scroll; margin: auto">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-6 text-center" *ngFor="let registro of registrosDocumentos">
+                <label>{{registro?.tipoDocumento?.valor}}</label>
+                <div class="thumbnail">
+                  <i class="fa fa-file-text-o fa-5x"></i>
+                  <h5 class="">{{registro?.archivo?.nombre}}</h5>
+                  <hr>
+                  <button class="btn  btn-warning fa fa-download left" (click)="descargarArchivo(registro?.archivo?.id)"></button>
+                  <button class="btn  btn-default fa fa-eye right" (click)="verArchivo(registro?.archivo?.id)"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- col-md-12 -->
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button class="btn btn-default" type="button" (click)="cerrarDetalleModal()"><i class="fa fa-close"></i>&nbsp;&nbsp;Cerrar
+    </button>
+  </modal-footer>
+</modal>
+
+
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalAcreditaIdioma>
+    <modal-header>
+      <button (click)="eliminarArchivosCancelarModal()" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h4 class="modal-title">{{edicionModal? 'Edici&oacute;n acreditaci&oacute;n de idioma' : 'Acreditaci&oacute;n de idioma'}} </h4>
+
+    </modal-header>
+    <modal-body>
+
+
+      <div *ngIf="edicionModal === false" [formGroup]="formularioBuscarModal">
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 padding-xs-vr">
+              <div class="row">
+                <div [ngClass]="{'has-error': getControlModalErrors('matricula')  }" >
+                  <label  class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Matrícula del estudiante: *</label>
+                  <div class="col-md-6">
+
+                    <input formControlName="matricula" id="matriculaEstudiante" name="matriculaEstudiante" #matriculaEstudiante
+                           class="form-control"
+                           ng2-auto-complete
+                           [(ngModel)]="matriculaModalSelAutocompleteModal"
+                           [source]="estudiantes"
+                           [min-chars] = "2"
+                           display-property-name="name"
+                           list-formatter="name"
+                           loading-text="Buscando..."
+                           no-match-found-text = "No hay coincidencias"
+                           list-formatter="name"
+                           (valueChanged)= "autocompleteOnSelect(matriculaEstudiante.value)"
+                           (keyup.enter) = "filtroChangedModal(matriculaEstudiante.value)" />
+                    <span id="helpBlock2" class="help-block" *ngIf="(getControlModalErrors('matricula'))" >
+                                  {{errorMessageModal(getControlModal('matricula'))}}
+                            </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="estudiante" class="col-md-6 padding-xs-vr">
+              <div class="row">
+                <div [ngClass]="{'has-error': getControlModalErrors('idIdioma')  }" >
+                  <label  class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Idioma: *</label>
+                  <div class="col-md-6">
+                    <select #idioma ngControl="idIdioma" class="form-control" (change)="validarIdioma(idioma.value)">
+                      <option value="" selected>Selecciona</option>
+                      <option *ngFor="let opcionCatIdiomas of opcionModalesCatIdiomasModal" value="{{opcionCatIdiomas.id}}">
+                        {{opcionCatIdiomas.text}}
+                      </option>
+                    </select>
+                    <span id="helpBlock2" class="help-block" *ngIf="(getControlModalErrors('idIdioma'))" >
+                              {{errorMessageModal(getControlModal('idIdioma'))}}
+                            </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-12 padding-xs-vr text-right">
+          <button (click)="obtenerInformacionEstudiante(estudiante)" class="btn btn-default">Buscar<span class="fa fa-search"></span>
+          </button>
+        </div>
+
+      </div>
+
+
+      <div *ngIf="entidadestudianteModalModal">
+        <div class="col-md-12">
+          <h6 class="form-heading text-muted text-semibold text-sm">DATOS DEL ESTUDIANTE</h6>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class=" col-md-6 padding-xs-vr">
+              <div class="row">
+                <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs" >Nombre:</label>
+                <div class="col-md-6">
+                  {{entidadestudianteModalModal?.getNombreCompleto()}}
+                </div>
+              </div>
+            </div>
+            <div class=" col-md-6 padding-xs-vr">
+              <div class="row">
+                <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Programa docente:</label>
+                <div class="col-md-6">
+                  {{entidadestudianteModalModal?.getProgramaDocente()}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class=" col-md-6 padding-xs-vr">
+              <div class="row">
+                <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs" for="curso">Curso COLSAN:</label>
+                <div class="col-md-6">
+                  <span id="curso">{{ingles || frances ? 'SI' : 'NO'}}</span>
+                </div>
+              </div>
+            </div>
+            <div class=" col-md-6 padding-xs-vr">
+              <div class="row">
+                <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Nivel registrado en solicitud de admisión:</label>
+                <div class="col-md-6">
+                  <span id="idNivelIdioma">{{entidadIdiomaEstudiante?.idNivelIdioma?.valor}}</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+      <div *ngIf="entidadestudianteModalModal" [formGroup]="formularioAcreditacionModal">
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row">
+            <div [ngClass]="{'has-error': getControlModalErrorsFormAcreditacion('calificacionEvaluacionDiagnostica')}" >
+              <label for="calificacion" class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Calificación de evaluación diagnóstica:</label>
+              <div class="col-md-6">
+                <input type="number" min="0" value="67" class="form-control" id="calificacion" name="calificacionEvaluacionDiagnostica" ngControl="calificacionEvaluacionDiagnostica" placeholder="Calificación">
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlModalErrorsFormAcreditacion('calificacionEvaluacionDiagnostica'))" >
+                                  {{errorMessage(getControlFormAcreditacion('calificacionEvaluacionDiagnostica'))}}
+                                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="ingles || frances" class="col-md-6 padding-xs-vr">
+          <div class="form-group">
+            <label  class="col-lg-6 control-label">Calificaciones:</label>
+          </div>
+          <div class="form-group">
+            <div class="col-md-12">
+              <div class="table-default table-responsive">
+                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                  <thead>
+                  <th class="text-center"
+                      *ngFor="let columna of columnasModalDocumentos"
+                  >
+                    {{columna.titulo}}
+                  </th>
+                  </thead>
+                  <tbody>
+                  <tr
+                    class="gradeA odd"
+                  >
+                    <td *ngFor="let registro of estudianteModalGruposIdiomaModal"
+                        class="text-center">{{registro.calificacion}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <h6 class="form-heading text-muted text-semibold text-sm">DATOS DEL IDIOMA</h6>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 padding-xs-vr">
+              <div class="row">
+                <!--div [ngClass]="{'has-error': getControlModalErrorsFormAcreditacion('idNivelIdioma')  }" >                </div-->
+                <label for="idNivelIdioma" class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Nivel obtenido:</label>
+                <div class="col-md-6">
+                  <select ngControl="idNivelIdioma" class="form-control">
+                    <option value="" selected>Selecciona</option>
+                    <option *ngFor="let catalogoNivelIdioma of opcionModalesNivelIdiomaModal" value="{{catalogoNivelIdioma.id}}">
+                      {{catalogoNivelIdioma.text}}
+                    </option>
+                  </select>
+                  <!--span id="helpBlock2" class="help-block" *ngIf="(getControlModalErrorsFormAcreditacion('idNivelIdioma'))" >
+                    {{errorMessage(getControlFormAcreditacion('idNivelIdioma'))}}
+                  </span-->
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 padding-xs-vr">
+              <div class="row">
+                <!--div [ngClass]="{'has-error': getControlModalErrorsFormAcreditacion('puntosCertificado')  }" >              </div-->
+
+                <label for="puntos" class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Puntos obtenidos del certificado:</label>
+                <div class="col-md-6">
+                  <input type="number" value="67" min="0" class="form-control" id="puntos" name="puntos" ngControl="puntosCertificado" placeholder="Puntos obtenidos del certificado">
+                  <!--span id="helpBlock2" class="help-block" *ngIf="(getControlModalErrorsFormAcreditacion('puntosCertificado'))" >
+                        {{errorMessage(getControlFormAcreditacion('puntosCertificado'))}}
+                  </span -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 padding-xs-vr" (click)="$event.preventDefault()">
+              <div class="row">
+                <label  class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Fecha Evaluación Diagnostica:</label>
+                <div class="col-md-6" >
+                  <div class="dropdown" dropdown autoClose="outsideClick">
+                    <div class="input-group">
+                      <input type="text" class="form-control" value="{{getFechaEvaluacionDiagnosticaModal()}}" disabled  >
+                      <span class="input-group-btn">
+                           <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu7" data-toggle="dropdown" dropdownToggle></button>
+                         </span>
+                    </div>
+                    ​
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1" dropdownMenu >
+                      <li>
+                        <div style="display:inline-block;">
+                          <datepicker [(ngModel)]="dt2" [minDate]="minDate" [showWeeks]="true" [ngModelOptions]="{standalone: true}"></datepicker>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-md-6 padding-xs-vr">
+              <div class="row">
+                <div [ngClass]="{'has-error': getControlModalErrorsFormAcreditacion('aplicaVencimiento')  }" >
+                  <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Vencimiento: *</label>
+                  <div class="col-md-6">
+                    <label class="radio-inline">
+                      <input [checked]="entidadAcreditacionIdiomaModal?.aplicaVencimiento === true" id="titular" name="radio" type="radio" (change)="cambioRadioVencimiento(true)">
+                      Si aplica
+                    </label>
+                    <label class="radio-inline">
+                      <input [checked]="entidadAcreditacionIdiomaModal?.aplicaVencimiento === false" id="titular" name="radio" type="radio" (change)="cambioRadioVencimiento(false)">
+                      No aplica
+                    </label>
+                    <span id="helpBlock2" class="help-block" *ngIf="(getControlModalErrorsFormAcreditacion('aplicaVencimiento'))" >
+                                          {{errorMessage(getControlFormAcreditacion('aplicaVencimiento'))}}
+                                    </span>
+                  </div>
+                </div>
+                <!--calendario en caso de aplicar -->
+                <div class="col-md-12" (click)="$event.preventDefault()">
+                  <div class="row">
+                    <label *ngIf="ocultarFechaVencimientoModal()"  class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Fecha de vencimiento:</label>
+                    <div class="col-md-6" >
+                      <div class="dropdown" dropdown autoClose="outsideClick">
+                        <div  *ngIf="ocultarFechaVencimientoModal()" class="input-group">
+                          <input type="text" class="form-control" value="{{getFechaVencimientoModal()}}" disabled  >
+                          <span class="input-group-btn">
+                               <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu2" data-toggle="dropdown" dropdownToggle></button>
+                             </span>
+                        </div>
+                        ​
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1" dropdownMenu >
+                          <li>
+                            <div style="display:inline-block;">
+                              <datepicker [(ngModel)]="dt1" [minDate]="minDate" [showWeeks]="true" [ngModelOptions]="{standalone: true}"></datepicker>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+
+        <div class="col-md-12 padding-xs-vr">
+          <div class="row">
+            <label for="documentoAcreditacion" class="col-md-3 control-label text-right-lg text-right-md text-left-sm text-left-xs">Descripción documento de acreditación:</label>
+            <div class="col-md-9">
+              <textarea class="form-control" rows="3" maxlength="500" id="documentoAcreditacion" placeholder="" ngControl="documentoAcreditacion"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12 padding-xs-vr">
+          <div class="row">
+            <label for="observaciones" class="col-md-3 control-label text-right-lg text-right-md text-left-sm text-left-xs">Observaciones:</label>
+            <div class="col-md-9">
+              <textarea class="form-control" rows="3" id="observaciones" maxlength="500" placeholder="" ngControl="observaciones"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <h6 class="form-heading text-muted text-semibold text-sm">DOCUMENTOS</h6>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <!--alert
+                    *ngFor="let alerta of alertas;#i = index"
+                    [type]="alerta.type"
+                    dismissible="true"
+                    (close)="cerrarAlerta(i)">
+              {{ alerta?.msg }}
+            </alert -->
+
+            <div class=" col-md-6">
+              <div class="row">
+
+                <div class="col-md-12 padding-xs-vr">
+                  <div class="row">
+                    <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Selecciona documento: *</label>
+                    <div class="col-md-6">
+                      <select #documento class="form-control"  (change)="agregarDocumentoModal(documento.value)" ngControl="seteador" >  <!--(change)="habilitarOtro(documento.value)"  -->
+                        <option disabled selected value="">Selecciona...</option>
+                        <option *ngFor="let documento of listaDocumentosModal" value="{{documento.id+'-'+documento.text}}">{{documento.text}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12 padding-xs-vr">
+
+                  <div *ngIf="tipoArchivo" id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome"
+                       style="min-height: 185px;">
+                    <div class="dz-default dz-message " ngFileSelect [options]="optionsModal" (onUpload)="handleDropUploadModal($event)">
+
+
+
+                      <i class="fa fa-cloud-upload"></i>
+                      Arrastre archivos aquí<br><span class="dz-text-small">o de clic para seleccionarlo manualmente</span>
+                    </div>
+                    <input type="file"  ngFileSelect
+                           [options]="optionsModal" (onUpload)="handleBasicUploadModal($event)">
+                  </div>
+                  <div class="progress">
+                    <div
+                      *ngIf="enableBasicModal()"
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="basicProgress"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      [style.width]="basicProgress + '%'">
+                      {{basicProgress}}%
+                    </div>
+
+                    <div
+                      *ngIf="enableDropModal()"
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="dropProgress"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      [style.width]="dropProgress + '%'">
+                      {{dropProgress}}%
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-md-6 padding-xs-vr">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="text-right">
+                    <button type="button" class="btn btn-danger form-group-margin" *ngIf="mostrarBotonesModal()" (click)="modalAdvertenciaModal('¿Está seguro de eliminar este documento?', 3)"><i class="fa fa-times"></i> Eliminar</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="row">
+
+                  <div class="table-default table-responsive">
+                    <div
+                      [ngClass]="{
+                                       'has-error': getControlModalErrorsFormAcreditacion('auxiliar')
+                                     }"
+                    >
+                      <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                        <thead>
+                        <tr role="row">
+                          <th *ngFor="let columna of columnasModalDocumentos"
+                              class="text-center"
+                              [ngClass]="{
+                                      'sorting_desc': columna.sort === 'desc',
+                                      'sorting_asc': columna.sort === 'asc',
+                                      'sorting': columna.sort !== false
+                                    }">
+                            {{columna.titulo}}
+                          </th>
+                        </tr>
+                        </thead>
+                        <tbody *ngIf = "registros.length === 0">
+                        <tr class="gradeA odd">
+                          <th class="text-center" colspan="2">
+                            No hay Registros
+                          </th>
+                        </tr>
+                        </tbody>
+                        <tbody *ngIf = "registros.length !== 0">
+                        <tr
+                          *ngFor="let registro of registrosModal"
+                          class="gradeA odd"
+                          [ngClass]="{
+                                      'seleccionado': rowSeleccionModaladoModal(registro)
+                                    }"
+                          (click) = "rowSeleccionModal(registro)"
+                        >
+                          <td class="text-center">{{registro?.nombre}}</td>
+                        </tr>
+                        </tbody>
+                      </table>
+                      <span id="helpBlock2" class="help-block" *ngIf="(getControlModalErrorsFormAcreditacion('auxiliar'))" >
+                                      Es necesario adjuntar al menos un archivo.
+                              </span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+
+          </div>
+        </div>
+        <div class="col-md-6">
+        </div>
+        <div class="col-md-6">
+          <div class="row">
+            <div [ngClass]="{'has-error': getControlModalErrorsFormAcreditacion('acreditado')}">
+              <div class="col-md-offset-3 col-md-9">
+                <label class="radio-inline">
+                  <input type="radio" [checked]="entidadAcreditacionIdiomaModal?.acreditado === true" name="acreditadoNoAcreditado" id="option" value="option1" (change)="cambioRadioAcreditado(true)" >
+                  Acreditado
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" [checked]="entidadAcreditacionIdiomaModal?.acreditado === false" name="acreditadoNoAcreditado" id="options" value="option1" (change)="cambioRadioAcreditado(false)">
+                  No acreditado
+                </label>
+                <span id="helpBlock3" class="help-block" *ngIf="(getControlModalErrorsFormAcreditacion('acreditado'))">
+                                           {{errorMessage(getControlFormAcreditacion('acreditado'))}}
+                                            </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </modal-body>
+
+    <modal-footer>
+      <button (click)="confirmarCancelarModal()" data-dismiss="modal" class="btn btn-default" type="button"><i class="fa fa-times"></i> Cancelar</button>
+      <button *ngIf="entidadestudianteModalModal" (click)="confirmarguardarAcreditacionModalModal()" type="button" class="btn btn-success"><i class="fa fa-check"></i> Validar idioma</button>
+    </modal-footer>
+  </modal>

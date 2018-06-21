@@ -1,0 +1,602 @@
+<!---======================= INICIO DASHBOARD DOCENCIA ========================================-->
+<div *ngIf="hasRol('DOCENCIA')">
+  <div class="panel">
+    <div class="panel-body">
+      <h4 class="form-heading text-muted text-semibold text-center">Docencia</h4>
+      <div class="col-md-12">
+        <div class="row">
+          <!--==========================
+              =            MENU            =
+              ===========================-->
+          <div class="col-md-2 text-center">
+            <a (click)="buscarAlumnos()" class="thumbnail">
+              <i class="fa fa-user fa-5x"></i>
+              <hr>
+              <h4>Alumnos</h4>
+            </a>
+          </div>
+          <div class="col-md-2 text-center">
+            <a (click)="boletas()" class="thumbnail">
+              <img class="fa-img-icono" src="assets/images/iconos/boleta.png" alt="">
+              <hr>
+              <h4 class="">Boletas</h4>
+            </a>
+          </div>
+          <div class="col-md-2 text-center">
+            <a (click)="actas()" class="thumbnail">
+              <img class="fa-img-icono" src="assets/images/iconos/actas.png" alt="">
+              <hr>
+              <h4 class="">Actas</h4>
+            </a>
+          </div>
+          <div class="col-md-2 text-center">
+            <a (click)="gestionMaterias()" class="thumbnail">
+              <img class="fa-img-icono" src="assets/images/iconos/libro-config.png" alt="">
+              <hr>
+              <h4 class="">Gestión materias</h4>
+            </a>
+          </div>
+          <div class="col-md-2 text-center">
+            <a (click)="movilidadDocencia()" class="thumbnail">
+              <img class="fa-img-icono-movilidad" src="assets/images/iconos/movilidad.png" alt="">
+              <hr>
+              <h4 class="">Movilidades vigentes</h4>
+            </a>
+          </div>
+          <div class="col-md-2 text-center">
+            <a (click)="estadisticas()" class="thumbnail">
+              <i class="fa fa-bar-chart fa-5x"></i>
+              <hr>
+              <h4 class="">Estadísticas</h4>
+            </a>
+          </div>
+          <!--====  End of MENU  ====-->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-body">
+      <h4 class="form-heading text-muted text-semibold text-center">Asistentes</h4>
+      <div class="col-md-12">
+        <div class="row">
+          <!--==========================
+              =            MENU            =
+              ===========================-->
+          <div class="col-md-2 text-center">
+            <a (click)="credencial()" class="thumbnail">
+              <i class="fa fa-credit-card fa-5x"></i>
+              <hr>
+              <h4>Credenciales</h4>
+            </a>
+          </div>
+          <div class="col-md-2 text-center">
+            <a (click)="apoyos()" class="thumbnail">
+              <img class="fa-img-icono" src="assets/images/iconos/becas.png" alt="">
+              <hr>
+              <h4 class="">Apoyos económicos</h4>
+            </a>
+          </div>
+          <div class="col-md-2 text-center">
+            <a (click)="servicioSocial()" class="thumbnail">
+              <img class="fa-img-icono-md" src="assets/images/iconos/social.png" alt="">
+              <hr>
+              <h4 class="">Servicio social</h4>
+            </a>
+          </div>
+          <div class="col-md-2 text-center">
+            <a (click)="idomas()" class="thumbnail">
+              <i class="fa fa-comments-o fa-5x"></i>
+              <hr>
+              <h4 class="">Idiomas</h4>
+            </a>
+          </div>
+          <div class="col-md-2 text-center">
+            <a (click)="docenciaConstancias()" class="thumbnail">
+              <img class="fa-img-icono" src="assets/images/iconos/constancia.png" alt="">
+              <hr>
+              <h4 class="">Constancias de estudio</h4>
+            </a>
+          </div>
+          <div class="col-md-2 text-center">
+            <a (click)="emisionTitulos()" class="thumbnail">
+              <i class="fa fa-mortar-board fa-5x"></i>
+              <hr>
+              <h4 class="">Emisión de títulos</h4>
+            </a>
+          </div>
+          <!--====  End of MENU  ====-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!---======================= FIN DASHBOARD DOCENCIA ========================================-->
+
+<!---======================= INICIO DASHBOARD PROFESOR ========================================-->
+
+<div *ngIf="hasRol('PROFESOR')">
+  <div class="page-header">
+    <div class="row">
+      <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+        <h1>Panel de Docente</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+
+      <div class="panel">
+
+        <div class="panel-body">
+          <div>
+            <h5 class="form-heading text-muted text-semibold text-sm">Accesos directos</h5>
+          </div>
+          <div class="col-md-3 text-center">
+            <a (click)="detalleMateriasProfesor()" class="thumbnail">
+              <i class="fa fa-book fa-5x"></i>
+              <hr>
+              <h4 class="">Materias</h4>
+            </a>
+          </div>
+          <div class="col-md-3 text-center">
+            <a (click)="detalleEvaluacionProfesor()" class="thumbnail">
+              <i class="fa fa-bar-chart fa-5x"></i>
+              <hr>
+              <h4 class="">Evaluación docente</h4>
+            </a>
+          </div>
+          <div class="col-md-3 text-center">
+            <a (click)="detalleCalifiaciones()" class="thumbnail">
+              <img class="fa-img-icono" src="assets/images/iconos/calificacion.png" alt="">
+              <hr>
+              <h4 class="">Calificaciones</h4>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!---======================= FIN DASHBOARD PROFESOR ========================================-->
+<!---======================= INICIO DASHBOARD ESTUDIANTE ========================================-->
+<div *ngIf="hasRol('ESTUDIANTE')">
+  <div class="page-header">
+    <div class="row">
+      <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+        <h1>Expediente</h1>
+        <p><small>Expediente del Estudiante</small></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <alert *ngFor="let mensaje of erroresConsultas" [type]="mensaje.tipo" dismissible="true">
+      {{ mensaje?.mensaje }}
+    </alert>
+    <alert *ngFor="let mensajeError of erroresGuardado" [type]="mensajeError.tipo" dismissible="true">
+      {{ mensajeError?.mensaje }}
+    </alert>
+    <alert *ngFor="let mensajeError of erroresGuardadoTipoModel" [type]="mensajeError.tipo" dismissible="true">
+      {{ mensajeError?.mensaje }}
+    </alert>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel colourable">
+        <div class="panel-body">
+          <div class="col-md-3 text-center">
+
+            <div class="panel profile-photo col-md-offset-3 col-md-6 ">
+              <img class="img-responsive" src="{{imagenPerfil ? imagenPerfil : 'https://image.freepik.com/vector-gratis/icono-de-usuario-masculino_17-810120247.jpg'}}" alt="imagen">
+            </div>
+            <div class="col-md-12 text-center">
+              <h5>{{estudianteActula?.convocatoria?.programaDocente?.descripcion}}
+                <p><small>{{estudianteActula?.convocatoria?.programaDocente?.abreviatura}}</small></p>
+              </h5>
+            </div>
+
+          </div>
+
+          <div class="col-md-9">
+            <div class="row">
+
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre:</dt>
+                        <dd class="col-md-6">{{estudianteActula?.datosPersonales?.nombre}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Primer apellido:</dt>
+                        <dd class="col-md-6">{{estudianteActula?.datosPersonales?.primerApellido}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Segundo apellido:</dt>
+                        <dd class="col-md-6">{{estudianteActula?.datosPersonales?.segundoApellido}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha de nacimiento:</dt>
+                        <dd class="col-md-6">{{obtenerFecha(estudianteActula?.datosPersonales?.fechaNacimiento)}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nacionalidad:</dt>
+                        <dd class="col-md-6">{{estudianteActula?.datosPersonales?.nacionalidad?.valor}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Promoci&oacute;n:</dt>
+                        <dd class="col-md-6">{{estudianteActula?.promocion?.getClavePromocion()}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs romper-texto">Correo institucional:</dt>
+                        <dd class="col-md-6 romper-texto">{{estudianteActula?.usuario?.email}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs romper-texto">Correo de contacto:</dt>
+                        <dd class="col-md-6 romper-texto">{{estudianteActula?.datosPersonales?.email}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estatus:</dt>
+                        <dd class="col-md-6">{{estudianteActula?.estatus?.valor}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="panel">
+        <div class="panel-body">
+          <h5 class="form-heading text-muted text-semibold text-sm">SERVICIOS</h5>
+
+          <div class="col-md-12">
+            <div class="row">
+
+              <div class="col-md-3 text-center">
+                <a (click)="detalleCargaAcademica()" class="thumbnail">
+                  <img class="fa-img-icono" src="assets/images/iconos/carga-academica.png" alt="">
+                  <hr>
+                  <h4>Carga acad&eacute;mica</h4>
+                </a>
+              </div>
+
+              <div class="col-md-3 text-center">
+                <a (click)="detalleTramites()" class="thumbnail">
+                  <i class="fa fa-paste fa-5x"></i>
+                  <hr>
+                  <h4 class="">Tr&aacute;mites</h4>
+                </a>
+              </div>
+
+              <div class="col-md-3 text-center">
+                <a (click)="detalleInducion()" class="thumbnail">
+                  <img class="fa-img-icono" src="assets/images/iconos/induccion.png" alt="">
+                  <hr>
+                  <h4 class="">Inducci&oacute;n acad&eacute;mica</h4>
+                </a>
+              </div>
+
+              <div class="col-md-3 text-center">
+                <a (click)="detalleHistorialAcademico()" class="thumbnail">
+                  <i class="fa fa-list-alt fa-5x"></i>
+                  <hr>
+                  <h4 class="">Historial acad&eacute;mico</h4>
+                </a>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="row">
+
+              <div class="col-md-3 text-center">
+                <a (click)="detalleIdiomas()" class="thumbnail">
+                  <i class="fa fa-comments fa-5x"></i>
+                  <hr>
+                  <h4 class="">Idiomas</h4>
+                </a>
+              </div>
+
+              <!--<div class="col-md-3 text-center">
+                  <a href="#" class="thumbnail">
+                      <i class="fa fa-graduation-cap fa-5x"></i>
+                      <hr>
+                      <h4 class="">Titulaci&oacute;n</h4>
+                  </a>
+              </div>-->
+
+              <div class="col-md-3 text-center">
+                <a (click)="detallePagos()" class="thumbnail">
+                  <i class="fa fa-money fa-5x"></i>
+                  <hr>
+                  <h4 class="">Pagos</h4>
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-md-6">
+      <div class="panel colourable">
+        <div class="panel-body">
+          <h5 class="form-heading text-muted text-semibold text-sm">Tr&aacute;mites especiales</h5>
+          <div class="col-md-6 text-center">
+            <a (click)="detalleEvaluacionDocente()" class="thumbnail">
+              <i class="fa fa-list-ol fa-5x"></i>
+              <hr>
+              <h4 class="">Evaluaci&oacute;n docente</h4>
+            </a>
+          </div>
+          <div class="col-md-6 text-center" [ngClass]="{'hidden':desabilitadoServicioSocial()}">
+            <a (click)="detalleServicioSocial()" class="thumbnail">
+              <img class="fa-img-icono-md" src="assets/images/iconos/social.png" alt="">
+              <hr>
+              <h4 class="">Servicio social</h4>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="panel colourable">
+        <div class="panel-body">
+          <h5 class="form-heading text-muted text-semibold text-sm">MOVILIDAD</h5>
+          <div class="col-md-6 text-center">
+            <a (click)="detalleMovilidad()" class="thumbnail">
+              <img class="fa-img-icono-movilidad" src="assets/images/iconos/movilidad.png" alt="">
+              <hr>
+              <h4 class="">Movilidad acad&eacute;mica</h4>
+            </a>
+          </div>
+
+          <div class="col-md-6 text-center">
+            <a (click)="detalleInterprogramas()" class="thumbnail">
+              <i class="fa fa-users fa-5x"></i>
+              <hr>
+              <h4 class="">Interprogramas</h4>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!---======================= FIN DASHBOARD ESTUDIANTE ========================================-->
+<!---======================= INICIO DASHBOARD ESTUDIANTE MOVILIDAD========================================-->
+
+<div *ngIf="hasRol('MOVILIDAD')">
+  <div class="page-header">
+    <div class="row">
+      <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+        <h1>Expediente</h1>
+        <p><small>Expediente del Estudiante</small></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <alert *ngFor="let mensaje of erroresConsultas" [type]="mensaje.tipo" dismissible="true">
+      {{ mensaje?.mensaje }}
+    </alert>
+    <alert *ngFor="let mensajeError of erroresGuardado" [type]="mensajeError.tipo" dismissible="true">
+      {{ mensajeError?.mensaje }}
+    </alert>
+    <alert *ngFor="let mensajeError of erroresGuardadoTipoModel" [type]="mensajeError.tipo" dismissible="true">
+      {{ mensajeError?.mensaje }}
+    </alert>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel colourable">
+        <div class="panel-body">
+          <div class="col-md-3 text-center">
+
+            <div class="panel profile-photo col-md-offset-3 col-md-6 ">
+              <img class="img-responsive" src="{{imagenPerfil ? imagenPerfil : 'https://image.freepik.com/vector-gratis/icono-de-usuario-masculino_17-810120247.jpg'}}" alt="imagen">
+            </div>
+            <div class="col-md-12 text-center">
+              <h5>{{estudianteMovilidadActual?.idProgramaDocente?.descripcion}}
+                <p><small>{{estudianteMovilidadActual?.idProgramaDocente?.abreviatura}}</small></p>
+              </h5>
+            </div>
+
+          </div>
+
+          <div class="col-md-9">
+            <div class="row">
+
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre:</dt>
+                        <dd class="col-md-6">{{estudianteMovilidadActual?.datosPersonales?.nombre}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Primer apellido:</dt>
+                        <dd class="col-md-6">{{estudianteMovilidadActual?.datosPersonales?.primerApellido}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Segundo apellido:</dt>
+                        <dd class="col-md-6">{{estudianteMovilidadActual?.datosPersonales?.segundoApellido}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha de nacimiento:</dt>
+                        <dd class="col-md-6">{{obtenerFecha(estudianteMovilidadActual?.datosPersonales?.fechaNacimiento)}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nacionalidad:</dt>
+                        <dd class="col-md-6">{{estudianteMovilidadActual?.datosPersonales?.nacionalidad?.valor}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Promoci&oacute;n:</dt>
+                        <dd class="col-md-6">{{estudianteMovilidadActual?.idPromocion?.getClavePromocion()}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Correo institucional:</dt>
+                        <dd class="col-md-6">{{estudianteMovilidadActual?.usuario?.email}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                  <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                      <dl class="form-horizontal">
+                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Correo de contacto:</dt>
+                        <dd class="col-md-6">{{estudianteMovilidadActual?.datosPersonales?.email}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="panel">
+        <div class="panel-body">
+          <h5 class="form-heading text-muted text-semibold text-sm">SERVICIOS</h5>
+
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-3 text-center">
+                <a (click)="detalleCargaAcademica()" class="thumbnail">
+                  <img class="fa-img-icono" src="assets/images/iconos/carga-academica.png" alt="">
+                  <hr>
+                  <h4>Carga acad&eacute;mica</h4>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel colourable">
+        <div class="panel-body">
+          <h5 class="form-heading text-muted text-semibold text-sm">Tr&aacute;mites especiales</h5>
+          <div class="col-md-6 text-center" *ngIf="accesoEvaluacionDocente">
+            <a (click)="detalleEvaluacionDocente()" class="thumbnail">
+              <i class="fa fa-list-ol fa-5x"></i>
+              <hr>
+              <h4 class="">Evaluaci&oacute;n docente</h4>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

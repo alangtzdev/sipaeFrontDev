@@ -1,0 +1,696 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-xs-12 text-center text-left-sm">
+      <h1>Requisitos para defensa de tesis</h1>
+    </div>
+  </div>
+</div>
+<!--<form [(ngFormModel)]="formulario">-->
+
+  <div class="panel ">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+              <label >Programa docente:</label>
+              <select #programaDocenteSelection class="form-control"
+                      (change)="activarBotonBusqueda(2)"
+                      (change)="cambioProgramaDocenteFiltro(programaDocenteSelection.value)">
+                <option value="" disabled selected> Selecciona...</option>
+                <option *ngFor="let programaDocenteItem of opcionesSelectProgramaDocente"
+                        [value]="programaDocenteItem.id">
+                  {{programaDocenteItem.text}}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+              <label >Promoción:</label>
+              <select #promocion (change)="activarBotonBusqueda(1)"
+                      class="form-control">
+                <option value="" selected>Selecciona...</option>
+                <option *ngFor="let promocionItem of opcionesPromociones" [value]="promocionItem.id">
+                  {{promocionItem.text}}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+          <button class="btn" (click)="buscarCriteriosCabezera( programaDocenteSelection.value, promocion.value)" [disabled]="!botonBuscar">
+            Buscar <span class="fa fa-search"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--</form>-->
+
+<div class="panel ">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-10">
+          <div class="text-right">
+            <div *ngIf="mostrarBotones()" class="btn-group open form-group-margin" dropdown>
+              <button id="split-button" type="button" class="btn btn-warning"><span class="btn-label icon fa fa-download"></span> Formatos titulaci&oacute;n</button>
+              <button type="button" class="btn btn-warning dropdown-toggle" dropdownToggle>
+                <i class="fa fa-caret-down"></i>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+                <li role="menuitem">
+                  <a
+                    class="dropdown-item"
+                    (click)="descargarFormato('OficioConfirmacion')"
+                  >
+                    Oficio confirmaci&oacute;n de fecha
+                  </a>
+                </li>
+                <!--<li class="divider dropdown-divider"></li>-->
+                <li role="menuitem">
+                  <a
+                    class="dropdown-item"
+                    (click)="descargarFormato('CriteriosEvaluacion')"
+                  >
+                    Criterios de evaluaci&oacute;n y reconocimiento
+                  </a>
+                </li>
+                <!--<li class="divider dropdown-divider"></li>-->
+                <li role="menuitem">
+                  <a
+                    class="dropdown-item"
+                    (click)="descargarFormato('ActaExamen')"
+                  >
+                    Acta de examen
+                  </a>
+                </li>
+                <!--<li class="divider dropdown-divider"></li>-->
+                <li role="menuitem">
+                  <a
+                    class="dropdown-item"
+                    (click)="descargarFormato('ProtestaGraduados')"
+                  >
+                    Protesta graduados
+                  </a>
+                </li>
+                <!--<li class="divider dropdown-divider"></li>-->
+                <li role="menuitem">
+                  <a
+                    class="dropdown-item"
+                    (click)="descargarFormato('Presidente')"
+                  >
+                    Constancia sinodal presidente
+                  </a>
+                </li>
+                <!--<li class="divider dropdown-divider"></li>-->
+                <li role="menuitem">
+                  <a
+                    class="dropdown-item"
+                    (click)="descargarFormato('Secretario')"
+                  >
+                    Constancia sinodal secretario
+                  </a>
+                </li>
+                <!--<li class="divider dropdown-divider"></li>-->
+                <li role="menuitem">
+                  <a
+                    class="dropdown-item"
+                    (click)="descargarFormato('Vocal')"
+                  >
+                    Constancia sinodal vocal
+                  </a>
+                </li>
+                <!--<li class="divider dropdown-divider"></li>-->
+                <li role="menuitem">
+                  <a
+                    class="dropdown-item"
+                    (click)="descargarFormato('CoDirector')"
+                  >
+                    Constancia co-director
+                  </a>
+                </li>
+                <!--<li class="divider dropdown-divider"></li>-->
+                <li role="menuitem">
+                  <a
+                    class="dropdown-item"
+                    (click)="descargarFormato('Invitacion')"
+                  >
+                    Invitaci&oacute;n a examen de grado
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <button *ngIf="mostarBotonVeredicto()" class="btn btn-labeled btn-success form-group-margin" (click)="modalrAgregarRequisito()"><span class="btn-label icon fa fa-plus"></span> Validar requisitos</button>
+            <button *ngIf="mostrarBotones()" class="btn btn-labeled btn-warning form-group-margin" (click)="modalrAgregarRequisito()"><span class="btn-label icon fa fa-edit"></span> Editar</button>
+            <button (click)="modalDetallesRequisitos()" class="btn btn-labeled btn-default form-group-margin" *ngIf="mostrarBotones()">
+              <span class="btn-label icon fa fa-eye"></span>Detalle</button>
+          </div>
+        </div>
+
+        <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+          <div class="row">
+            <div class="col-md-12 pull-right text-right">
+              <div class="row">
+                <input
+                  #filtro
+                  type="text"
+                  class="form-control"
+                  id="buscar"
+                  placeholder="Buscar..."
+                  (keyup.enter)="filtroChanged(filtro.value)"
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--=================================
+                    =            DATA-TABLES            =
+                    ==================================-->
+    <div role="grid" id="jq-datatables-example_wrapper" class="dataTables_wrapper form-inline no-footer table-responsive">
+      <form [formGroup]="formularioRegistroPagina">
+        <div class="table-header clearfix">
+          <div class="table-caption">Lista de estudiantes</div>
+          <div class="DT-lf-right">
+            <div class="DT-per-page">
+              <div class="dataTables_length" id="jq-datatables-example_length">
+                <label>Registros por página:
+                  <select
+                    #limiteControl
+                    name="jq-datatables-example_length"
+                    aria-controls="jq-datatables-example"
+                    class="form-control input-sm"
+                    (change) = "setLimite(limiteControl.value)"
+                    formControlName="registroPorPagina"
+                  >
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="table-responsive">
+        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+          <thead>
+          <tr role="row">
+            <th
+              *ngFor="let columna of columnas"
+              [ngClass]="{
+							        		'sorting_desc': columna.sort === 'desc',
+							        		'sorting_asc': columna.sort === 'asc',
+							        		'sorting': columna.sort !== false
+							        	}"
+              (click)="sortChanged(columna)"
+            >
+              {{columna.titulo}}
+            </th>
+          </tr>
+          </thead>
+          <tbody *ngIf = "registros.length === 0">
+          <tr class="gradeA odd">
+            <th class="text-center" colspan="5">
+              Cambie sus criterios de búsqueda
+            </th>
+          </tr>
+          </tbody>
+          <tbody *ngIf = "registros.length !== 0">
+          <tr
+            *ngFor="let registro of registros"
+            class="gradeA odd"
+            [ngClass]="{
+							        		'seleccionado': rowSeleccionado(registro)
+							        }"
+            (click) = "rowSeleccion(registro)"
+          >
+            <td class="center">{{registro?.estudiante?.datosPersonales?.getNombreCompleto()}}</td>
+            <td class="center">{{registro?.estudiante?.tutor?.nombreTrabajo}}</td>
+            <td class="center">{{registro?.estudiante?.tutor?.getFechaConFormato()}}</td>
+            <td class="center">{{registro?.estudiante?.tutor?.tipoTesis?.valor}}</td>
+            <td class="center">{{registro?.estudiante?.tutor?.profesor?.getNombreCompleto()}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-footer clearfix">
+        <div class="DT-pagination" *ngIf="isSetPaginacion()">
+          <div class="dataTables_paginate paging_simple_numbers">
+            <pagination
+              class="pagination"
+              [totalItems] = "paginacion.registrosTotales"
+              [itemsPerPage] = "limite"
+              [maxSize] = "maxSizePags"
+              [rotate]="false"
+              [(ngModel)] = "paginaActual"
+              (pageChanged) = "cambiarPagina($event)"
+              previousText = "Anterior"
+              nextText = "Siguiente"
+            >
+            </pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--====  End of DATA-TABLES  ====-->
+  </div>
+</div>
+
+<!-- INICIA MODAL DE VALIDAR REQUISITOS -->
+<modal [animation]="animation" [keyboard]="keyboard"
+  [backdrop]="backdrop" #modalValidarRequisitos>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalAgregarRequisitos()" aria-hidden="true">×</button>
+    <h4 class="modal-title">Agregar requisitos</h4>
+  </modal-header>
+  <modal-body>
+    <form [formGroup]="formulario">
+            <div class="row">
+                <div class="col-md-12">
+                    <h5 class="form-heading text-muted text-semibold text-sm">DATOS DEL ESTUDIANTE </h5>
+                </div>
+
+                <div class="col-md-12">
+
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre del estudiante:</dt>
+                                <dd class="col-md-6">{{estudianteActual?.datosPersonales?.getNombreCompleto()}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Título de tesis:</dt>
+                                <dd class="col-md-6">{{entidadComiteTutorial?.tituloTesis}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6 form-group-margin" *ngIf="estudianteActual?.lgac?.denominacion">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">LGAC:</dt>
+                                <dd class="col-md-6">{{estudianteActual?.lgac?.denominacion}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Director de tesis:</dt>
+                                <dd class="col-md-6">{{estudianteActual?.tutor?.tipo?.id === 2 ? estudianteActual?.tutor?.profesor?.getNombreCompleto() : '--'}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente:</dt>
+                                <dd class="col-md-6">{{estudianteActual?.promocion?.programaDocente?.descripcion}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-12">
+                    <h5 class="form-heading text-muted text-semibold text-sm">REQUISITOS </h5>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="row">
+
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-1">
+                                <input type="checkbox" value="" class="px check-grande"
+                                ngControl="totalAsginatura" formControlName="totalAsginatura">
+                            </div>
+                            <div class="col-md-5 text-left">
+                                <p>Aprobación total de asignaturas</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div
+                                        [ngClass]="{
+                'has-error': getControlErrors('totalAsginaturaC')
+              }"
+                                >
+                                    <input type="text" class="form-control" placeholder="Comentarios" name="totalAsginaturaC"
+                                           id="totalAsginaturaC" maxlength="500"
+                                           ngControl="totalAsginaturaC" formControlName="totalAsginaturaC">
+            <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('totalAsginaturaC'))" >
+                    {{errorMessage(getControl('totalAsginaturaC'))}}
+            </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-1">
+                                <input type="checkbox" value="" class="px check-grande"
+                                ngControl="idioma1" formControlName="idioma1">
+                            </div>
+                            <div class="col-md-5 text-left">
+                                <p>Comprobante de idioma</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div
+                                        [ngClass]="{
+                'has-error': getControlErrors('idioma1C')
+              }"
+                                >
+                                    <input type="text" class="form-control" placeholder="Comentarios" name="idioma1C"
+                                           id="idioma1C" maxlength="500"
+                                           ngControl="idioma1C" formControlName="idioma1C">
+            <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idioma1C'))" >
+                    {{errorMessage(getControl('idioma1C'))}}
+            </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-1">
+                                <input type="checkbox" value="" class="px check-grande"
+                                ngControl="idioma2" formControlName="idioma2">
+                            </div>
+                            <div class="col-md-5 text-left">
+                                <p>Comprobante de idioma complementario (DLH)</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div
+                                        [ngClass]="{
+                'has-error': getControlErrors('idioma2C')
+              }"
+                                >
+                                    <input type="text" class="form-control" placeholder="Comentarios" name="idioma2C" maxlength="500"
+                                    id="idioma2C" ngControl="idioma2C" formControlName="idioma2C">
+            <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idioma2C'))" >
+                    {{errorMessage(getControl('idioma2C'))}}
+            </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-1">
+                                <input type="checkbox" value=""
+                                class="px check-grande" ngControl="noAdeudos" formControlName="noAdeudos">
+                            </div>
+                            <div class="col-md-5 text-left">
+                                <p>No adeudos en COLSAN</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div
+                                        [ngClass]="{
+                'has-error': getControlErrors('noAdeudosC')
+              }"
+                                >
+                                    <input type="text" class="form-control" placeholder="Comentarios" maxlength="500"
+                                           id="noAdeudosC" name="noAdeudosC" ngControl="noAdeudosC" formControlName="noAdeudosC">
+            <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('noAdeudosC'))" >
+                    {{errorMessage(getControl('noAdeudosC'))}}
+            </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-1">
+                                <input type="checkbox" value="" class="px check-grande"
+                                ngControl="votosAprobatorios" formControlName="votosAprobatorios">
+                            </div>
+                            <div class="col-md-5 text-left">
+                                <p>Presentar la tesis con el voto aprobatorio del director y de los lectores asignados por el coordinador.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div
+                                        [ngClass]="{
+                'has-error': getControlErrors('votosAprobatoriosC')
+              }"
+                                >
+                                    <input type="text" class="form-control" placeholder="Comentarios" name="votosAprobatoriosC"
+                                           id="votosAprobatoriosC" maxlength="500"
+                                           ngControl="votosAprobatoriosC" formControlName="votosAprobatoriosC">
+            <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('votosAprobatoriosC'))" >
+                    {{errorMessage(getControl('votosAprobatoriosC'))}}
+            </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-1">
+                                <input type="checkbox" value="" class="px check-grande"
+                                ngControl="aprobarExamen" formControlName="aprobarExamen">
+                            </div>
+                            <div class="col-md-5 text-left">
+                                <p>Sustentar y aprobar el examen oral de defensa de la tesis ante un jurado integrado para tal efecto.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div
+                                        [ngClass]="{
+                'has-error': getControlErrors('aprobarExamenC')
+              }"
+                                >
+                                    <input type="text" class="form-control" placeholder="Comentarios" id="aprobarExamenC"
+                                           name="aprobarExamenC" maxlength="500"
+                                           ngControl="aprobarExamenC" formControlName="aprobarExamenC">
+            <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('aprobarExamenC'))" >
+                    {{errorMessage(getControl('aprobarExamenC'))}}
+            </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-1">
+                                <input type="checkbox" value="" class="px check-grande"
+                                ngControl="fotos" formControlName="fotos">
+                            </div>
+                            <div class="col-md-5 text-left">
+                                <p>Fotos</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div
+                                        [ngClass]="{
+                'has-error': getControlErrors('fotosC')
+              }"
+                                >
+                                    <input type="text" class="form-control" placeholder="Comentarios" id="fotosC" name="fotosC"
+                                           ngControl="fotosC" formControlName="fotosC" maxlength="500">
+            <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('fotosC'))" >
+                    {{errorMessage(getControl('fotosC'))}}
+            </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModalAgregarRequisitos()"><i class="fa fa-close"></i> Cancelar</button>
+    <button type="button" class="btn btn-success" (click)="enviarFormulario()" [disabled]="!habilitarBotonGuardar()"><i class="fa fa-check"></i>
+      Guardar
+    </button>
+  </modal-footer>
+</modal>
+
+<!-- FIN DE ODAL DE VALIDAR REQUISITOS -->
+
+<!-- INICIA MODAL DE DETALLE REQUISITOS -->
+<modal [animation]="animation" [keyboard]="keyboard"
+[backdrop]="backdrop" #modalDetalleRequisitos>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalDetalle()" aria-hidden="true">×</button>
+    <h4 class="modal-title">Detalle requisitos</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+            <div class="col-md-12">
+                <h5 class="form-heading text-muted text-semibold text-sm">DATOS DEL ESTUDIANTE </h5>
+            </div>
+
+            <div class="col-md-12">
+
+                <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                        <dl class="form-horizontal">
+                            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre del
+                                estudiante:
+                            </dt>
+                            <dd class="col-md-6">
+                                {{entidadComiteTutorial?.estudiante?.datosPersonales?.getNombreCompleto()}}
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                        <dl class="form-horizontal">
+                            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa
+                                docente:
+                            </dt>
+                            <dd class="col-md-6">
+                                {{entidadComiteTutorial?.estudiante?.promocion?.programaDocente?.descripcion}}
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 form-group-margin">
+
+                <div class="row">
+                    <dl class="form-horizontal">
+                        <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">LGAC:</dt>
+                        <dd class="col-md-9">{{entidadComiteTutorial?.estudiante?.lgac?.denominacion}}</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="col-md-12 form-group-margin">
+
+                <div class="row">
+                    <dl class="form-horizontal">
+                        <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Director de
+                            tesis:
+                        </dt>
+                        <dd class="col-md-9">{{entidadComiteTutorial?.estudiante?.tutor?.tipo?.id === 2 ?
+                            entidadComiteTutorial?.estudiante?.tutor?.profesor?.getNombreCompleto() : '--'}}
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="col-md-12">
+
+                <div class="row">
+                    <dl class="form-horizontal">
+                        <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Título de
+                            tesis:
+                        </dt>
+                        <dd class="col-md-9">{{entidadComiteTutorial?.estudiante?.tutor?.nombreTrabajo}}</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="col-md-12 form-group-margin">
+                <h5 class="form-heading text-muted text-semibold text-sm">REQUISITOS </h5>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 form-horizontal">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="table-default table-scroll-modal">
+                            <table cellpadding="0" cellspacing="0" border="0"
+                                   class="table table-striped table-bordered dataTable no-footer"
+                                   id="jq-datatables-example2"
+                                   aria-describedby="jq-datatables-example_info">
+                                <thead>
+                                <tr role="row">
+                                    <th class="text-center">
+                                        REQUISITO
+                                    </th>
+                                    <th class="text-center">
+                                        NOTAS
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="gradeA odd">
+                                    <th class="text">
+                                        Aprobación total de asignaturas:
+                                    </th>
+                                    <th class="text">
+                                        <span class='btn-label icon fa fa-{{entidadComiteTutorial?.examenGrado?.totalAsginatura ? "check" : "times"}}'></span>
+                                        {{entidadComiteTutorial?.examenGrado?.totalAsginaturaC}}
+                                    </th>
+                                </tr>
+                                <tr class="gradeA odd">
+                                    <th class="text">
+                                        Comprobante de idioma:
+                                    </th>
+                                    <th class="text">
+                                        <span class='btn-label icon fa fa-{{entidadComiteTutorial?.examenGrado?.idioma1 ? "check" : "times"}}'></span>
+                                        {{entidadComiteTutorial?.examenGrado?.idioma1C}}
+                                    </th>
+                                </tr>
+                                <tr class="gradeA odd">
+                                    <th class="text">
+                                        Comprobante de idioma complementario (DLH):
+                                    </th>
+                                    <th class="text">
+                                        <span class='btn-label icon fa fa-{{entidadComiteTutorial?.examenGrado?.idioma2 ? "check" : "times"}}'></span>
+                                        {{entidadComiteTutorial?.examenGrado?.idioma2C}}
+                                    </th>
+                                </tr>
+                                <tr class="gradeA odd">
+                                    <th class="text">
+                                        No adeudos en COLSAN:
+                                    </th>
+                                    <th class="text">
+                                        <span class='btn-label icon fa fa-{{entidadComiteTutorial?.examenGrado?.noAdeudos ? "check" : "times"}}'></span>
+                                        {{entidadComiteTutorial?.examenGrado?.noAdeudosC}}
+                                    </th>
+                                </tr>
+                                <tr class="gradeA odd">
+                                    <th class="text">
+                                        Presentar la tesis con el voto aprobatorio del director y de los lectores
+                                        asignados
+                                        por el coordinador.:
+                                    </th>
+                                    <th class="text">
+                                        <span class='btn-label icon fa fa-{{entidadComiteTutorial?.examenGrado?.votosAprobatorios ? "check" : "times"}}'></span>
+                                        {{entidadComiteTutorial?.examenGrado?.votosAprobatoriosC}}
+                                    </th>
+                                </tr>
+                                <tr class="gradeA odd">
+                                    <th class="text">
+                                        Sustentar y aprobar el examen oral de defensa de la tesis ante un jurado
+                                        integrado para tal efecto.:
+                                    </th>
+                                    <th class="text">
+                                        <span class='btn-label icon fa fa-{{entidadComiteTutorial?.examenGrado?.aprobarExamen ? "check" : "times"}}'></span>
+                                        {{entidadComiteTutorial?.examenGrado?.aprobarExamenC}}
+                                    </th>
+                                </tr>
+                                <tr class="gradeA odd">
+                                    <th class="text">
+                                        Fotos:
+                                    </th>
+                                    <th class="text">
+                                        <span class='btn-label icon fa fa-{{entidadComiteTutorial?.examenGrado?.fotos ? "check" : "times"}}'></span>
+                                        {{entidadComiteTutorial?.examenGrado?.fotosC}}
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-success" (click)="cerrarModalDetalle()"><i class="fa fa-check"></i>
+      Aceptar
+    </button>
+  </modal-footer>
+</modal>
+<!-- FIN MODAL DE DETALLE REQUISITOS -->
+
+

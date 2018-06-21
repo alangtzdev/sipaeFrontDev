@@ -1,0 +1,833 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+      <h1>Designaci&oacute;n de tutor / director</h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel ">
+      <div class="panel-body">
+        <div class="row">
+
+          <div class="col-md-8">
+            <div class="row">
+
+              <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                <label >Programa docente:</label>
+                <select class="form-control" #idProgramaDocente (change)="activarBotonBusqueda(2)" (change)="cambioProgramaDocenteFiltro(idProgramaDocente.value)">
+                  <option value="" disabled selected>Selecciona...</option>
+                  <option
+                    *ngFor="let catalogoProgramaDocente of listaProgramas"
+                    value="{{catalogoProgramaDocente.id}}"
+                  >
+                    {{catalogoProgramaDocente.text}}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                <label >Promoción:</label>
+                <select class="form-control" #idPromocion (change)="activarBotonBusqueda(1)">
+                  <option value="" selected>Selecciona...</option>
+                  <option
+                    *ngFor="let catalogoPromocion of opcionesSelectPromocion"
+                    value="{{catalogoPromocion.id}}"
+                  >
+                    {{catalogoPromocion.text}}
+                  </option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+            <button class="btn btn-default" (click)="buscarCriteriosCabezera(idProgramaDocente.value, idPromocion.value)" [disabled]="!botonValido">
+              Buscar
+              <span class="glyphicon glyphicon-search"></span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-md-12">
+    <div class="panel ">
+      <div class="panel-body">
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="col-md-10">
+              <div class="text-right">
+                <button class="btn btn-labeled btn-success form-group-margin texto-largo" *ngIf="mostrarFormato()" (click)="descargarSolicitud()" ><span class="btn-label icon fa fa-check"></span>Formato de designación de director</button>
+                <button class="btn btn-labeled btn-success form-group-margin" *ngIf="mostrarBotonDirector()" (click)="modalAsignarDirector()"><!--*ngIf="mostrarBotonDirector()"--><span class="btn-label icon fa fa-plus"></span>Asignar director</button>
+                <a class="btn btn-labeled btn-success form-group-margin" *ngIf="mostrarBotonTutor()" (click)="modalAsignarTutor()"> <!--*ngIf="mostrarBotonTutor()"--> <span class="btn-label icon fa fa-plus"></span>Asignar tutor</a>
+                <a class="btn btn-labeled btn-default form-group-margin" *ngIf="mostrarBotones()" (click)="modalDetalles()"><span class="btn-label icon fa fa-eye"></span>Detalle</a>
+                <a class="btn btn-labeled btn-warning form-group-margin" *ngIf="mostrarBotoneditar()" (click)="modalEditar()"><span class="btn-label icon fa fa-pencil-square-o"></span>Editar</a>
+
+                <div class="btn-group form-group-margin" dropdown>
+                  <button id="split-button" [disabled]="desabilitarCampos()" type="button" class="btn btn-conacyt">
+                    <span class="btn-label icon fa fa-download"></span> Exportar</button>
+                  <button type="button" [disabled]="desabilitarCampos()" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                    <i class="fa fa-caret-down"></i>
+                  </button>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+                    <li role="menuitem">
+                      <a
+                        class="dropdown-item"
+                        (click)="exportar('Excel')"
+                      >
+                        Exportar a Excel
+                      </a>
+                    </li>
+                    <li class="divider dropdown-divider"></li>
+                    <li role="menuitem">
+                      <a
+                        class="dropdown-item"
+                        (click)="exportar('PDF')"
+                      >
+                        Exportar a PDF
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+
+              </div>
+            </div>
+            <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+              <div class="row">
+                <div class="col-md-12 pull-right text-right">
+                  <div class="row">
+                    <input [disabled]="desabilitarCampos()"
+                           #filtro
+                           type="text"
+                           class="form-control"
+                           id="buscar"
+                           placeholder="Buscar..."
+                           (keyup.enter)="filtroChanged(filtro.value)"
+                    >
+                  </div>
+                </div>
+              </div>
+            </div> <!-- cont-buscar-->
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="table-default">
+              <div role="grid" class="dataTables_wrapper form-inline">
+                <div class="table-header clearfix">
+                  <div class="table-caption">Lista de estudiantes</div>
+
+                  <div class="DT-lf-right">
+                    <div class="DT-per-page">
+                      <div class="dataTables_length" id="jq-datatables-example_length">
+                        <label>Registros por p&aacute;gina:
+                          <select #limiteControl
+                                  [disabled]="desabilitarCampos()"
+                                  name="jq-datatables-example_length"
+                                  aria-controls="jq-datatables-example"
+                                  class="form-control input-sm"
+                                  (change) = "setLimite(limiteControl.value)"
+                          >
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                          </select>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="table-responsive">
+                  <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                    <thead>
+                    <tr role="row">
+                      <th
+                        *ngFor="let columna of columnas"
+                        [ngClass]="{
+							        		'sorting_desc': columna.sort === 'desc',
+							        		'sorting_asc': columna.sort === 'asc',
+							        		'sorting': columna.sort !== false
+							        	}"
+                        (click)="sortChanged(columna)"
+                      >
+                        {{columna.titulo}}
+                      </th>
+                    </thead>
+                    <tbody *ngIf = "registros.length === 0">
+                    <tr class="gradeA odd">
+                      <th class="text-center" colspan="4">
+                        Cambie sus criterios de b&uacute;squeda
+                      </th>
+                    </tr>
+                    </tbody>
+                    <tbody *ngIf = "registros.length !== 0">
+                    <tr
+                      *ngFor="let registro of registros"
+                      class="gradeA odd"
+                      [ngClass]="{
+							        		'seleccionado': rowSeleccionado(registro)
+							        }"
+                      (click) = "rowSeleccion(registro)"
+                    >
+                      <td class="center">{{registro?.datosPersonales?.getNombreCompleto()}}</td>
+                      <td class="center">{{registro?.tutor?.nombreTrabajo}}</td>
+                      <td class="center">{{registro?.tutor?.getFechaConFormato()}}</td>
+                      <td class="center">{{registro?.tutor?.profesor?.getNombreCompleto()}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="table-footer clearfix">
+                  <div class="DT-pagination" *ngIf="isSetPaginacion()">
+                    <div class="dataTables_paginate paging_simple_numbers">
+                      <pagination
+                        class="pagination"
+                        [totalItems] = "paginacion.registrosTotales"
+                        [itemsPerPage] = "limite"
+                        [maxSize] = "maxSizePags"
+                        [rotate]="false"
+                        [(ngModel)] = "paginaActual"
+                        (pageChanged) = "cambiarPagina($event)"
+                        previousText = "Anterior"
+                        nextText = "Siguiente"
+                      >
+                      </pagination>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL DE DETALLE EN ASIGNAR TUTOR DIRECTOR -->
+<modal [animation]="animation" [keyboard]="keyboard" 
+  [backdrop]="backdrop" #modalDetalleAsignarTutorDirector>
+  <modal-header>
+    <button type="button" class="close" data-dismiss="modal"
+            aria-label="Close" (click)="cerrarModalDetalleTutorDirector()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Detalle de designación de tutor-director</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estudiante:</dt>
+                                <dd class="col-md-6">{{nombreEstudianteDetalle}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Matr&iacute;cula:</dt>
+                                <dd class="col-md-6">{{matriculaDetalle}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 form-group-margin">
+                        <div *ngIf="entidadDetalleTutor?.lgac?.denominacion">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">LGAC:</dt>
+                                    <dd class="col-md-6">{{entidadDetalleTutor?.lgac?.denominacion}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12" *ngIf="tutor">
+                <div class="row">
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Tutor:</dt>
+                                <dd class="col-md-6">{{tutor}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Proyecto de investigación:</dt>
+                                <dd class="col-md-6">{{tituloTesis ? tituloTesis : proyectoInvestigacion}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12" *ngIf="directorTesis">
+                <div class="row">
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Director:</dt>
+                                <dd class="col-md-6">{{directorTesis}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Coodirector:</dt>
+                                <dd class="col-md-6">{{coDirectorTesis}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+         <div class="col-md-12" *ngIf="directorTesis">
+                <div class="row">
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha de designaci&oacute;n:</dt>
+                                <dd class="col-md-6">{{registroSeleccionado?.tutor?.getFechaConFormato()}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+    </div>
+  </modal-body>
+  <modal-footer>
+    <div class="text-right">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cerrarModalDetalleTutorDirector()"><i class="fa fa-close"></i> Cerrar</button>
+    </div>
+  </modal-footer>
+</modal>
+<!-- FIN DEL MODAL DE DETALLE EN ASIGNAR TUTOR DIRECTOR -->
+
+<!-- MODAL DE AGREGAR DIRECTOR -->
+<modal [animation]="animation" [keyboard]="keyboard" 
+  [backdrop]="backdrop" #modalAsignarDirectorLic>
+  <modal-header>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" 
+    (click)="cerrarModalAsignarDirector()">
+            <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Designación de director</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+        <form class="form-horizontal" [formGroup]="formularioDirector">
+        <!-- SECCION-DETALLE -->
+            <div class="col-md-12">
+                    <h6 class="form-heading text-muted text-semibold text-sm">DATOS DEL ESTUDIANTE</h6>
+            </div>
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estudiante:</dt>
+                                <dd class="col-md-6">{{entidadDetalleEstudiante?.datosPersonales?.getNombreCompleto()}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Matr&iacute;cula:</dt>
+                                <dd class="col-md-6">{{entidadDetalleEstudiante?.matricula?.matriculaCompleta}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="col-md-12" *ngIf="entidadDetalleEstudiante?.tutor?.tipoTesis?.valor">
+                <div class="row">
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Anteproyecto:</dt>
+                                <dd class="col-md-6">{{entidadDetalleEstudiante?.tutor?.tipoTesis?.valor}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    </div>
+            </div>-->
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Tutor:</dt>
+                                <dd class="col-md-6">{{entidadDetalleEstudiante?.tutor?.profesor?.getNombreCompleto()}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Proyecto de investigación:</dt>
+                                <dd class="col-md-6">{{entidadDetalleEstudiante?.tutor?.nombreTrabajo}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div [ngClass]="{'has-error': getControlErrors('nombreTrabajo')}">
+                <div class="col-md-12 padding-xs-vr">
+                    <div class="row">
+                        <label class="col-md-3 control-label">Proyecto de tesis:</label>
+                        <div class="col-md-9">
+                            <textarea  class="form-control" rows="3" cols="70" maxlength="250" 
+                            ngControl="nombreTrabajo" formControlName="nombreTrabajo"
+                            maxlength="250">
+                            </textarea>
+                            <span id="helpBlock2" class="help-block " *ngIf="(getControlErrors('nombreTrabajo'))" >
+                                    {{errorMessage(getControl('nombreTrabajo'))}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                    <h6 class="form-heading text-muted text-semibold text-sm">DATOS DEL DIRECTOR / CODIRECTOR</h6>
+            </div>
+
+
+            <div class="col-md-12 padding-xs-vr">
+                <div class="row">
+                    <label for="inlineRadioOptions" class="col-md-9 control-label text-left">¿Desea designar un director diferente al tutor actual?: </label>
+                    <div class="col-md-3">
+                        <label class="radio-inline col-md-2">
+                            <input type="radio" name="inlineRadioOptions" id="Radio" value="option1" [checked]="validarCheck()" (click)="cambiarAuxiliarAgregar(true)"> S&iacute;
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="inlineRadioOptions" id="Radio" value="option2" [checked]="!validarCheck()" (click)="cambiarAuxiliarAgregar(false)"> No
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-12 padding-xs-vr">
+                <div class="row">
+                    <label class="col-md-3 control-label">Director tesis:</label>
+                    <div class="col-md-8">
+                        <select class="form-control"  ngControl="idProfesor" formControlName="idProfesor"
+                        (change)="activarBotonAsignar(1)" >
+                            <option value="" disabled selected>Selecciona una opci&oacute;n</option>
+                            <option
+                                    *ngFor="let catalogoProfesor of opcionesSelectProfesores"
+                                    value="{{catalogoProfesor.id}}"
+                            >
+                                {{catalogoProfesor.getNombreCompleto()}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+        
+        <div class="col-md-12">
+            <div class="row">
+                <form [formGroup]="formularioCodirector">
+                    <div class=" col-md-6 padding-xs-vr">
+                        <div class="row">
+                            <label class="col-md-6 control-label">Codirector:</label>
+                            <div class="col-md-6">
+                                <select #valor class="form-control"  (change)="obtenrCodirector(valor.value)" 
+                                 formControlName="idProfesor">
+                                    <option value="" disabled selected>Selecciona...</option>
+                                    <option
+                                            *ngFor="let catalogoProfesor of opcionesSelectProfsCodir"
+                                            value="{{catalogoProfesor.id}}"
+                                    >
+                                        {{catalogoProfesor.getNombreCompleto()}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+
+                <div class="col-md-6 padding-xs-vr">
+                    <div class="row">
+                        <label class="col-md-6 control-label text-left" for="fecha">Fecha de designaci&oacute;n:</label>
+                        <div class="col-md-6">
+                            <div class="dropdown" dropdown autoClose="outsideClick">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" value="{{ getFechaAsignacion()}}"
+                                     readonly="readonly" id="FechaAsignacion" name="FechaAsignacion" 
+                                    disabled
+                                                   ng-model="fechaAsignacion" *ngIf="dt"> 
+                                        <span class="input-group-btn">
+                                            <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu" data-toggle="dropdown" dropdownToggle></button>
+                                       </span>
+                                 </div>
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu" dropdownMenu >
+                                    <li>
+                                        <div style="display:inline-block;">
+                                            <datepicker [(ngModel)]="dt" [minDate]="minDate" [showWeeks]="true"
+                                            [ngModelOptions]="{standalone: true}" [dateDisabled]="dateDisabled"></datepicker>
+                                        </div>
+                                    </li>
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>  
+            </div>      
+ </div>
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cerrarModalAsignarDirector()"><i class="fa fa-close"></i> Cancelar</button>
+        <button type="button" [disabled]="botonValidoAgregarDirector" class="btn btn-success" (click)="asignacionTutoDirector()"><i class="fa fa-check"></i>Asignar director</button>
+  </modal-footer>
+</modal>
+<!-- FIN DEL MODAL DE AAGREGAR DIRECTOR -->
+
+<!-- INICIA  MODAL DE EDITAR DIRECTOR -->
+<modal [animation]="animation" [keyboard]="keyboard" 
+  [backdrop]="backdrop" #modalEditarDirector>
+  <modal-header>
+    <button type="button" class="close" data-dismiss="modal"
+                aria-label="Close" (click)="cerrarModalEditarDirector()">
+            <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Editar</h4>
+  </modal-header>
+  <modal-body>
+    <form class="form-horizontal" [formGroup]="formularioTutor">
+      <div class="row">
+                <div class="col-md-12">
+                        <h6 class="form-heading text-muted text-semibold text-sm">Editar director</h6>
+                </div>
+                
+                <div class="col-md-12 form-group-margin">
+                    <div class="row">
+                        <dl class="form-horizontal">
+                            <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Estudiante:</dt>
+                            <dd class="col-md-9">{{registroSeleccionado?.datosPersonales?.getNombreCompleto()}}</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div [ngClass]="{'has-error': getControlErrorsEditarDirector('nombreTrabajo')}" >
+                    <div class="col-md-12 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Proyecto de investigaci&oacute;n: *</dt>
+                                <dd class="col-md-9">
+                                    <input type="text" class="form-control" id="nombreTrabajo" name="nombreTrabajo" maxlength="50"
+                                                     formControlName="nombreTrabajo" ngControl="nombreTrabajo" placeholder="" maxlength="249">
+                                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrorsEditarDirector('nombreTrabajo'))">
+                                        {{errorMessagEditarDirector(getControlEditarDirector('nombreTrabajo'))}}
+                                    </span>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 form-group-margin">
+                    <div class="row">
+                        <dl class="form-horizontal">
+                            <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">LGAC:</dt>
+                            <dd class="col-md-6">
+                                <select #valorLgac class="form-control" ngControl="idLgac" 
+                                (change)="elegirLgac(valorLgac.value)" formControlName="idLgac">
+                                    <option value="0" disabled selected>Selecciona...</option>
+                                    <option
+                                            *ngFor="let catalogoLGAC of opcionesSelelectLgac"
+                                            value="{{catalogoLGAC.id}}"
+                                    >
+                                        {{catalogoLGAC.denominacion}}
+                                    </option>
+                                </select>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                        <dl class="form-horizontal">
+                            <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Director:</dt>
+                            <dd class="col-md-9">
+                                <select #valor class="form-control"  
+                                ngControl="idProfesor" (change)="obtenerLgac(valor.value)"
+                                formControlName="idProfesor">
+                                    <option value="" disabled selected>Selecciona...</option>
+                                    <option
+                                            *ngFor="let catalogoProfesor of opcionesSelectProfesores"
+                                            value="{{catalogoProfesor.id}}"
+                                    >
+                                        {{catalogoProfesor.getNombreCompleto()}}
+                                    </option>
+                                </select>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                        <dl class="form-horizontal">
+                            <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Codirector:</dt>
+                            <dd class="col-md-9">
+                                <select class="form-control"  ngControl="idProfCodirector" formControlName="idProfCodirector">
+                                    <option value="0" selected>Selecciona...</option>
+                                    <option
+                                            *ngFor="let catalogoProfesor of opcionesSelectProfsCodir"
+                                            value="{{catalogoProfesor.id}}"
+                                    >
+                                        {{catalogoProfesor.getNombreCompleto()}}
+                                    </option>
+                                </select>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                  <div class="col-md-6 padding-xs-vr">
+                    <div class="row">
+                        <label class="col-md-6 control-label text-left" for="fecha">Fecha de designaci&oacute;n:</label>
+                        <div class="col-md-6">
+                            <div class="dropdown" dropdown autoClose="outsideClick">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" value="{{ getFechaAsignacionTutor()}}"
+                                     readonly="readonly" id="FechaAsignacion" name="FechaAsignacion" 
+                                    disabled
+                                                   ng-model="FechaAsignacion" *ngIf="dt">
+                                        <span class="input-group-btn">
+                                            <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu" data-toggle="dropdown" dropdownToggle></button>
+                                       </span>
+                                 </div>
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu" dropdownMenu >
+                                    <li>
+                                        <div style="display:inline-block;">
+                                            <datepicker [(ngModel)]="dt" [minDate]="minDate" [showWeeks]="true"
+                                            [ngModelOptions]="{standalone: true}" [dateDisabled]="dateDisabled"></datepicker>
+                                        </div>
+                                    </li>
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+              </div>
+    </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+      <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cerrarModalEditarDirector()"><i class="fa fa-close"></i> Cerrar</button>
+        <button type="button" class="btn btn-success" (click)="enviarFormularioEditarDirector()"><i class="fa fa-check"></i> Guardar</button>
+  </modal-footer>
+</modal>
+<!-- FIN DEL MODAL DE EDITAR DIRECTOR -->
+
+<!-- INICIO DE MODAL EDITAR TUTOR-->
+<modal [animation]="animation" [keyboard]="keyboard" 
+  [backdrop]="backdrop" #modalEditarTutor>
+    <modal-header>
+        <button type="button" class="close" data-dismiss="modal"
+                aria-label="Close" (click)="cerrarModalEditarTutor()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Editar</h4>
+    </modal-header>
+    <modal-body>
+        <form class="form-horizontal" [formGroup]="formularioEditarTutor">
+            <div class="row">
+            <div class="col-md-12">
+                    <h6 class="form-heading text-muted text-semibold text-sm">Editar tutor</h6>
+            </div>
+
+
+            <div class="col-md-12 form-group-margin">
+                <div class="row">
+                    <dl class="form-horizontal">
+                    <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Proyecto de investigaci&oacute;n:</dt>
+                    <dd class="col-md-9">{{registroSeleccionado?.tutor?.nombreTrabajo}}</dd>
+                    </dl>
+                </div>
+            </div>
+
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estudiante:</dt>
+                            <dd class="col-md-6">{{registroSeleccionado?.datosPersonales?.getNombreCompleto()}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">LGAC:</dt>
+                            <dd class="col-md-6">{{registroSeleccionado?.lgac?.denominacion}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Tutor:</dt>
+                                <dd class="col-md-6">
+                                    <select class="form-control"  ngControl="idProfesor" formControlName="idProfesor">
+                                    <option value="" disabled selected>Selecciona una opcion</option>
+                                    <option
+                                            *ngFor="let catalogoProfesor of opcionesSelectProfesores"
+                                            value="{{catalogoProfesor.id}}"
+                                    >
+                                        {{catalogoProfesor.getNombreCompleto()}}
+                                    </option>
+                                </select>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <!--<div class="col-md-6 form-group-margin">
+                        <div class="row">
+                            <dl class="form-horizontal">
+                            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estatus:</dt>
+                            <dd class="col-md-6"></dd>
+                            </dl>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+            </div>
+        </form>
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cerrarModalEditarTutor()"><i class="fa fa-close"></i> Cerrar</button>
+        <button type="button" class="btn btn-success" (click)="enviarFormularioEditarTutor()"><i class="fa fa-check"></i>Editar Tutor</button>
+    </modal-footer>
+</modal>
+<!-- FIN DEL MODAL EDITAR TUTOR -->
+
+<!-- INICIA MODAL DE ASIGNAR TUTOR -->
+<modal [animation]="animation" [keyboard]="keyboard" 
+  [backdrop]="backdrop" #modalAgregarTutor>
+    <modal-header>
+        <button type="button" class="close" data-dismiss="modal"
+                aria-label="Close" (click)="cerrarModalAsignarTutor()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Registro de designación tutor</h4>
+    </modal-header>
+    <modal-body>
+        <form class="form-horizontal" [formGroup]="formularioAgregarTutor">
+            <div class="row">
+                <div class="col-md-12">
+                        <h6 class="form-heading text-muted text-semibold text-sm">AGREGAR TUTOR</h6>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estudiante:</dt>
+                                    <dd class="col-md-6">{{registroSeleccionado?.datosPersonales?.getNombreCompleto()}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Matrícula:</dt>
+                                    <dd class="col-md-6">{{registroSeleccionado?.matricula?.matriculaCompleta}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                        <div [ngClass]="{'has-error': getControlErrorsAgregarTutor('nombreTrabajo')}">
+                            <dl class="form-horizontal">
+                                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Proyecto de investigación: *</dt>
+                                <dd class="col-md-6">
+                                    <textarea class="form-control" type="text" 
+                                    placeholder="T&iacute;tulo tesis" ngControl="nombreTrabajo" 
+                                    rows="3" formControlName="nombreTrabajo"
+                                    maxlength="500"></textarea>
+                                        <span id="helpBlock2" class="help-block " *ngIf="(getControlErrorsAgregarTutor('nombreTrabajo'))" >
+                                                {{errorMessageAgregarTutor(getControlAgregarTutor('nombreTrabajo'))}}
+                                        </span>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6 form-group-margin">
+                            <div class="row">
+                                <dl class="form-horizontal">
+                                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Profesor:</dt>
+                                    <dd class="col-md-6">
+                                        <select class="form-control"  ngControl="idProfesor" formControlName="idProfesor" (change)="activarBotonAsignarAgregarTutor(1)">
+                                            <option value="" selected>Selecciona una opcion</option>
+                                            <option
+                                                    *ngFor="let catalogoProfesor of opcionesSelectProfesores"
+                                                    value="{{catalogoProfesor?.id}}"
+                                            >
+                                                {{catalogoProfesor.getNombreCompleto()}}
+                                            </option>
+                                        </select>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cerrarModalAsignarTutor()"><i class="fa fa-close"></i> Cerrar</button>
+        <button type="button" class="btn btn-success" (click)="enviarFormularioAgregarTutor()" [disabled]="!botonValidoAgregarTutor"><i class="fa fa-check"></i>Asignar tutor</button>
+    </modal-footer>
+</modal>
+<!-- FIN DE MODAL DE ASIGNAR TUTOR -->

@@ -1,0 +1,314 @@
+<div class="navbar navbar-inverse" id="main-navbar" role="navigation">
+  <div class="navbar-inner">
+    <div class="navbar-header blanco">
+      <a class="navbar-brand blanco" href="#">
+        <div><img alt="Colsan Logo" src="assets/images/login/colsan_logo.png"></div>
+      </a>
+      <div class="navbar-toggle collapsed pull-right">
+        <img class="img-conacyt" alt="conacyt" src="assets/images/conacyt.jpg">
+      </div>
+    </div>
+    <div class="collapse navbar-collapse azul main-navbar-collapse" id="main-navbar-collapse">
+      <div class="right clearfix">
+        <div class="nav navbar-nav pull-right right-navbar-nav">
+          <img class="img-conacyt" alt="conacyt" src="assets/images/conacyt.jpg">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="inactive-content">
+  <div class="page-header">
+    <div class="row">
+      <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+        <h1>Registro del interesado</h1>
+      </div>
+    </div>
+  </div>
+  <div class="panel">
+    <form class="form-horizontal" [formGroup]="formulario" (ngSubmit)="enviarFormulario()">
+      <div class="panel-body">
+        <fieldset>
+          <div class="row">
+            <div class="col-md-12 text-right-lg text-right-md text-left-sm ">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class ="col-md-6 padding-xs-vr">
+                      <div class="row">
+                        <div  [ngClass]="{'has-error': getControlErrors('nombre')}">
+                          <label class="col-md-6 control-label  text-right-lg text-right-md text-left-sm text-left-xs" for="nombre">Nombre:*</label>
+                          <div class="col-md-6">
+                            <input id="nombre" type="text" class="form-control "
+                                   placeholder="Nombre" formControlName="nombre" maxlength="50">
+                            <span class="help-block" *ngIf="(getControlErrors('nombre'))" >
+                                                                   {{errorMessage(getControl('nombre'))}}
+                                                           </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 padding-xs-vr">
+                      <div class="row">
+                        <div [ngClass]="{'has-error': getControlErrors('primerApellido')}">
+                          <label class="col-md-6 control-label  text-right-lg text-right-md text-left-sm text-left-xs" for="primerApellido">Primer apellido:*</label>
+                          <div class="col-md-6 ">
+                            <input id="primerApellido" type="text" class="form-control"
+                                   placeholder="Primer apellido" formControlName="primerApellido" maxlength="50">
+                            <span class="help-block " *ngIf="(getControlErrors('primerApellido'))" >
+                                                                   {{errorMessage(getControl('primerApellido'))}}
+                                                           </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class = "col-md-6 padding-xs-vr">
+                      <div class="row" [ngClass]="{'has-error': getControlErrors('segundoApellido')}">
+                        <label class="col-md-6 control-label  text-right-lg text-right-md text-left-sm text-left-xs" for="segundoApellido">Segundo apellido:</label>
+                        <div class="col-md-6 text-left">
+                          <input id="segundoApellido" type="text" class="form-control"
+                                 placeholder="Segundo apellido" formControlName="segundoApellido" maxlength="50">
+                          <span class="help-block "  *ngIf="(getControlErrors('segundoApellido'))" >
+                                                               {{errorMessage(getControl('segundoApellido'))}}
+                                                       </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class ="col-md-6 padding-xs-vr">
+                      <div class="row">
+                        <div [ngClass]="{'has-error': getControlErrors('email')}">
+                          <label class="col-md-6 control-label  text-right-lg text-right-md text-left-sm text-left-xs" for="correo">Correo electr&oacute;nico:*</label>
+                          <div id="correo" class="col-md-6">
+                            <input type="text" class="form-control"
+                                   placeholder="Correo electrónico" formControlName="email" maxlength="50">
+                            <span class="help-block " *ngIf="(getControlErrors('email'))" >
+                                                                   {{errorMessage(getControl('email'))}}
+                                                           </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-6 padding-xs-vr">
+                      <div class="row" [ngClass]="{
+                                           'has-error': getControlErrors('telefono')
+                                          }">
+                        <label class="col-md-6 control-label  text-right-lg text-right-md text-left-sm text-left-xs" for="telefono">Tel&eacute;fono:</label>
+                        <div class="col-md-6">
+                          <input id="telefono" type="text" class="form-control"
+                                 placeholder="000-000-0000" formControlName="telefono" maxlength="19">
+                          <span class="help-block " *ngIf="(getControlErrors('telefono'))" >
+                                                               {{errorMessage(getControl('telefono'))}}
+                                                       </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 padding-xs-vr">
+                      <div class="row" [ngClass]="{
+                                           'has-error': getControlErrors('celular')
+                                          }">
+                        <label class="col-md-6 control-label  text-right-lg text-right-md text-left-sm text-left-xs" for="celular">Celular:</label>
+                        <div class="col-md-6">
+                          <input id="celular" type="text" class="form-control"
+                                 placeholder="000-000-0000" formControlName="celular" maxlength="18">
+                          <span class="help-block " *ngIf="(getControlErrors('celular'))" >
+                                                               {{errorMessage(getControl('celular'))}}
+                                                       </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-6 padding-xs-vr">
+                      <div class="row">
+                        <div [ngClass]="{'has-error': getControlErrors('idPais')}">
+                          <label class="col-md-6 control-label  text-right-lg text-right-md text-left-sm text-left-xs" for="paisOrigen">Pa&iacute;s
+                            de origen:*</label>
+                          <div id="paisOrigen" class="col-md-6">
+                            <select formControlName="idPais" class="form-control">
+                              <option value="" disabled selected> Selecciona...</option>
+                              <option *ngFor="let paisOrigen of paisesSelect" value="{{paisOrigen.id}}">
+                                {{paisOrigen.descripcion}}
+                              </option>
+                            </select>
+                            <span class="help-block " *ngIf="(getControlErrors('idPais'))" >
+                              {{errorMessage(getControl('idPais'))}}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 padding-xs-vr">
+                      <div class="row">
+                        <div [ngClass]="{'has-error': getControlErrors('idProgramaDocente')}">
+                          <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs" for="programaDocente">
+                            Programa docente de inter&eacute;s:*
+                          </label>
+                          <div class="col-md-6">
+                            <select #programaDocenteId id="programaDocente" class="form-control" formControlName="idProgramaDocente" (change)= "getPromocionNuevoInteresado(programaDocenteId.value)">
+                              <option value="" disabled selected> Selecciona...</option>
+                              <option *ngFor="let programa of programasDocentesSelect" value="{{programa.id}}">
+                                {{programa.descripcion}}
+                              </option>
+                            </select>
+                            <span class="help-block " *ngIf="(getControlErrors('idProgramaDocente'))" >
+                              {{errorMessage(getControl('idProgramaDocente'))}}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class ="col-md-6 padding-xs-vr">
+                      <div class="row" [ngClass]="{'has-error': getControlErrors('institucion')}">
+                        <label class="col-md-6 control-label  text-right-lg text-right-md text-left-sm text-left-xs" for="institucion">
+                          Instituci&oacute;n de procedencia:</label>
+                        <div class="col-md-6">
+                          <input id="institucion" type="text" class="form-control"
+                                 placeholder="Institución de procedencia" formControlName="institucion" maxlength="50">
+                          <span class="help-block " *ngIf="(getControlErrors('institucion'))" >
+                            {{errorMessage(getControl('institucion'))}}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 padding-xs-vr">
+                      <div class ="row">
+                        <div [ngClass]="{'has-error': getControlErrors('idMedioDifucion')}">
+                          <label class="col-md-6 control-label  text-right-lg text-right-md text-left-sm text-left-xs" for="medio">&iquest;Por qu&eacute; medio te enteraste de COLSAN?:*</label>
+                          <div class="col-md-6">
+                            <select id="medio" class="form-control" formControlName="idMedioDifucion">
+                              <option value="" disabled selected> Selecciona...</option>
+                              <option *ngFor="let medio of medioDifusionSelect" value="{{medio.id}}">
+                                {{medio.descripcion}}
+                              </option>
+                            </select>
+                            <span class="help-block " *ngIf="(getControlErrors('idMedioDifucion'))" >
+                                                                    {{errorMessage(getControl('idMedioDifucion'))}}
+                                                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="seleccionOtroMedio" class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-6 padding-xs-vr">
+                      <div class="row">
+                        <div [ngClass]="{'has-error': getControlErrors('otroMedio')}">
+                          <label class="col-md-6 control-label  text-right-lg text-right-md text-left-sm text-left-xs" for="otroMedio">Otro:*</label>
+                          <div class="col-md-6">
+                            <input id="otroMedio" type="text" class="form-control"
+                                   placeholder="Por favor especifique" formControlName="otroMedio" maxlength="50">
+                            <span class="help-block " *ngIf="(getControlErrors('otroMedio'))" >
+                                                               {{errorMessage(getControl('otroMedio'))}}
+                                                       </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12 padding-xs-vr">
+                  <div class="row" [ngClass]="{
+                                                     'has-error': getControlErrors('comentarios')
+                                                    }">
+                    <label class="col-md-3 control-label  text-right-lg text-right-md text-left-sm text-left-xs" for="comentarios">Comentarios:</label>
+                    <div class=" col-md-9">
+                      <textarea id="comentarios" class="form-control" placeholder="Comentarios" rows="3" formControlName="comentarios" maxlength="250"></textarea>
+                      <span id="helpBlock2" class="help-block " *ngIf="(getControlErrors('comentarios'))" >
+                                                {{errorMessage(getControl('comentarios'))}}
+                                        </span>
+                      <label class="" style="float: right">
+                        (M&aacute;ximo 250 caracteres)
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12 text-right">
+                  <div class="row">
+                    <div class="col-md-6 col-md-offset-6 padding-xs-vr" id="recaptcha">
+                      <div class="g-recaptcha"
+                           data-expired-callback='caducidadReCatch'
+                           data-callback="checkReCaptch"
+                           data-sitekey="6LccMxsTAAAAABnj7t9Vg3X8Z9B7Leo88UfZxXcU">
+                      </div>
+                    </div>
+                    <div class="col-md-6  col-md-offset-6 padding-xs-vr">
+                      <label>Valida antes de enviar</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12 padding-xs-vr">
+                  <label for="comentarios" class="fat-commentarios">La información que usted proporcioné forma parte del sistema de datos personales bajo la responsabilidad de la Dirección de Docencia de El Colegio de San Luis, A.C. y queda protegida por la Ley de Transparencia y Acceso a la Información Pública Gubernamental, con fundamento en lo que establecen los artículos 13, 14 y 20 de la Ley y 26 y 37 de su Reglamento.</label>
+                </div>
+
+              </div>
+            </div><!--termino col-md-12-->
+          </div>
+        </fieldset>
+      </div>
+      <div class="panel-footer">
+        <div class="text-right">
+          <a type="button" href="http://www.colsan.edu.mx/" class="btn btn-default"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancelar</a>&nbsp;&nbsp;
+          <button [disabled]="!reCaptchaValido" type="submit" class="btn btn-success">Enviar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-alert modal-success" #modal  >
+  <modal-header class="text-left" [show-close]="true">
+    <i class="fa fa-check-circle"></i>
+  </modal-header>
+  <modal-body class="col-md-12 col-sm-12 col-xs-12 modal-title">
+    <span>Se realizó correctamente el registro.</span>
+  </modal-body>
+  <modal-footer>
+    <a type="button" href="http://www.colsan.edu.mx/" class="btn btn-default">Aceptar</a>
+  </modal-footer>
+</modal>
+
+<!-- MODAL INTERESADO DUPLICADO -->
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-alert modal-danger" #modalInteresadoDuplicado  >
+  <modal-header class="text-left" [show-close]="true">
+    <i class="fa fa-check-circle"></i>
+  </modal-header>
+  <modal-body class="col-md-12 col-sm-12 col-xs-12 modal-title">
+    <span>Ya tenemos registrado su direci&oacute;n de correo el&eacute;ctronico.</span>
+  </modal-body>
+  <modal-footer>
+    <a type="button" (click)="cerrarModalInteresadoDuplicado()"
+    href="http://www.colsan.edu.mx/" class="btn btn-default">Aceptar</a>
+  </modal-footer>
+</modal>
+<!-- FINAL MODAL INTERESADO DUPLICADO -->

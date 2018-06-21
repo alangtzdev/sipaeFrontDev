@@ -1,0 +1,83 @@
+<div class="tab-pane fade active in" id="tab1">
+
+  <div class="row">
+    <div class="col-md-12">
+      <h5 class="form-heading text-muted text-semibold text-sm">Documentos</h5>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel" style="width:100%;height: 250px; overflow-y: scroll; margin: auto">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-4 text-center"
+                     *ngIf="entidadPlanEstudios?.archivoCertificado?.nombre">
+                  <label for="archivos">Certificado:</label>
+                  <div class="thumbnail">
+                    <i class="fa fa-file-text-o fa-5x"></i>
+                    <h5 class="">{{ entidadPlanEstudios?.archivoCertificado?.nombre}}</h5>
+                    <hr>
+                    <button class="btn  btn-warning fa fa-download left"
+                            (click)="descargarArchivo(entidadPlanEstudios?.archivoCertificado?.id)"></button>
+                    <button class="btn  btn-default fa fa-eye right"
+                            (click)="verArchivo(entidadPlanEstudios?.archivoCertificado?.id)"></button>
+                  </div>
+                </div>
+                <div class="col-md-4 text-center" *ngIf="entidadPlanEstudios?.archivoDictamen?.nombre">
+                  <label for="archivos">Dictamen:</label>
+                  <div class="thumbnail">
+                    <i class="fa fa-file-text-o fa-5x"></i>
+                    <h5 class="">{{ entidadPlanEstudios?.archivoDictamen?.nombre}}</h5>
+                    <hr>
+                    <button class="btn  btn-warning fa fa-download left"
+                            (click)="descargarArchivo(entidadPlanEstudios?.archivoDictamen?.id)"></button>
+                    <button class="btn  btn-default fa fa-eye right"
+                            (click)="verArchivo(entidadPlanEstudios?.archivoDictamen?.id)"></button>
+                  </div>
+                </div>
+                <div class="col-md-4 text-center"
+                     *ngIf="entidadPlanEstudios?.archivoEstructura?.nombre">
+                  <label for="archivos">Estructura:</label>
+                  <div class="thumbnail">
+                    <i class="fa fa-file-text-o fa-5x"></i>
+                    <h5 class="">{{ entidadPlanEstudios?.archivoEstructura?.nombre}}</h5>
+                    <hr>
+                    <button class="btn  btn-warning fa fa-download left"
+                            (click)="descargarArchivo(entidadPlanEstudios?.archivoEstructura?.id)"></button>
+                    <button class="btn  btn-default fa fa-eye right"
+                            (click)="verArchivo(entidadPlanEstudios?.archivoEstructura?.id)"></button>
+                  </div>
+                </div>
+                <!-- <div class="col-md-4 text-center" *ngIf="entidadPlanEstudios?.archivoEvaluacion?.nombre">
+                    <label for="archivos">Evaluación:</label>
+                    <div class="thumbnail">
+                        <i class="fa fa-file-text-o fa-5x"></i>
+                        <h5 class="">{{ entidadPlanEstudios?.archivoEvaluacion?.nombre}}</h5>
+                        <hr>
+                        <button class="btn  btn-warning fa fa-download left" (click)="descargarArchivo(entidadPlanEstudios?.archivoEvaluacion?.id)"></button>
+                        <button class="btn  btn-default fa fa-eye right"  (click)="verArchivo(entidadPlanEstudios?.archivoEvaluacion?.id)"></button>
+                    </div>
+                </div>-->
+                <div class="col-md-4 text-center" *ngIf="entidadPlanEstudios?.archivoMapa?.nombre">
+                  <label for="archivos">Mapa:</label>
+                  <div class="thumbnail">
+                    <i class="fa fa-file-text-o fa-5x"></i>
+                    <h5 class="">{{ entidadPlanEstudios?.archivoMapa?.nombre}}</h5>
+                    <hr>
+                    <button class="btn  btn-warning fa fa-download left"
+                            (click)="descargarArchivo(entidadPlanEstudios?.archivoMapa?.id)"></button>
+                    <button class="btn  btn-default fa fa-eye right"
+                            (click)="verArchivo(entidadPlanEstudios?.archivoMapa?.id)"></button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div> <!-- col-md-12 -->
+      </div>
+
+
+    </div>
+  </div>
+
+</div> <!-- / .tab-pane -->

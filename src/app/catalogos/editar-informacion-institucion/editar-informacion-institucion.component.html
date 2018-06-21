@@ -1,0 +1,706 @@
+<div class="page-header">
+    <div class="row">
+        <div class="col-md-12 text-center text-left-sm">
+            <h1>Identificación de la Institución</h1>
+        </div>
+    </div>
+</div>
+
+<div class="panel-body">
+    <div class="col-md-12" *ngIf="erroresConsultas.lenght !== 0">
+        <alert
+                *ngFor="let alerta of erroresConsultas"
+                [type]="alerta.tipo"
+                dismissible="true">
+            {{ alerta?.mensaje }}
+        </alert>
+    </div>
+    <div class="col-md-12" *ngIf="!erroresConsultas.lenght || erroresConsultas.lenght === 0">
+        <alert
+                *ngFor="let alerta of erroresGuardado"
+                [type]="alerta.tipo"
+                dismissible="true">
+            {{ alerta?.mensaje }}
+        </alert>
+        <div class="row">
+            <form class="form-horizontal" (ngSubmit)="enviarFormulario()" [formGroup]="formulario">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h6 class="form-heading text-muted text-semibold text-sm">Datos de la Institución</h6>
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div [ngClass]="{'has-error': getControlErrors('claveInstitucion')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="claveInstitucion"
+                                                       class="col-md-6 control-label">Clave de la
+                                                    institución:<span>*</span></label>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="claveInstitucion"
+                                                           ngControl="claveInstitucion" placeholder="Clave"
+                                                           formControlName="claveInstitucion">
+                                                  <span id="helpBlock1" class="help-block"
+                                                        *ngIf="(getControlErrors('claveInstitucion'))">
+                                                      {{errorMessage(getControl('claveInstitucion'))}}
+                                                  </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div [ngClass]="{'has-error': getControlErrors('claveEscuela')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="claveEscuela" class="col-md-6 control-label">Clave de la
+                                                    escuela:<span>*</span></label>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="claveEscuela"
+                                                           ngControl="claveEscuela" placeholder="Clave de la escuela"
+                                                           formControlName="claveEscuela">
+                                                  <span id="helpBlock3" class="help-block"
+                                                        *ngIf="(getControlErrors('claveEscuela'))">
+                                                      {{errorMessage(getControl('claveEscuela'))}}
+                                                  </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div [ngClass]="{'has-error': getControlErrors('nombreInstitucion')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="nombreInstitucion" class="col-md-6 control-label">Nombre de
+                                                    la institución:<span>*</span></label>
+                                                <div class="col-md-6">
+                                                <textarea type="text" class="form-control" id="nombreInstitucion"
+                                                          ngControl="nombreInstitucion" formControlName="nombreInstitucion"
+                                                          placeholder="Nombre institución"></textarea>
+                                                <span id="helpBlock3" class="help-block"
+                                                      *ngIf="(getControlErrors('nombreInstitucion'))">
+                                                    {{errorMessage(getControl('nombreInstitucion'))}}
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div [ngClass]="{'has-error': getControlErrors('vialidadPrincipal')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="vialidadPrincipal" class="col-md-6 control-label">Vialidad
+                                                    principal:<span>*</span></label>
+                                                <div class="col-md-6">
+                                                    <input class="form-control" id="vialidadPrincipal"
+                                                           ngControl="vialidadPrincipal" formControlName="vialidadPrincipal"
+                                                           placeholder="Vialidad principal">
+                                                <span id="helpBlock5" class="help-block"
+                                                      *ngIf="(getControlErrors('vialidadPrincipal'))">
+                                                    {{errorMessage(getControl('vialidadPrincipal'))}}
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row">
+
+                                    <div [ngClass]="{'has-error': getControlErrors('numeroExterior')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="numeroExterior" class="col-md-6 control-label">Número
+                                                    exterior:<span>*</span></label>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="numeroExterior"
+                                                           ngControl="numeroExterior" formControlName="numeroExterior"
+                                                           placeholder="Número exterior">
+                                                  <span id="helpBlock6" class="help-block"
+                                                        *ngIf="(getControlErrors('numeroExterior'))">
+                                                      {{errorMessage(getControl('numeroExterior'))}}
+                                                  </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div [ngClass]="{'has-error': getControlErrors('numeroInterior')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="numeroInterior"
+                                                       class="col-md-6 control-label">Número interior:</label>
+                                                <!--<span>*</span>-->
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="numeroInterior"
+                                                           ngControl="numeroInterior" placeholder="Número interior"
+                                                           formControlName="numeroInterior">
+                                                  <span id="helpBlock8" class="help-block"
+                                                        *ngIf="(getControlErrors('numeroInterior'))">
+                                                      {{errorMessage(getControl('numeroInterior'))}}
+                                                  </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row">
+
+                                    <div [ngClass]="{'has-error': getControlErrors('vialidadDerecha')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="vialidadDerecha"
+                                                       class="col-md-6 control-label">Vialidad derecha:</label>
+                                                <!--<span>*</span>-->
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="vialidadDerecha"
+                                                           ngControl="vialidadDerecha" placeholder="Vialidad derecha"
+                                                           formControlName="vialidadDerecha">
+                                                  <span id="helpBlock8" class="help-block"
+                                                        *ngIf="(getControlErrors('vialidadDerecha'))">
+                                                      {{errorMessage(getControl('vialidadDerecha'))}}
+                                                  </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div [ngClass]="{'has-error': getControlErrors('vialidadIzquierda')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="vialidadIzquierda" class="col-md-6 control-label">Vialidad
+                                                    izquierda:</label><!--<span>*</span>-->
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="vialidadIzquierda"
+                                                           ngControl="vialidadIzquierda" formControlName="vialidadIzquierda"
+                                                           placeholder="Vialidad izquierda">
+                                                  <span id="helpBlock9" class="help-block"
+                                                        *ngIf="(getControlErrors('vialidadIzquierda'))">
+                                                      {{errorMessage(getControl('vialidadIzquierda'))}}
+                                                  </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row">
+
+                                    <div [ngClass]="{'has-error': getControlErrors('vialidadPosterior')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="vialidadPosterior" class="col-md-6 control-label">Vialidad
+                                                    posterior:</label><!--<span>*</span>-->
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="vialidadPosterior"
+                                                           ngControl="vialidadPosterior" formControlName="vialidadPosterior"
+                                                           placeholder="Vialidad posterior">
+                                                  <span id="helpBlock10" class="help-block"
+                                                        *ngIf="(getControlErrors('vialidadPosterior'))">
+                                                      {{errorMessage(getControl('vialidadPosterior'))}}
+                                                  </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div [ngClass]="{'has-error': getControlErrors('asentamientoHumano')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="asentamientoHumano" class="col-md-6 control-label">Asentamiento
+                                                    humano:</label><!--<span>*</span>-->
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="asentamientoHumano"
+                                                           ngControl="asentamientoHumano" formControlName="asentamientoHumano"
+                                                           placeholder="Asentamiento humano">
+                                                  <span id="helpBlock9" class="help-block"
+                                                        *ngIf="(getControlErrors('asentamientoHumano'))">
+                                                      {{errorMessage(getControl('asentamientoHumano'))}}
+                                                  </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row">
+
+                                    <div [ngClass]="{'has-error': getControlErrors('codigoPostal')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="codigoPostal" class="col-md-6 control-label">Código
+                                                    postal:<span>*</span></label>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="municipio"
+                                                           ngControl="codigoPostal" placeholder="Código postal"
+                                                           formControlName="codigoPostal">
+                                                <span id="helpBlock9" class="help-block"
+                                                      *ngIf="(getControlErrors('codigoPostal'))">
+                                                    {{errorMessage(getControl('codigoPostal'))}}
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div [ngClass]="{'has-error': getControlErrors('localidad')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="localidad"
+                                                       class="col-md-6 control-label">Localidad:<span>*</span></label>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="localidad"
+                                                           ngControl="localidad" formControlName="localidad"
+                                                           placeholder="Localidad">
+                                                  <span id="helpBlock10" class="help-block"
+                                                        *ngIf="(getControlErrors('localidad'))">
+                                                      {{errorMessage(getControl('localidad'))}}
+                                                  </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div [ngClass]="{'has-error': getControlErrors('idEntidadFederativa')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="entidadFederativa" class="col-md-6 control-label">Entidad
+                                                    federativa:<span>*</span></label>
+                                                <div class="col-md-6">
+                                                    <select #estado type="text" class="form-control"
+                                                            id="entidadFederativa"
+                                                            ngControl="idEntidadFederativa" formControlName="idEntidadFederativa"
+                                                            placeholder="Entidad federativa"
+                                                            (change)="cargarMunicipios(estado.value,2)">
+                                                        <option selected disabled value="">Seleciona...</option>
+                                                        <option *ngFor="let opcion of opcionesEstado"
+                                                                value="{{opcion.id}}">{{opcion.text}}
+                                                        </option>
+                                                    </select>
+                                                  <span id="helpBlock10" class="help-block"
+                                                        *ngIf="(getControlErrors('idEntidadFederativa'))">
+                                                      {{errorMessage(getControl('idEntidadFederativa'))}}
+                                                  </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div [ngClass]="{'has-error': getControlErrors('idMunicipio')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="municipio"
+                                                       class="col-md-6 control-label">Municipio:<span>*</span></label>
+                                                <div class="col-md-6">
+                                                    <select type="text" class="form-control" ngControl="idMunicipio" 
+                                                    formControlName="idMunicipio"
+                                                            placeholder="Municipio">
+                                                        <option selected disabled value="">Seleciona...</option>
+                                                        <option *ngFor="let opcion of opcionesMunicipio"
+                                                                value="{{opcion.id}}">{{opcion.text}}
+                                                        </option>
+                                                    </select>
+                                                  <span id="helpBlock9" class="help-block"
+                                                        *ngIf="(getControlErrors('idMunicipio'))">
+                                                      {{errorMessage(getControl('idMunicipio'))}}
+                                                  </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div [ngClass]="{'has-error': getControlErrors('telefono')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="telefono"
+                                                       class="col-md-6 control-label">Tel&eacute;fono:<span>*</span></label>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="telefono"
+                                                           ngControl="telefono" formControlName="telefono" placeholder="Télefono">
+                                                  <span id="helpBlock9" class="help-block"
+                                                        *ngIf="(getControlErrors('telefono'))">
+                                                      {{errorMessage(getControl('telefono'))}}
+                                                  </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div [ngClass]="{'has-error': getControlErrors('extencion')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="extencion" class="col-md-6 control-label">Extensión
+                                                    teléfono:</label><!--<span>*</span>-->
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="extencion"
+                                                           ngControl="extencion" formControlName="extencion"
+                                                           placeholder="Extensión">
+                                                  <span id="helpBlock10" class="help-block"
+                                                        *ngIf="(getControlErrors('extencion'))">
+                                                      {{errorMessage(getControl('extencion'))}}
+                                                  </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div [ngClass]="{'has-error': getControlErrors('fax')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="fax" class="col-md-6 control-label">Fax:</label>
+                                                <!--<span>*</span>-->
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="fax"
+                                                           ngControl="fax" formControlName="fax" placeholder="Fax">
+                                                  <span id="helpBlock9" class="help-block"
+                                                        *ngIf="(getControlErrors('fax'))">
+                                                      {{errorMessage(getControl('fax'))}}
+                                                  </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div [ngClass]="{'has-error': getControlErrors('extencionFax')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label class="col-md-6 control-label">Extensión fax:</label>
+                                                <!--<span>*</span>-->
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control"
+                                                           placeholder="Extensión fax" 
+                                                           ngControl="extencionFax" formControlName="extencionFax">
+                                                  <span id="helpBlock10" class="help-block"
+                                                        *ngIf="(getControlErrors('extencionFax'))">
+                                                      {{errorMessage(getControl('extencionFax'))}}
+                                                  </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div [ngClass]="{'has-error': getControlErrors('dependenciaNormativa')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="dependenciaNormativa" class="col-md-6 control-label">Dependencia
+                                                    normativa:</label><!--<span>*</span>-->
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="dependenciaNormativa"
+                                                           ngControl="dependenciaNormativa" formControlName="dependenciaNormativa"
+                                                           placeholder="Dependencia normativa">
+                                                  <span id="helpBlock10" class="help-block"
+                                                        *ngIf="(getControlErrors('dependenciaNormativa'))">
+                                                      {{errorMessage(getControl('dependenciaNormativa'))}}
+                                                  </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div [ngClass]="{'has-error': getControlErrors('nombreInstitucionPertenece')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="nombreInstitucionPertenece" class="col-md-6 control-label">Nombre
+                                                    de institución al que pertenece:</label><!--<span>*</span>-->
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control"
+                                                           id="nombreInstitucionPertenece"
+                                                           ngControl="nombreInstitucionPertenece" formControlName="nombreInstitucionPertenece"
+                                                           placeholder="Nombre de institución al que pertenece">
+                                                  <span id="helpBlock9" class="help-block"
+                                                        *ngIf="(getControlErrors('nombreInstitucionPertenece'))">
+                                                      {{errorMessage(getControl('nombreInstitucionPertenece'))}}
+                                                  </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div [ngClass]="{'has-error': getControlErrors('nombreDirectorEscuela')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="nombreDirectorEscuela" class="col-md-6 control-label">Nombre
+                                                    director escuela:</label><!--<span>*</span>-->
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="nombreDirectorEscuela"
+                                                           ngControl="nombreDirectorEscuela" formControlName="nombreDirectorEscuela"
+                                                           placeholder="Nombre director escuela">
+                                                  <span id="helpBlock10" class="help-block"
+                                                        *ngIf="(getControlErrors('nombreDirectorEscuela'))">
+                                                      {{errorMessage(getControl('nombreDirectorEscuela'))}}
+                                                  </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div [ngClass]="{'has-error': getControlErrors('paginaWeb')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="paginaWeb" class="col-md-6 control-label">Página
+                                                    web:</label><!--<span>*</span>-->
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="paginaWeb"
+                                                           ngControl="paginaWeb" placeholder="Página web"
+                                                           formControlName="paginaWeb">
+                                                  <span id="helpBlock9" class="help-block"
+                                                        *ngIf="(getControlErrors('paginaWeb'))">
+                                                      {{errorMessage(getControl('paginaWeb'))}}
+                                                  </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div [ngClass]="{'has-error': getControlErrors('email')}">
+                                        <div class=" col-md-6 padding-xs-vr">
+                                            <div class="row">
+                                                <label for="email" class="col-md-6 control-label">Email:</label>
+                                                <!--<span>*</span>-->
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="email"
+                                                           ngControl="email" formControlName="email"
+                                                           placeholder="Email">
+                                                  <span id="helpBlock10" class="help-block"
+                                                        *ngIf="(getControlErrors('email'))">
+                                                      {{errorMessage(getControl('email'))}}
+                                                  </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <h6 class="form-heading text-muted text-semibold text-sm">DOCUMENTOS</h6>
+
+                        <div class="row">
+
+                            <!---------------------------------------------------------->
+                            <div class="row text-right-lg text-right-md text-left-sm text-left-xs">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <alert
+                                                *ngFor="let alerta of alertas; let i = index"
+                                                [type]="alerta.type"
+                                                dismissible="true"
+                                                class="col-md-12 text-center"
+                                                (close)="cerrarAlerta(i)">
+                                            {{ alerta?.msg }}
+                                        </alert>
+
+
+
+                                        <div class=" col-md-6">
+                                            <label class="fat-commentarios text-center">Nota: Solo archivos con formato .jpg</label>
+
+                                            <br>
+                                            <div class="row">
+
+                                                <div class="col-md-12 padding-xs-vr">
+                                                    <div class="row">
+                                                        <label for="Input" class="col-md-6 control-label">Selecciona
+                                                            documento: *</label>
+                                                        <div class="col-md-6">
+                                                            <select #doc class="form-control" ngControl="seteador"
+                                                            formControlName="seteador"
+                                                                    (change)="habilitarDropZone(doc.value)">
+                                                                <option disabled selected value="">Selecciona...
+                                                                </option>
+                                                                <option value="99">Credencial frontal movilidad</option>
+                                                                <option value="98">Credencial trasera movilidad</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12 padding-xs-vr">
+
+                                                    <div *ngIf="tipoArchivo" id="dropzonejs-example"
+                                                         class="dropzone-box dz-clickable dropzone-custome"
+                                                         style="min-height: 185px;">
+                                                        <div class="dz-default dz-message " ngFileSelect [options]="options"
+                                                             (onUpload)="handleDropUpload($event)">
+                                                            <i class="fa fa-cloud-upload"></i>
+                                                            Arrastre archivos aquí<br><span class="dz-text-small">o de clic para seleccionarlo manualmente</span>
+                                                        </div>
+                                                        <input type="file" ngFileSelect [options]="options"
+                                                               (onUpload)="handleBasicUpload($event)">
+                                                    </div>
+                                                    <div class="progress">
+                                                        <div
+                                                                *ngIf="enableBasic()"
+                                                                class="progress-bar"
+                                                                role="progressbar"
+                                                                aria-valuenow="basicProgress"
+                                                                aria-valuemin="0"
+                                                                aria-valuemax="100"
+                                                                [style.width]="basicProgress + '%'">
+                                                            {{basicProgress}}%
+                                                        </div>
+
+                                                        <div
+                                                                *ngIf="enableDrop()"
+                                                                class="progress-bar"
+                                                                role="progressbar"
+                                                                aria-valuenow="dropProgress"
+                                                                aria-valuemin="0"
+                                                                aria-valuemax="100"
+                                                                [style.width]="dropProgress + '%'">
+                                                            {{dropProgress}}%
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-6 padding-xs-vr">
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="text-right">
+                                                        <button type="button" class="btn btn-danger form-group-margin"
+                                                                [disabled]="!registroSeleccionado"
+                                                                (click)="eliminarRegistro()"><i class="fa fa-times"></i>
+                                                            Eliminar
+                                                        </button><!---->
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="row">
+
+                                                    <div class="table-default table-responsive">
+                                                        <div
+                                                                [ngClass]="{
+                                                     'has-error': getControlErrors('auxiliar')
+                                                   }"
+                                                        >
+                                                            <table cellpadding="0" cellspacing="0" border="0"
+                                                                   class="table table-striped table-bordered dataTable no-footer"
+                                                                   id="jq-datatables-example"
+                                                                   aria-describedby="jq-datatables-example_info">
+                                                                <thead>
+                                                                <tr role="row">
+                                                                    <th *ngFor="let columna of columnas"
+                                                                        class="text-center"
+                                                                        [ngClass]="{
+                                                    'sorting_desc': columna.sort === 'desc',
+                                                    'sorting_asc': columna.sort === 'asc',
+                                                    'sorting': columna.sort !== false
+                                                  }">
+                                                                        {{columna.titulo}}
+                                                                    </th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody *ngIf="registros.length === 0">
+                                                                <tr class="gradeA odd">
+                                                                    <th class="text-center" colspan="1">
+                                                                        No hay Registros
+                                                                    </th>
+                                                                </tr>
+                                                                </tbody>
+                                                                <tbody *ngIf="registros.length !== 0">
+                                                                <tr
+                                                                        *ngFor="let registro of registros"
+                                                                        class="gradeA odd"
+                                                                        [ngClass]="{
+                                                    'seleccionado': rowSeleccionado(registro)
+                                                  }"
+                                                                        (click)="rowSeleccion(registro)"
+                                                                >
+                                                                    <td class="text-center">{{registro?.idTipo == 98 ?
+                                                                        'Credencial trasera movilidad' : 'Credencial frontal movilidad'}}
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                            <span id="helpBlock2" class="help-block"
+                                                  *ngIf="(getControlErrors('auxiliar'))">
+                                                    Es necesario adjuntar los dos archivos.
+                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <!---------------------------------------------------------->
+
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <button class="btn btn-default form-group-margin" type="button" (click)="cancelarEdicion()"><i
+                            class="fa fa-times"></i>&nbsp;&nbsp;Cancelar
+                    </button>
+                    <button class="btn btn-success form-group-margin" type="button" type="submit"><i
+                            class="fa fa-floppy-o"></i>
+                        {{edicionFormulario ? '&nbsp;&nbsp;Actualizar' : '&nbsp;&nbsp;Guardar'}}
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+

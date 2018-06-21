@@ -1,0 +1,31 @@
+
+<modal class="modal-alert modal-success" [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalEnviarSol>
+  <modal-header>
+    <i class="fa fa-check-circle"></i>
+  </modal-header>
+  <modal-body>
+
+    <div class="col-md-12 text-center">
+      <br>
+      <span><strong>¿Est&aacute;s seguro que deseas enviar la solicitud de admisi&oacute;n y documentos
+            anexos para su evaluaci&oacute;n?
+            </strong></span>
+      <br><br>
+      <div class="text-center">
+        <div class="row col-md-2">
+          <input #aceptacion type="checkbox" class="px">
+        </div>
+        <span>&nbsp;Conozco y acepto los t&eacute;rminos de la convocatoria y de acuerdo a la misma, acepto los resultados emitidos.</span>
+      </div>
+      <br><br>
+      <div class="col-md-12 text-center">
+        <button data-dismiss="modal" class="btn btn-danger" type="button"  (click)="cerrarModal()">&nbsp;&nbsp;No</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button class="btn btn-success" type="button" (click)="redireccionarListaSolicitud()" [disabled]="!aceptacion.checked">&nbsp;&nbsp;Sí</button>
+      </div>
+      <br><br><br>
+    </div>
+  </modal-body>
+  <modal-footer>
+  </modal-footer>
+</modal>

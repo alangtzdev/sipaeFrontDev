@@ -1,0 +1,95 @@
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalAgregaDoc>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModal()" aria-hidden="true">×</button>
+    <h4 class="modal-title" style="">Agregar documento</h4>
+  </modal-header>
+  <modal-body>
+
+
+    <div class="col-md-12">
+      <alert
+        *ngFor="let alerta of alertas;let i = index"
+        [type]="alerta.type"
+        dismissible="true"
+        dismissOnTimeout="3000"
+        (close)="cerrarAlerta(i)">
+        {{ alerta?.msg }}
+      </alert>
+    </div>
+
+    <form [formGroup]="formularioDocumentacion">
+      <div class="row">
+
+        <div class=" col-md-12 padding-xs-vr">
+          <div class="row">
+            <div [ngClass]="{'has-error': getControlErrors('idTipoDocumento')}">
+              <label class="col-md-3 control-label text-left" for="idTipoDocumento">Documento:*</label>
+              <div class="col-md-9">
+                <select #opcionesDocumentos class="form-control" id="idTipoDocumento"
+                        name="idTipoDocumento" ngControl="idTipoDocumento" formControlName="idTipoDocumento">
+                  <option value="" selected disabled>Selecciona...</option>
+                  <option *ngFor="let opcioneTipoDocumento of opcionesCatTipoDocumento"
+                          [value]="opcioneTipoDocumento.id">
+                    {{opcioneTipoDocumento.text}}
+                  </option>
+                </select>
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idTipoDocumento'))">
+                                    {{errorMessage(getControl('idTipoDocumento'))}}
+                                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class=" col-md-12 padding-xs-vr">
+          <h5><small>{{nombreArchivo}}</small></h5>
+          <div class="my-drop-zone text-center" rows="10">
+            <div id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome">
+              <div class="dz-default dz-message " ngFileSelect [options]="options" (onUpload)="handleDropUpload($event)">
+
+                <i class="fa fa-cloud-upload"></i>
+                Suelte el archivo aqu&iacute;<br><span class="dz-text-small">o da clic para subir manualmente
+                                    <br><span class="dz-text-small">(Tama&ntilde;o m&aacute;ximo permitido: 50MB)</span></span>
+              </div>
+              <input class="col-md-12" type="file" name="file" accept="application/pdf" ngFileSelect
+                     [options]="options"
+                     (onUpload)="handleBasicUpload($event)">
+            </div>
+            <div class="progress">
+              <div
+                *ngIf="enableBasic()"
+                class="progress-bar"
+                role="progressbar"
+                aria-valuenow="basicProgress"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [style.width]="basicProgress + '%'">
+                {{basicProgress}}%
+              </div>
+              <div
+                *ngIf="enableDrop()"
+                class="progress-bar"
+                role="progressbar"
+                aria-valuenow="dropProgress"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [style.width]="dropProgress + '%'">
+                {{dropProgress}}%
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </modal-body>
+  <modal-footer>
+    <button (click)="cerrarModal()" class="btn btn-default" type="button" data-dismiss="modal"><span
+      class="glyphicon glyphicon-remove"></span> Cancelar
+    </button>
+    <button (click)="enviarFormulario()" [disabled]="habilitarBotonAgregar" type="submit" class="btn btn-success"><span
+      class="glyphicon glyphicon-plus"></span> Agregar
+    </button>
+  </modal-footer>
+</modal>

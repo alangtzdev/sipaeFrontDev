@@ -1,0 +1,118 @@
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalRegistroPub>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModal()" aria-hidden="true">×</button>
+    <h4 class="modal-title" style="">Registro de publicaci&oacute;n</h4>  </modal-header>
+  <modal-body>
+
+
+    <div>
+      <h5 class="form-heading text-muted text-semibold text-sm">PUBLICACI&Oacute;N</h5>
+    </div>
+    <br>
+    <alert
+      *ngFor="let alerta of erroresGuardado"
+      [type]="alerta.tipo"
+      dismissible="true">
+      {{ alerta?.mensaje }}
+    </alert>
+    <form class="form-horizontal" [formGroup]="formulario">
+      <div class="text-right-lg text-right-md text-left-sm text-left-xs">
+        <div class="row">
+          <div class="col-md-12 padding-xs-vr">
+            <div class="row">
+              <div
+                [ngClass]="{
+                                    'has-error': getControlErrors('titulo')
+                                    }"
+              >
+                <div class="col-md-3 control-label text-right">
+                  <label for="titulo">T&iacute;tulo/ Tema de publicaci&oacute;n:*</label>
+                </div>
+                <div class="col-md-9">
+                        <textarea
+                          class="form-control"
+                          id="titulo"
+                          placeholder="T&iacute;tulo o Tema"
+                          ngControl="titulo" formControlName="titulo"
+                          maxlength="500"
+                        ></textarea>
+                  <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('titulo'))" >
+                                {{errorMessage(getControl('titulo'))}}
+                        </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label text-left" >Fecha de
+                publicaci&oacute;n:</label>
+              <div class="col-md-6">
+                <div class="dropdown" dropdown autoClose="outsideClick">
+                  <div class="input-group">
+                    <input type="text" class="form-control" value="{{ getFechaInicio()}}" disabled>
+                    <span class="input-group-btn">
+                                                                            <button class="btn dropdown-toggle fa fa-calendar" type="button" id="aprobacionFecha" data-toggle="dropdown" dropdownToggle></button>
+                                                                        </span>
+                  </div>
+
+                  <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="aprobacionFecha" dropdownMenu >
+                    <li>
+                      <div style="display:inline-block;">
+                        <datepicker [(ngModel)]="dt" [maxDate]="fechaMaxima" [showWeeks]="true" [ngModelOptions]="{standalone: true}"></datepicker>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="row">
+          <h5 class="form-heading text-muted text-semibold text-sm">RESUMEN DE LA PUBLICACI&Oacute;N</h5>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="col-md-12">
+            <div
+              class = 'form-group'
+              [ngClass]="{
+                                'has-error': getControlErrors('resumen')
+                                }"
+            >
+              <div>
+                    <textarea
+                      class="form-control"
+                      type="text"
+                      rows="10"
+                      id="resumen"
+                      maxlength="1999"
+                      ngControl="resumen" formControlName="resumen"
+                    >
+                </textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row ">
+        <div class="col-md-12 text-right">
+          <h6> (M&aacute;ximo 1999 caracteres)</h6>
+        </div>
+      </div>
+
+    </form>
+
+  </modal-body>
+  <modal-footer>
+    <button class="btn btn-danger" type="button" (click)="cerrarModal()"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+    <button type="button" class="btn btn-success" (click)="enviarFormulario()"><i class="fa fa-plus"></i> Agregar</button>
+  </modal-footer>
+</modal>

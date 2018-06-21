@@ -1,0 +1,50 @@
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalDetallePub>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModal()" aria-hidden="true">×</button>
+    <h4 class="modal-title" style="">Detalle de publicaci&oacute;n</h4>
+  </modal-header>
+  <modal-body>
+
+    <div class="row">
+
+
+      <div class="col-md-12">
+        <h5 class="form-heading text-muted text-semibold text-sm">PUBLICACI&Oacute;N</h5>
+      </div>
+
+      <div class="col-md-12 form-group-margin">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">T&iacute;tulo/ Tema de publicaci&oacute;n:</dt>
+            <dd class="col-md-9">{{entidadPublicacion?.titulo}}</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="col-md-6 form-group-margin">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha:</dt>
+            <dd class="col-md-6">{{entidadPublicacion?.getFechaPublicacionFormato()}}</dd>
+          </dl>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <h5 class="form-heading text-muted text-semibold text-sm ">RESUMEN DE LA PUBLICACI&Oacute;N</h5>
+      </div>
+
+      <div class="col-md-12 form-group-margin">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dd class="col-md-12"> <textarea class="form-control" type="text" disabled>{{entidadPublicacion?.resumen}}</textarea></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <button class="btn btn-default" type="button" (click)="cerrarModal()"><span class="glyphicon glyphicon-remove"></span> Cerrar</button>
+  </modal-footer>
+</modal>

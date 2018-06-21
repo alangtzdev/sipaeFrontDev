@@ -1,0 +1,98 @@
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalRegIdioma>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModal()" aria-hidden="true">×</button>
+    <h4 class="modal-title" style="">Registro de Idiomas</h4>
+  </modal-header>
+  <modal-body>
+
+    <form class="form-horizontal" [formGroup]="formulario">
+      <div class="row">
+
+        <div class="col-md-12">
+          <div class="row">
+            <div [ngClass]="{'has-error': getControlErrors('idIdioma')}" >
+              <div class=" col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label class="col-md-6 control-label text-left">Idioma:*</label>
+                  <div class="col-md-6">
+                    <select class="form-control form-group-margin" name="idioma" id="idIdioma" ngControl="idIdioma" formControlName="idIdioma"
+                            [disabled]="auxiliar">
+                      <option value="" disabled selected>Selecciona...</option>
+                      <option *ngFor="let opcionIdioma of opcionIdiomaService" value="{{opcionIdioma.id}}">{{opcionIdioma.text}}</option>
+                    </select>
+                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idIdioma'))" >
+                                                    {{errorMessage(getControl('idIdioma'))}}
+                                            </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div [ngClass]="{ 'has-error': getControlErrors('idNivelIdioma')}">
+              <div class=" col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label class="col-md-6 control-label text-left">Nivel:*</label>
+                  <div class="col-md-6">
+                    <select class="form-control form-group-margin" name="idNivelIdioma" id="idNivelioma"
+                            ngControl="idNivelIdioma" formControlName="idNivelIdioma">
+                      <option value="" disabled selected>Selecciona...</option>
+                      <option *ngFor="let opcionNivel of opcionNivelIdioma" value="{{opcionNivel.id}}">{{opcionNivel.text}}</option>
+                    </select>
+                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idNivelIdioma'))" >
+                                                    {{errorMessage(getControl('idNivelIdioma'))}}
+                                            </span>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class=" col-md-6 padding-xs-vr">
+              <div class="row">
+                <label class="col-md-6 control-label text-left">¿Tienes otro idioma que no aparezca en la lista?</label>
+                <div class="col-md-6">
+                  <label class=" col-md-6">
+                    <input type="radio" name="inlineRadioOptions" id="inline RadioOtroIdioma1"
+                           [checked]="validarOtroIdioma()" (click)="cambiarAuxiliar(true)">
+                    <strong>Si</strong>
+                  </label>
+                  <label class=" col-md-6">
+                    <input type="radio" name="inlineRadioOptions" id="inline RadioOtroIdioma2"
+                           [checked]="!validarOtroIdioma()" (click)="cambiarAuxiliar(false)"> <strong>No</strong>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class=" col-md-6 padding-xs-vr">
+              <div class="row">
+                <div *ngIf="validarOtroIdioma()">
+                  <label class="col-md-6 control-label text-left">Otro:</label>
+                  <div class="col-md-6">
+                    <input class="form-control" type="text" placeholder="Idioma"
+                           ngControl="otro" formControlName="otro">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cerrarModal()"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancelar</button>
+    <button type="button" class="btn btn-success" (click)="enviarFormulario()"><i class="fa fa-plus"></i>&nbsp;&nbsp;Agregar</button>
+  </modal-footer>
+</modal>

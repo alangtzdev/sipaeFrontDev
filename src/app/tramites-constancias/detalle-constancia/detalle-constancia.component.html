@@ -1,0 +1,91 @@
+
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12 text-center text-left-sm">
+      <h1>Detalle de solicitud de constancia</h1>
+      <p><small>Detalle de solicitud</small></p>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-body">
+    <h5 class="form-heading text-muted text-semibold text-sm">DETALLES DEL ESTUDIANTE</h5>
+    <div class="row">
+      <!-- SECCION-DETALLE -->
+      <div class="col-md-6 form-group-margin">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre del estudiante:</dt>
+            <dd class="col-md-6">{{entidadSolicitudConstancia?.estudiante?.datosPersonales?.getNombreCompleto()}}</dd>
+          </dl>
+        </div>
+      </div>
+      <div class="col-md-6 form-group-margin">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Matr&iacute;cula:</dt>
+            <dd class="col-md-6">{{entidadSolicitudConstancia?.estudiante?.matricula?.matriculaCompleta}}</dd>
+          </dl>
+        </div>
+      </div>
+      <div class="col-md-12 form-group-margin">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente:</dt>
+            <dd class="col-md-9">{{entidadSolicitudConstancia?.estudiante?.promocion?.programaDocente?.descripcion}}</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="form-heading text-muted text-semibold text-sm">DETALLES DEL DOCUMENTO</div>
+      </div>
+
+      <div class="col-md-6 form-group-margin">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Dirigido a:</dt>
+            <dd class="col-md-6">{{entidadSolicitudConstancia?.dirigida}}</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <label>Prop&oacute;sito del documento:</label>
+      </div>
+
+      <div class="col-md-12 form-group-margin">
+                                <textarea class="form-control" rows="6" cols="200" maxlength="500" disabled="">{{entidadSolicitudConstancia?.proposito}}
+                                </textarea>
+      </div>
+
+
+
+      <div class="col-md-12">
+        <label>Consideraciones particulares:</label>
+      </div>
+      <div class="col-md-12 form-group-margin">
+                            <textarea class="form-control" rows="6" cols="200" maxlength="500" disabled="">{{entidadSolicitudConstancia?.consideraciones}}
+                            </textarea>
+      </div>
+
+      <div class="col-md-12">
+        <h5 class="form-heading text-muted text-semibold text-sm">REDACCIÓN DE DOCUMENTO</h5>
+      </div>
+
+
+      <div class="col-md-12 padding-xs-vr">
+
+
+        <tiny-mce-editor></tiny-mce-editor>
+      </div>
+
+      <div class="col-md-12 text-right">
+        <br>
+        <button class="btn btn-labeled btn-warning" (click)="descargarConstancia()" [disabled]="disableDescarga"><span class="btn-label icon fa fa-download"></span>Constancia</button>
+      </div>
+      <!-- SECCION-DETALLE -->
+    </div>
+  </div>
+</div>

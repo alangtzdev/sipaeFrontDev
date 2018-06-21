@@ -1,0 +1,126 @@
+<div class="tab-pane fade active in" id="911">
+  <form role="form" (ngSubmit)="exportar(reporteSeleccionado.value, periodoInicioSeleccionado.value, periodoFinSeleccionado.value)" [formGroup]="formulario911">
+  <!--<form class="form-horizontal" [(ngFormModel)]="formulario911">-->
+    <h5 class="form-heading text-muted text-semibold text-sm">Reportes 911</h5>
+    <div class="col-md-12 padding-xs-vr">
+      <div class="row">
+        <div [ngClass]="{'has-error': getControlErrors('id')}">
+          <select class="form-control" ngControl="id" #reporteSeleccionado formControlName="id"
+                  (change)="obtenerProgramaDocente(reporteSeleccionado.value)">
+            <option selected>Selecciona...</option>
+            <option value="reporte9119" selected>911-9</option>
+            <option value="reporte911_9A">911-9A</option>
+            <option value="reporte911_9B">911-9B</option>
+            <option value="911_10">911-10</option>
+            <!--<option value="91100">Anexo migraci&oacute;n</option>-->
+          </select>
+          <span id="helpBlock1" class="help-block" *ngIf="(getControlErrors('id'))">
+                        {{errorMessage(getControl('id'))}}
+                    </span>
+        </div>
+
+
+      </div>
+    </div>
+
+    <div class="col-md-12 padding-xs-vr"
+         *ngIf="reporteSeleccionado.value == 'reporte911_9A' || reporteSeleccionado.value == 'reporte911_9B'">
+      <div class="row">
+        <div [ngClass]="{'has-error': getControlErrors('programa')}">
+          <label class="col-md-6 control-label" for="programa">Programa docente:</label>
+          <div class="col-md-6">
+            <select id="programa" name="programa" #programaSeleccionado formControlName="programa"
+                    class="form-control" ngControl="programa">
+              <option value="" selected>Selecciona...</option>
+              <option
+                *ngFor="let catalogoItem of opcionesPrograma"
+                value="{{catalogoItem.id}}">
+                {{catalogoItem.text}}
+              </option>
+            </select>
+            <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('programa'))">
+                            {{errorMessage(getControl('programa'))}}
+                        </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12 padding-xs-vr">
+      <div class="row">
+        <div [ngClass]="{'has-error': getControlErrors('periodoInicio')}">
+
+          <label class="col-md-6 control-label" for="fechainicio">Período inicio:</label>
+          <div class="col-md-6">
+            <select id="idPeriodoInicio" name="idPeriodoInicio" #periodoInicioSeleccionado formControlName="periodoInicio"
+                    class="form-control" ngControl="periodoInicio"
+                    (change)="cambioPeriodoFin(periodoInicioSeleccionado.value)">
+              <option value="" selected>Selecciona...</option>
+              <option
+                *ngFor="let catalogoItem of opcionesPeriodo"
+                value="{{catalogoItem.id}}">
+                {{catalogoItem.text}}
+              </option>
+            </select>
+            <span id="helpBlock1" class="help-block" *ngIf="(getControlErrors('periodoInicio'))">
+                                {{errorMessage(getControl('periodoInicio'))}}
+                            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 padding-xs-vr">
+      <div class="row">
+        <div [ngClass]="{'has-error': getControlErrors('periodoFin')}">
+          <label class="col-md-6 control-label" for="fechainicio">Período final:</label>
+          <div class="col-md-6">
+            <select id="periodoFin" name="periodoFin" #periodoFinSeleccionado formControlName="periodoFin"
+                    class="form-control" ngControl="periodoFin">
+              <option value="" selected>Selecciona...</option>
+              <option
+                *ngFor="let catalogoItem of opcionesPeriodoFinal"
+                value="{{catalogoItem.id}}">
+                {{catalogoItem.text}}
+              </option>
+            </select>
+            <span id="helpBlock1" class="help-block" *ngIf="(getControlErrors('periodoFin'))">
+                                {{errorMessage(getControl('periodoFin'))}}
+                            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--<div class="col-md-12 padding-xs-vr">
+      <div class="row">
+        <div class="btn-group pull-right">
+
+          <button class="btn btn-labeled btn-conacyt form-group-margin"
+                  (click)="exportar(reporteSeleccionado.value, periodoInicioSeleccionado.value, periodoFinSeleccionado.value)">
+            <span class="btn-label icon fa fa-download"></span>Exportar
+          </button>
+        </div>
+      </div>
+    </div>-->
+   
+<!--
+    <div class="btn-group pull-right">
+
+      <button class="btn btn-labeled btn-conacyt form-group-margin"
+              type="submit">
+        <span class="btn-label icon fa fa-download"></span>Exportar
+      </button>
+    </div> -->
+
+                <div class="btn-group pull-right" dropdown>
+                  <button class="btn btn-labeled btn-conacyt form-group-margin"
+                          type="submit">
+                    <span class="btn-label icon fa fa-download"></span> Exportar</button>
+                      <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                    <i class="fa fa-caret-down"></i>
+                  </button>
+                </div>
+
+
+  </form>
+</div>

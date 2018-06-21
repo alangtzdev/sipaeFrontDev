@@ -1,0 +1,30 @@
+<div class="panel-body tab-content tab-content-bordered">
+  <div class="col-md-12">
+    <div class="col-md-12 text-left ">
+      <dl >¿Le gustaría tomar otro curso con el profesor?</dl>
+    </div>
+
+    <div class="col-md-10 ">
+
+      <canvas width="467" height="233" 
+              baseChart
+              [data]="pieChartData"
+              [options]="barPietOptions"
+              [labels]="pieChartLabels"
+              [chartType]="pieChartType"
+              [colors]="pieChartColors"
+              (chartHover)="chartHovered($event)"
+              (chartClick)="chartClicked($event)"></canvas>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="col-md-12 no-padding-t">
+        <h6 class="text-light-gray text-semibold text-xs">Respuestas</h6>
+        <label class="label label-success label-tag">Si {{darFormatoPorcentajeSi(porcentajeSi)}}%</label>
+        <label class="label label-danger label-tag">No {{darFormatoPorcentajeNo(porcentajeNo)}}%</label>
+        <label class="label label-default label-tag">No contesto  {{darFormatoProcentaTotalAlumnos(porcentajeNumeroAlumnos)}}%</label>
+      </div>
+    </div>
+  </div>
+</div>

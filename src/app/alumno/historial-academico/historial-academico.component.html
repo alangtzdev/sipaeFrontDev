@@ -1,0 +1,31 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 text-center text-left-sm">
+      <h1>Expediente</h1>
+      <p><small>Expediente del estudiante</small></p>
+    </div>
+  </div>
+</div>
+<div class="panel">
+  <div class="panel-body">
+    <div class="col-md-6 col-sm-6" style="padding: 0">
+      <h5 class="form-heading text-muted text-semibold text-sm">MATR&Iacute;CULA: {{matriculaEstudiante}}</h5>
+    </div>
+    <div class="col-md-6  col-sm-6 text-left" style="padding: 0">
+      <h5 class="form-heading text-muted text-semibold text-sm text-right-sm">ESTUDIANTE: {{nomreEstudiante}}</h5>
+    </div>
+
+    <tabset>
+      <tab heading="K&aacute;rdex">
+        <div *ngIf="idEstudiante">
+          <app-historial-academico-kardex [idEstudiante]="idEstudiante"></app-historial-academico-kardex>
+        </div>
+      </tab>
+      <tab heading="Formaci&oacute;n continua">
+        <div *ngIf="idEstudiante">
+          <app-historial-academico-aprendizaje-continuo [idEstudiante]="idEstudiante" ></app-historial-academico-aprendizaje-continuo>
+        </div>
+      </tab>
+    </tabset>
+  </div>
+</div>

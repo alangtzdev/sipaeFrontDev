@@ -1,0 +1,366 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+      <h1>Inducción Académica</h1>
+      <p><small>Inducción del Estudiante</small></p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+
+  <div class="col-md-12">
+    <div class="panel colourable">
+      <div class="panel-body">
+        <h5 class="form-heading text-muted text-semibold text-sm">INDUCCIÓN ACADÉMICA</h5>
+
+        <div class="col-md-3 text-center" (click)="modalInduccionAcademica('planEstudios')">
+          <a  class="thumbnail">
+            <i class="fa fa-th-list fa-5x"></i>
+            <hr>
+            <h4 >Plan de estudios</h4>
+          </a>
+        </div>
+
+        <div class="col-md-3 text-center" (click)="modalInduccionAcademica('programa')">
+          <a  class="thumbnail">
+            <i class="fa fa-file-text-o fa-5x"></i>
+            <hr>
+            <h4 class="">Programa de estudios</h4>
+          </a>
+        </div>
+
+        <div class="col-md-3 text-center" (click)="modalInduccionAcademica('reglamentos')">
+          <a  class="thumbnail">
+            <i class="fa fa-balance-scale fa-5x"></i>
+            <hr>
+            <h4 class="">Normas y reglamentos</h4>
+          </a>
+        </div>
+
+        <div class="col-md-3 text-center" (click)="modalsInduccionServicios('movilidad')">
+          <a  class="thumbnail">
+            <img class="fa-img-icono-movilidad" src="assets/images/iconos/movilidad.png" alt="">
+            <hr>
+            <h4 class="">Movilidad académica</h4>
+          </a>
+        </div>
+
+        <div class="col-md-3 text-center" (click)="modalsInduccionServicios('titulacion')">
+          <a  class="thumbnail">
+            <i class="fa fa-graduation-cap fa-5x"></i>
+            <hr>
+            <h4 class="">Titulaci&oacute;n</h4>
+          </a>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-md-12">
+    <div class="panel colourable">
+      <div class="panel-body">
+        <h5 class="form-heading text-muted text-semibold text-sm">INDUCCIÓN SERVICIOS</h5>
+
+        <div class="col-md-3 text-center" (click)="modalsInduccionServicios('biblioteca')">
+          <a  class="thumbnail">
+            <img class="fa-img-icono-lg" src="assets/images/iconos/biblioteca.png" alt="">
+            <hr>
+            <h4 >Biblioteca</h4>
+          </a>
+        </div>
+
+        <div class="col-md-3 text-center" (click)="modalsInduccionServicios('fotocopiadora')">
+          <a  class="thumbnail">
+            <i class="fa fa-print fa-5x"></i>
+            <hr>
+            <h4 class="">Fotocopiadora</h4>
+          </a>
+        </div>
+
+        <div class="col-md-3 text-center" (click)="modalsInduccionServicios('tic')">
+          <a  class="thumbnail">
+            <i class="fa fa-laptop fa-5x"></i>
+            <hr>
+            <h4 class="">TIC'S</h4>
+          </a>
+        </div>
+
+        <div class="col-md-3 text-center" (click)="modalsInduccionServicios('seguro')">
+          <a  class="thumbnail">
+            <i class="fa fa-ambulance fa-5x"></i>
+            <hr>
+            <h4 class="">Seguro Escolar</h4>
+          </a>
+        </div>
+
+        <div class="col-md-3 text-center" (click)="modalsInduccionServicios('becas')">
+          <a  class="thumbnail">
+            <img class="fa-img-icono" src="assets/images/iconos/becas.png" alt="">
+            <hr>
+            <h4 class="">Becas</h4>
+          </a>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #induccionAcademica  >
+  <modal-header>
+    <button type="button" class="close" (click)="closeModalNormasReglamentos()">×</button>
+    <h4 class="modal-title">{{tituloModal}}</h4>
+  </modal-header>
+  <modal-body>
+    <form>
+      <div *ngIf="tipoModal == 'planEstudios'" class="col-sm-12">
+        <div class="row">
+          <!-- Light table -->
+          <div class="table-light table-responsive">
+            <table class="table table-bordered">
+              <thead>
+              <tr>
+                <th colspan="2" class="text-center">Plan de estudios {{planEstudio?.programaDocente?.descripcion}}</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <TD class="text-center">Modalidad </TD>
+                <TD class="text-center">{{planEstudio?.modalidad}}</TD>
+              </tr>
+              <tr>
+                <TD class="text-center">Duracion del ciclo</TD>
+                <TD class="text-center">{{planEstudio?.duracionCiclo}}</TD>
+              </tr>
+              <tr>
+                <TD class="text-center">Clave del plan de estudio</TD>
+                <TD class="text-center">{{planEstudio?.clave}}</TD>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- / Light table -->
+        </div>
+      </div>
+      <div *ngIf="tipoModal == 'programa' || tipoModal == 'reglamentos'" class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-3 text-center">
+              <div class="thumbnail conacyt">
+                <i *ngIf="tituloModal == 'Normas y reglamento'" class="fa fa-balance-scale fa-5x"></i>
+                <i *ngIf="tituloModal == 'Programa de estudio'" class="fa fa-file-text-o fa-5x"></i>
+                  <hr>
+                  <h4>{{tituloModal}}</h4>
+              </div>
+            </div>
+
+            <div class="col-md-9 text-center">
+              <div class="panel panel-info panel-dark">
+                <div class="panel-heading">
+                  <span class="panel-title">Descripci&oacute;n</span>
+                  <div class="panel-heading-controls">
+                    <div class="panel-heading-icon"><i class="fa fa-info-circle"></i></div>
+                  </div>
+                </div>
+                <div *ngIf="tituloModal == 'Normas y reglamento'" class="panel-body text-justify">
+                  Documentos que especifican normas para regular todas las actividades de los miembros
+                  de la comunidad de El COLSAN. Mismos que consisten en sentar bases para la
+                  convivencia y prevenir conflictos.
+                </div>
+                <div *ngIf="tituloModal == 'Programa de estudio'" class="panel-body text-justify">
+                  Conjunto estructurado de asignaturas, prácticas y actividades de la enseñanza y el
+                  aprendizaje. El plan de estudios debe contener los propósitos de formación general, los
+                  contenidos fundamentales de estudio y los criterios y procedimientos de evaluación y
+                  acreditación.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h5 class="form-heading text-muted text-semibold text-sm">DOCUMENTACI&Oacute;N ADICIONAL</h5>
+
+      <div class="col-md-12">
+        <div class="row">
+          <div class="panel" style="width:100%;height: 200px; overflow-y: scroll; margin: auto" *ngIf="datosCompartidos?.listadoInducciones?.length !== 0">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-3 text-center"  *ngFor="let documento of datosCompartidos?.listadoInducciones;let idx = index;">
+                  <div class="thumbnail">
+                    <i class="fa fa-file-text-o fa-5x"></i>
+                    <h5 title="{{documento.nombre}}">{{ documento.nombre }}</h5>
+                    <hr>
+                    <button *ngIf="documento.idArchivo.id" class="btn  btn-warning fa fa-download" (click)="descargarArchivo(documento.idArchivo.id)"></button>
+                    <button *ngIf="documento.idArchivo.id" class="btn  btn-default fa fa-eye" (click)="verArchivo(documento.idArchivo.id)"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel" *ngIf="datosCompartidos?.listadoInducciones?.length === 0">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-12 text-center">
+                  No se encontr&oacute; documentaci&oacute;n adicional
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- col-md-12 -->
+
+    </form>
+    <div class="row" *ngIf="!showCheckAcept">
+      <div [ngClass]="{
+      'col-md-12 padding-xs-vr': true,
+      'text-left': true}">
+        <div class="checkbox">
+          <label>
+            <input #valor [(ngModel)]="terminoAceptado" type="checkbox" (change)="validarTerminos(valor.checked)"> Acepta haber leído los términos de cualquier plan o programa de estudios*
+          </label>
+        </div>
+        <div *ngIf="showHelp" class="alert alert-danger">
+          <strong>Campo requerido</strong>
+        </div>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button  type="button" class="btn btn-default" (click)="closeModalNormasReglamentos()"><i class="fa fa-times"></i> Cerrar</button>
+  </modal-footer>
+</modal>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #induccionServicios  >
+  <modal-header>
+    <button type="button" class="close" (click)="closeModalServicioInduccion()">×</button>
+    <h4 class="modal-title">{{tituloModal}}</h4>
+  </modal-header>
+  <modal-body>
+    <div *ngIf="idSubtema !== 10" class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-3 text-center">
+            <div class="thumbnail conacyt">
+              <i *ngIf="tituloModal == 'Fotocopiadora'" class="fa fa-print fa-5x"></i>
+              <i *ngIf="tituloModal == 'Seguro Escolar'" class="fa fa-ambulance fa-5x"></i>
+              <i *ngIf="tituloModal == 'TIC´s'" class="fa fa-laptop fa-5x"></i>
+              <img *ngIf="tituloModal == 'Biblioteca'" class="fa-img-icono-lg" src="assets/images/iconos/biblioteca.png" alt="">
+              <img *ngIf="tituloModal == 'Becas'" class="fa-img-icono" src="assets/images/iconos/becas.png" alt="">
+              <img *ngIf="tituloModal == 'Movilidad académica'" class="fa-img-icono-movilidad" src="assets/images/iconos/movilidad.png" alt="">
+              <hr>
+              <h4>{{tituloModal}}</h4>
+            </div>
+          </div>
+
+          <div class="col-md-9 text-center">
+            <div class="panel panel-info panel-dark">
+              <div class="panel-heading">
+                <span class="panel-title">Descripci&oacute;n</span>
+                <div class="panel-heading-controls">
+                  <div class="panel-heading-icon"><i class="fa fa-info-circle"></i></div>
+                </div>
+              </div>
+              <div *ngIf="tituloModal == 'Biblioteca'" class="panel-body text-justify">
+                La Biblioteca “Rafael Montejano y Aguiñaga”, es una biblioteca especializada en Ciencias
+                Sociales y Humanidades. Su principal objetivo es el apoyo a la investigación y la docencia
+                a través de la adquisición, organización, preservación, desarrollo de colecciones,
+                vinculación y difusión. Opera con estándares e indicadores internacionales y proporciona
+                servicios en su formación tradicional e incorpora medios electrónicos y de alta tecnología
+                para alcanzar una mayor cobertura; proporciona servicios y consulta especializada en
+                respuesta a las necesidades de información de la comunidad académica de la Institución,
+                así como del público interesado en el tema.
+
+                Cuenta con una colección en desarrollo de 80 mil volúmenes y más de 160 títulos de
+                publicaciones periódicas.
+
+                Para mayor información consultar la siguiente liga:
+                <a href="http://biblio.colsan.edu.mx/index.html"> http://biblio.colsan.edu.mx/index.html</a>
+              </div>
+
+              <div *ngIf="tituloModal == 'Fotocopiadora'" class="panel-body text-justify">
+                En el área de Fotocopiado encontrará los servicios fotocopias y engargolados.
+              </div>
+
+              <div *ngIf="tituloModal == 'TIC´s'" class="panel-body text-justify">
+                La Unidad de Tecnologías de la Información y Comunicación (UTIC), le brindará los
+                siguientes servicios:
+
+                - Impresiones blanco y negro y a color
+
+                - Asesoría en cuestiones de conexión a la red inalámbrica
+
+                - Asesoría para las cuentas de usuario, activación de correo institucional y acceso a redes
+
+                - Centro de servicios de cómputo
+              </div>
+
+              <div *ngIf="tituloModal == 'Seguro Escolar'" class="panel-body text-justify">
+                Información general sobre el Seguro contra Accidentes Escolares para todos los
+                estudiantes.
+
+                Los estudiantes de Licenciatura cuentan con un seguro facultativo por parte del IMSS.
+                Este servicio cubre atención médica, farmacéutica y hospitalaria sin restricción de
+                enfermedades.
+              </div>
+
+              <div *ngIf="tituloModal == 'Becas'" class="panel-body text-justify">
+                En este apartado encontrará una guía para la gestión de Becas CONACYT, desde la
+                postulación, selección-asignación y formalización de la beca. Además de los Lineamientos
+                de Becas y Ayudas Económicas que ofrece El COLSAN
+              </div>
+
+              <div *ngIf="tituloModal == 'Movilidad académica'" class="panel-body text-justify">
+                Los estudiantes de licenciatura y posgrado de El Colegio podr&aacute;n cursar
+                asignaturas optativas contempladas en el plan curricular, en el marco de un
+                convenio interinstitucional y con reconocimiento de acreditaci&oacute;n;
+                realizar estancias de investigaci&oacute;n, participar como ponente en eventos
+                acad&eacute;micos nacionales e internacionales; desarrollar trabajo de campo
+                complemento de su formaci&oacute;n acad&eacute;mica y proyectos de
+                investigaci&oacute;n.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h5 class="form-heading text-muted text-semibold text-sm">DOCUMENTACI&Oacute;N ADICIONAL</h5>
+
+    <div class="col-md-12">
+      <div class="row">
+          <div class="panel" style="width:100%;height: 200px; overflow-y: scroll; margin: auto" *ngIf="datosCompartidos?.listadoInducciones?.length !== 0">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-3 text-center"  *ngFor="let documento of datosCompartidos?.listadoInducciones;let idx = index;">
+                  <div class="thumbnail">
+                    <i class="fa fa-file-text-o fa-5x"></i>
+                    <h5 title="{{documento.nombre}}">{{ documento.nombre }}</h5>
+                    <hr>
+                    <button *ngIf="documento.idArchivo.id" class="btn  btn-warning fa fa-download" (click)="descargarArchivo(documento.idArchivo.id)"></button>
+                    <button *ngIf="documento.idArchivo.id" class="btn  btn-default fa fa-eye" (click)="verArchivo(documento.idArchivo.id)"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel" *ngIf="datosCompartidos?.listadoInducciones?.length === 0">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-12 text-center">
+                  No se encontr&oacute; documentaci&oacute;n adicional
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div> <!-- col-md-12 -->
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" data-dismiss="modal" (click)="closeModalServicioInduccion()"><i class="fa fa-times"></i> Cerrar</button>
+  </modal-footer>
+</modal>

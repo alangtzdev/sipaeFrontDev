@@ -1,0 +1,272 @@
+<div class="panel">
+  <div class="tab-content tab-content-bordered">
+    <div class="tab-pane active" id="datos-documentacion">
+      <div class="row">
+        <div class="col-md-12">
+          <h6 class="form-heading text-muted text-semibold text-sm">ACTIVIDAD ACTUAL</h6>
+        </div>
+
+        <div class="col-md-12 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dd class="col-md-12">
+                <textarea class="form-control" disabled>{{entidadAspirante?.actividadActual}}</textarea>
+              </dd>
+            </dl>
+          </div>
+        </div>
+
+        <div *ngIf="soloLicenciatura">
+          <div class="col-md-12">
+            <h6 class="form-heading text-muted text-semibold text-sm">EXPOSICIÓN DE MOTIVOS</h6>
+            <h6 class="form-heading text-muted text-semibold text-sm">Señale en términos precisos, las razones por las que se interesa
+              usted en estudiar la Licenciatura en Relaciones Internacionales.
+              Añada una descripción de sus planes y metas profesionales una vez
+              terminados sus estudios y mencione en qué áreas y/o instituciones
+              le interesa trabajar en el futuro.</h6>
+          </div>
+        </div>
+
+        <div *ngIf="soloLicenciatura" class="col-md-12 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dd class="col-md-12">
+                <textarea class="form-control" rows="7" disabled>{{entidadAspirante?.exposicionMotivos}}</textarea>
+              </dd>
+            </dl>
+          </div>
+        </div>
+
+        <div class="col-md-12" *ngIf="!soloLicenciatura">
+          <h6  class="form-heading text-muted text-semibold text-sm">EXPERIENCIA PROFESIONAL Y/O DE INVESTIGACI&Oacute;N</h6>
+        </div>
+
+
+        <div *ngIf="!soloLicenciatura" class="col-md-12">
+          <div class="text-right">
+            <button *ngIf="mostrarBotones()" (click)="modalDetalleExperiencia()" type="submit"
+                    class="btn btn-default form-group-margin"><i class="fa fa-eye"></i>&nbsp;&nbsp;Detalle
+            </button>
+          </div>
+
+          <div class="table-default table-responsive">
+            <table cellpadding="0" cellspacing="0" border="0"
+                   class="table table-striped table-bordered dataTable no-footer"
+                   id="jq-datatables-example2" aria-describedby="jq-datatables-example_info">
+              <thead>
+              <tr role="row">
+                <th *ngFor="let columnaExperiencia of columnasExperiencia">
+                  {{columnaExperiencia.titulo}}
+                </th>
+              </tr>
+              </thead>
+              <tbody *ngIf="registrosExperiencias.length === 0">
+              <tr class="gradeA odd">
+                <th class="text-center" colspan="4">
+                  No hay Registros
+                </th>
+              </tr>
+              </tbody>
+              <tbody *ngIf="registrosExperiencias.length !== 0">
+              <tr
+                *ngFor="let registroExperiencia of registrosExperiencias"
+                class="gradeA odd"
+                [ngClass]="{
+                          'seleccionado': rowSeleccionado(registroExperiencia)
+                        }"
+                (click)="rowSeleccion(registroExperiencia)"
+              >
+                <td class="center">{{registroExperiencia?.tipoExperiencia?.valor}}</td>
+                <td class="center">{{registroExperiencia?.institucion}}</td>
+                <td class="center">{{registroExperiencia?.getFechaInicioConFormato()}}</td>
+                <td *ngIf="registroExperiencia.fechaFin" class="center">{{registroExperiencia.getFechaFinConFormato()}}</td>
+                <td *ngIf="!registroExperiencia.fechaFin" class="center">---</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-md-12" *ngIf="!soloLicenciatura">
+          <h6  class="form-heading text-muted text-semibold text-sm">PUBLICACIONES</h6>
+        </div>
+
+        <div *ngIf="!soloLicenciatura" class="col-md-12">
+          <div class="text-right">
+            <button *ngIf="mostrarBotonDetallePublicacion()" (click)="modalDetallePublicacion()"
+                    type="submit" class="btn btn-default form-group-margin"><i class="fa fa-eye"></i> Detalle
+            </button>
+          </div>
+          <div class="table-default table-scroll-modal">
+            <table cellpadding="0" cellspacing="0" border="0"
+                   class="table table-striped table-bordered dataTable no-footer"
+                   id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+              <thead>
+              <tr role="row">
+                <th *ngFor="let columnaPublicacion of columnasPublicaciones">
+                  {{columnaPublicacion.titulo}}
+                </th>
+              </tr>
+              </thead>
+              <tbody *ngIf="registrosPublicaciones.length === 0">
+              <tr class="gradeA odd">
+                <th class="text-center" colspan="2">
+                  No hay Registros
+                </th>
+              </tr>
+              </tbody>
+              <tbody *ngIf="registrosPublicaciones.length !== 0">
+              <tr
+                *ngFor="let registroPublicacion of registrosPublicaciones"
+                class="gradeA odd"
+                [ngClass]="{
+                          'seleccionado': rowSeleccionadoPublicacion(registroPublicacion)
+                        }"
+                (click)="rowSeleccionPublicacion(registroPublicacion)"
+              >
+                <td class="center">{{registroPublicacion.titulo}}</td>
+                <td class="center">{{registroPublicacion?.getFechaPublicacionFormato()}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-->INICIA MODAL DETALLE DE EXPERIENCIA PROFESIONAL</!-->
+<modal [animation]="animation" [keyboard]="keyboard" 
+  [backdrop]="backdrop" #modalDetalleExperienciaProfesional>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalDetalleExperiencia()" aria-hidden="true">×</button>
+    <h4 class="modal-title">Detalle de experiencia </h4>
+  </modal-header>
+  <modal-body>
+    <div class="col-md-12" *ngIf="erroresConsultas.lenght !== 0" >
+            <alert
+                    *ngFor="let alerta of erroresConsultas"
+                    [type]="alerta.tipo"
+                    dismissible="true">
+                {{ alerta?.mensaje }}
+            </alert>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                        <dl class="form-horizontal">
+                            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Experiencia: </dt>
+                            <dd class="col-md-6">{{entidadDetalleExperiencia?.tipoExperiencia?.valor}}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" *ngIf="!mostrarCamposTipoExperiencia()">
+                <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                        <dl class="form-horizontal">
+                            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Título / tema: </dt>
+                            <dd class="col-md-6">{{entidadDetalleExperiencia?.titulo}}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                        <dl class="form-horizontal">
+                            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Institución o empresa: </dt>
+                            <dd class="col-md-6">{{entidadDetalleExperiencia?.institucion}}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                        <dl class="form-horizontal">
+                            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">{{mostrarCampo ? 'Cargo ocupado' : 'Responsabilidad'}}: </dt>
+                            <dd class="col-md-6">{{entidadDetalleExperiencia?.responsabilidad}}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-6 form-group-margin">
+                    <div class="row">
+                        <dl class="form-horizontal">
+                            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Desde: </dt>
+                            <dd class="col-md-6">{{entidadDetalleExperiencia?.getFechaInicioConFormato()}}</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div *ngIf="entidadDetalleExperiencia?.fechaFin" class="col-md-6 form-group-margin">
+                    <div class="row">
+                        <dl class="form-horizontal">
+                            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Hasta: </dt>
+                            <dd class="col-md-6">{{entidadDetalleExperiencia?.getFechaFinConFormato()}}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModalDetalleExperiencia()"><i class="fa fa-close"></i> Cerrar</button>
+  </modal-footer>
+</modal>
+<!-->TERMINA MODAL DETALLE DE EXPERIENCIA PROFESIONAL</!-->
+
+<!-->INICIA MODAL DETALLE DE PUBLICACION</!-->
+<modal [animation]="animation" [keyboard]="keyboard" 
+  [backdrop]="backdrop" #modalDetallePublicacionSolicitud>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalDetallePublicacion()" aria-label="Close">x</button>
+    <h4 class="modal-title" style="">Detalle de publicaci&oacute;n</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+        <div class="col-md-12">
+            <h5 class="form-heading text-muted text-semibold text-sm">PUBLICACI&Oacute;N</h5>
+        </div>
+
+        <div class="col-md-12 form-group-margin">
+            <div class="row">
+                <dl class="form-horizontal">
+                    <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">T&iacute;tulo/ Tema de publicaci&oacute;n:*</dt>
+                    <dd class="col-md-9"> <textarea class="form-control" type="text" disabled>{{entidadDetallePublicacion?.titulo}}</textarea></dd>
+                </dl>
+            </div>
+        </div>
+        
+         <div class="col-md-6 form-group-margin">
+            <div class="row">
+                <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha:</dt>
+                    <dd class="col-md-6">{{entidadDetallePublicacion?.getFechaPublicacionFormato()}}</dd>
+                </dl>
+            </div>
+        </div>
+            <div class="col-md-12">
+                <h5 class="form-heading text-muted text-semibold text-sm ">RESUMEN DE LA PUBLICACI&Oacute;N</h5>
+            </div>
+
+            <div class="col-md-12 form-group-margin">
+                <div class="row">
+                    <dl class="form-horizontal">
+                        <dd class="col-md-12"> <textarea class="form-control" type="text" disabled>{{entidadDetallePublicacion?.resumen}}</textarea></dd>
+                    </dl>
+                </div>
+            </div>
+    </div> 
+  </modal-body>
+  <modal-footer>
+    <div class="text-right">
+      <button class="btn btn-default" type="button" (click)="cerrarModalDetallePublicacion()"><span class="glyphicon glyphicon-remove"></span>Cerrar</button>
+    </div>
+  </modal-footer>
+</modal>
+<!-->TERMINA MODAL DETALLE DE PUBLICACION</!-->

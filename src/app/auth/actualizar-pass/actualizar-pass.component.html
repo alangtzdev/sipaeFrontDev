@@ -1,0 +1,117 @@
+<!-- Page background -->
+<div id="page-signin-bg" style="z-index: -1">
+  <!-- Replace this with your bg image -->
+  <img src="assets/images/login/background_colsan.png" alt="">
+</div>
+<!-- / Page background -->
+
+<!-- Container -->
+
+<div class="col-md-12 center-block text-center logo-colsan-login">
+  <img src="assets/images/login/colsan_logo.png">
+</div>
+
+<div class="signin-container">
+
+  <!-- Left side -->
+  <div class="signin-info">
+    <div class="colsan-logo-login">
+      <img class="img-responsive" src="assets/images/SIPAE_LOGO.png">
+    </div>
+    <div class="slogan text-center">
+      Sistema Integral de Planeación y Administración Escolar
+    </div> <!-- / .slogan -->
+  </div>
+
+  <div class="signin-form">
+
+    <div class="password-reset-form" id="password-reset-form">
+
+      <div class="header">
+        <div class="signin-text">
+          <span >Nueva Contraseña</span>
+          <div class="close" type="button" [routerLink]="['/login']">×</div>
+        </div> <!-- / .signin-text -->
+      </div>
+    </div>
+    <form role="form" data-toggle="validator" (ngSubmit)="actualizarContrasena()"
+           [formGroup]="formularioResetPass">
+
+      <div class="form-group-login w-icon">
+        <label for="password">Nueva contraseña:*</label>
+      </div>
+      <div class="form-group-login w-icon" [ngClass]="{ 'has-error': getControlErrors('password') }">
+        <div data-tooltip="La contraseña, debe contener al menos 6 caracteres un número, letras mayúsculas y minúsculas">
+          <input
+            class="form-control input-lg"
+            type="password"
+            id="password"
+            #password
+            formControlName="password"
+            placeholder="Nueva contraseña"
+            ngControl="password">
+          <span class="fa fa-lock signin-form-icon"></span>
+          <span id="helpBlock7" class="help-block" *ngIf="(getControlErrors('password'))">
+            {{errorMessage(getControl('password'))}}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group-login w-icon">
+        <label for="password">Confirmar nueva contraseña:*</label>
+      </div>
+      <div class="form-group-login w-icon" [ngClass]="{ 'has-error': getControlErrors('auxiliar') }">
+        <div data-tooltip="La contraseña, debe de coincidir con la contraseña anteriormente indicada">
+          <input
+            class="form-control input-lg"
+            type="password"
+            id="confirmarpassword"
+            #confirmarpassword
+            formControlName="confirmarpassword"
+            placeholder="Confirmar nueva contraseña"
+            ngControl="confirmarpassword"
+            (keyup)="validarContrasenias()"
+          >
+          <span class="fa fa-lock signin-form-icon"></span>
+          <span id="helpBlock7" class="help-block" *ngIf="contrasenasDiferentes">
+            Las contraseñas no son iguales
+          </span>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button type="submit"
+                class="btn btn-primary btn-block">
+          Enviar
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-alert modal-danger" #modalError  >
+  <modal-header class="text-left">
+    <i class="fa fa-times"></i>
+  </modal-header>
+  <modal-body>
+    <span><strong>El tiempo expiro</strong></span>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModal()"><i class="fa fa-times"></i>&nbsp;&nbsp;Cerrar</button>
+  </modal-footer>
+</modal>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-alert modal-success" #modalExito  >
+  <modal-header class="text-left">
+    <i class="fa fa-check-circle-o"></i>
+  </modal-header>
+  <modal-body>
+    <span><strong>Se actualizo correctamente la contraseña</strong></span>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModalExito()"><i class="fa fa-times"></i>&nbsp;&nbsp;Cerrar</button>
+  </modal-footer>
+</modal>
+

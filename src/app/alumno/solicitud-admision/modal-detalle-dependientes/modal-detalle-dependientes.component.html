@@ -1,0 +1,60 @@
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalDetDependiente>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModal()" aria-hidden="true">×</button>
+    <h4 class="modal-title">Detalle de dependientes
+      econ&oacute;micos
+    </h4>  </modal-header>
+  <modal-body>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre: </dt>
+                  <dd class="col-md-6">{{entidadDependiente?.nombreCompleto}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha
+                    de nacimiento: </dt>
+                  <dd class="col-md-6">{{entidadDependiente?.getFechaNacimientoConFormato()}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Parentesco: </dt>
+                  <dd class="col-md-6">{{entidadDependiente?.parentesco?.valor == 'Otro' ? entidadDependiente?.otroParentesco : entidadDependiente?.parentesco?.valor}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Sexo:</dt>
+                  <dd class="col-md-6">{{entidadDependiente?.sexo?.valor}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModal()"><span class="fa fa-close"></span> Cerrar</button>
+  </modal-footer>
+</modal>

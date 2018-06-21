@@ -1,0 +1,176 @@
+<form [formGroup]="formulario">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-12">
+          <h6 class="form-heading text-muted text-semibold text-sm">ACTIVIDAD ACTUAL</h6>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12 padding-xs-vr">
+                            <textarea id="actividadActual" class="form-control"
+                                      placeholder="Describa su actividad actual"
+                                      maxlength="3000"
+                                      value="" rows="7"
+                                      ngControl="actividadActual" formControlName="actividadActual"></textarea>
+              <span style="float: right">
+                            (M&aacute;ximo 3000 caracteres)
+                            </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12" *ngIf="!mostrarCampurarExperiencia()">
+          <h6 class="form-heading text-muted text-semibold text-sm">EXPOSICIÓN DE MOTIVOS</h6>
+          <h6 class="form-heading text-muted text-semibold text-sm">Señale en términos precisos, las razones por las que se interesa
+            usted en estudiar la Licenciatura en Relaciones Internacionales.
+            Añada una descripción de sus planes y metas profesionales una vez
+            terminados sus estudios y mencione en qué áreas y/o instituciones
+            le interesa trabajar en el futuro.</h6>
+        </div>
+
+        <div class="col-md-12" *ngIf="!mostrarCampurarExperiencia()">
+          <div class="row">
+            <div class="col-md-12 padding-xs-vr">
+                            <textarea id="exposicionMotivos" class="form-control"
+                                      placeholder="Exposición de motivos"
+                                      maxlength="7500"
+                                      value="" rows="10"
+                                      ngControl="exposicionMotivos" formControlName="exposicionMotivos"></textarea>
+              <span style="float: right">
+                            (M&aacute;ximo 7500 caracteres)
+                            </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12" *ngIf="mostrarCampurarExperiencia()">
+          <div class="row">
+            <div class="col-md-12">
+              <h6 class="form-heading text-muted text-semibold text-sm">EXPERIENCIA PROFESIONAL Y/O DE INVESTIGACI&Oacute;N</h6>
+            </div>
+            <div class="col-md-12">
+              <div class="text-right">
+                <button *ngIf="mostarBotonesExperiencia()" type="button" class="btn btn-danger form-group-margin" (click)="eliminarExperiencia()"><i class="fa fa-times"></i>&nbsp;&nbsp;Eliminar</button>
+                <button *ngIf="mostarBotonesExperiencia()" type="submit" class="btn btn-default form-group-margin" (click)="modalDetalles()"><i class="fa fa-eye"></i>&nbsp;&nbsp;Detalle</button>
+                <button *ngIf="mostarBotonesExperiencia()" type="submit" class="btn btn-warning form-group-margin" (click)="modalAgregarRegistroExperiencia('editar')"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Editar</button>
+                <button type="submit" class="btn btn-success form-group-margin" (click)="modalAgregarRegistroExperiencia('agregar')"><i class="fa fa-plus"></i>&nbsp;&nbsp;Agregar</button>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="table-default table-scroll-modal">
+                <div class="table-responsive">
+                  <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example2" aria-describedby="jq-datatables-example_info">
+                    <thead>
+                    <tr role="row">
+                      <th
+                        *ngFor="let columna of columnas"
+
+                      >
+                        {{columna.titulo}}
+                      </th>
+                    </thead>
+                    <tbody *ngIf = "registros.length === 0">
+                    <tr class="gradeA odd">
+                      <th class="text-center" colspan="4">
+                        No hay Registros
+                      </th>
+                    </tr>
+                    </tbody>
+                    <tbody *ngIf = "registros.length !== 0">
+                    <tr
+                      *ngFor="let registro of registros"
+                      class="gradeA odd"
+                      [ngClass]="{
+                                                            'seleccionado': rowSeleccionado(registro)
+                                                    }"
+                      (click) = "rowSeleccion(registro)"
+                    >
+                      <td class="center">{{registro.tipoExperiencia.valor}}</td>
+                      <td class="center">{{registro.institucion}}</td>
+                      <td class="center">{{registro.getFechaInicioConFormato()}}</td>
+                      <td *ngIf="registro.fechaFin" class="center">{{registro.getFechaFinConFormato()}}</td>
+                      <td *ngIf="!registro.fechaFin" class="center">---</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12" *ngIf="ocultarExperiencia">
+          <div class="row">
+            <div class="col-md-12">
+              <h6 class="form-heading text-muted text-semibold text-sm">PUBLICACIONES</h6>
+            </div>
+
+            <div class="col-md-12">
+              <div class="text-right">
+                <button *ngIf="mostarBotonesPublicacion()" type="button" class="btn btn-danger form-group-margin" (click)="eliminarPublicacion()"><i class="fa fa-times"></i>&nbsp;&nbsp;Eliminar</button>
+                <button *ngIf="mostarBotonesPublicacion()" type="submit" class="btn btn-default form-group-margin" (click)="modalDetallePublicacion()"><i class="fa fa-eye"></i>&nbsp;&nbsp;Detalle</button>
+                <button *ngIf="mostarBotonesPublicacion()" type="submit" class="btn btn-warning form-group-margin" (click)="modalRegistroPublicacion('editar')"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Editar</button>
+                <button type="button" class="btn btn-success form-group-margin" (click)="modalRegistroPublicacion('agregar')"><i class="fa fa-plus"></i>&nbsp;&nbsp;Agregar</button>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="table-default">
+                <div class="table-responsive table-scroll-modal">
+                  <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example2" aria-describedby="jq-datatables-example_info">
+                    <thead>
+                    <tr role="row">
+                      <th
+                        *ngFor="let columnaPublicacion of columnasPublicacion"
+
+                      >
+                        {{columnaPublicacion.titulo}}
+                      </th>
+                    </thead>
+                    <tbody *ngIf = "registrosPublicacion.length === 0">
+                    <tr class="gradeA odd">
+                      <th class="text-center" colspan="4">
+                        No hay Registros
+                      </th>
+                    </tr>
+                    </tbody>
+                    <tbody *ngIf = "registrosPublicacion.length !== 0">
+                    <tr
+                      *ngFor="let registroPublicacion of registrosPublicacion"
+                      class="gradeA odd"
+                      [ngClass]="{
+                                                            'seleccionado': rowSeleccionadoPublicacion(registroPublicacion)
+                                                    }"
+                      (click) = "rowSeleccionPublicacion(registroPublicacion)"
+                    >
+                      <td class="center">{{registroPublicacion?.titulo}}</td>
+                      <td class="center">{{registroPublicacion?.getFechaPublicacionFormato()}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div> <!--row-->
+    </div> <!--general-->
+    <div class="col-md-12 padding-xs-vr">
+      <label class="fat-commentarios">La información que usted proporcione forma
+        parte del sistema de datos personales bajo la responsabilidad de la Dirección de
+        Docencia de El Colegio de San Luis, A.C. y queda protegida por la Ley de Transparencia y
+        Acceso a la Información Pública Gubernamental, con fundamento en lo que establecen los
+        artículos 13, 14 y 20 de la Ley y 26 y 37 de su Reglamento.</label>
+    </div>
+  </div><!--row-->
+</form>
+
+<app-modal-detalle-experiencia #modalDetalleExp> </app-modal-detalle-experiencia>
+<app-modal-registro-experiencia #modalRegistroExp> </app-modal-registro-experiencia>
+
+<app-modal-detalle-publicaciones #modalDetallePub></app-modal-detalle-publicaciones>
+<app-modal-registro-publicaciones #modalRegistroPub></app-modal-registro-publicaciones>

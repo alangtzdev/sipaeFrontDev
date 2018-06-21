@@ -1,0 +1,691 @@
+<div class="panel">
+  <div class="tab-content tab-content-bordered">
+    <div class="tab-pane fade active in" id="tab1">
+
+      <div class="row">
+        <div class="col-md-12">
+
+          <div class="col-md-12">
+            <div class="row">
+              <h6 class="form-heading text-muted text-semibold text-sm">Informaci&Oacute;n del
+                Usuario</h6>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="col-md-offset-4 col-md-4 profile-block">
+                  <div class="panel profile-photo ">
+                    <img alt="imagen" class="img-responsive" src="{{entidadAspirante?.usuario?.foto?.id ? imagenPerfil + entidadAspirante?.usuario?.foto?.id : 'images/usuario.png'}}">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Nombre:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.datosPersonales?.nombre}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Primer
+                      Apellido:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.datosPersonales?.primerApellido}}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Segundo
+                      Apellido:
+                    </dt>
+                    <dd class="col-md-6">
+                      {{entidadAspirante?.datosPersonales?.segundoApellido}}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Sexo:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.datosPersonales?.sexo?.valor}}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Fecha de
+                      Nacimiento:
+                    </dt>
+                    <dd class="col-md-6">
+                      {{entidadAspirante?.datosPersonales?.getFechaNacimientoFormato()}}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Lugar de
+                      Nacimiento:
+                    </dt>
+                    <dd class="col-md-6">
+                      {{entidadAspirante?.datosPersonales?.lugarNacimiento}}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Edad:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.datosPersonales?.edad}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Procedencia:
+                    </dt>
+                    <dd class="col-md-6">
+                      {{entidadAspirante?.datosPersonales?.nacionalidad?.valor}}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Estado
+                      Civil:
+                    </dt>
+                    <dd class="col-md-6">
+                      {{entidadAspirante?.datosPersonales?.estadoCivil?.valor}}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+              <div *ngIf="entidadAspirante?.datosPersonales?.nacionalidad?.id === 5" class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      CURP:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.datosPersonales?.curp}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div *ngIf="entidadAspirante?.datosPersonales?.nacionalidad?.id === 6" class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Núm. ID
+                      (Extranjeros):
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.datosPersonales?.numId}}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      N&uacute;mero de hijos:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.datosPersonales?.numeroHijos}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Celular:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.datosPersonales?.celular}}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Tel. fijo:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.datosPersonales?.oficina}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Correo electr&oacute;nico:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.datosPersonales?.email}}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      ¿Padre o Madre mexicanos?:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.datosPersonales?.nacionalidadPadreMadre?.valor}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div *ngIf="entidadAspirante?.datosPersonales?.discapacidad" class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      ¿Tiene alguna discapacidad?:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.datosPersonales?.discapacidad}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div *ngIf="!entidadAspirante?.datosPersonales?.discapacidad" class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      ¿Tiene alguna discapacidad?:
+                    </dt>
+                    <dd class="col-md-6">No</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      RFC:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.datosPersonales?.rfc}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      País de origen:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.datosPersonales?.paisOrigen?.valor}}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="row">
+              <h6 class="form-heading text-muted text-semibold text-sm">Dirección</h6>
+            </div>
+          </div>
+
+          <div class="col-lg-12">
+            <div class="row">
+              <div class="text-right">
+                <button *ngIf="mostrarBotones()" (click)="abrirModalDetalleDireccion()" type="submit"
+                        class="btn btn-default"><i
+                  class="btn-label icon fa fa-eye"></i> Detalle
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="row">
+              <div role="grid" id="jq-datatables-example_wrapper"
+                   class="dataTables_wrapper form-inline no-footer">
+                <div class="table-responsive">
+                  <table cellpadding="0" cellspacing="0" border="0"
+                         class="table table-striped table-bordered dataTable no-footer"
+                         id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                    <thead>
+                    <tr role="row">
+                      <th
+                        *ngFor="let columna of columnas"
+                        [ngClass]="{
+  							        		'sorting_desc': columna.sort === 'desc',
+  							        		'sorting_asc': columna.sort === 'asc',
+  							        		'sorting': columna.sort !== false
+  							        	}"
+                        (click)="sortChanged(columna)"
+                      >
+                        {{columna.titulo}}
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="registros.length === 0">
+                    <tr class="gradeA odd">
+                      <th class="text-center" colspan="3">
+                        No hay Registros
+                      </th>
+                    </tr>
+                    </tbody>
+                    <tbody *ngIf="registros.length !== 0">
+                    <tr *ngFor="let registro of registros"
+                        class="gradeA odd"
+                        [ngClass]="{'seleccionado': rowSeleccionado(registro)}"
+                        (click)="obtenerDomicilio(registro)">
+                      <td class="center">{{registro?.tipo?.valor}}</td>
+                      <td class="center">{{registro?.calle}}&nbsp;{{registro?.numero}}</td>
+                      <td class="center">{{registro?.pais?.valor}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <accordion [closeOthers]="oneAtATime">
+        <accordion-group #group [isOpen]="status.open">
+          <div accordion-heading>
+            {{obtenerTituloContactoDependiente(entidadAspirante?.promocion?.programaDocente?.nivelEstudios?.id)}}
+            <i class="pull-right fa"
+               [ngClass]="{'fa-minus-square': group?.isOpen, 'fa-plus-square': !group?.isOpen}"></i>
+          </div>
+          <h6 *ngIf="!soloLicenciatura" class="form-heading text-muted text-semibold text-sm">DEPENDIENTES ECONÓMICOS</h6>
+          <div *ngIf="!soloLicenciatura" class="table-default table-responsive">
+            <table cellpadding="0" cellspacing="0" border="0"
+                   class="table table-striped table-bordered dataTable no-footer"
+                   id="jq-datatables-example"
+                   aria-describedby="jq-datatables-example_info">
+              <thead>
+              <tr role="row">
+                <th *ngFor="let columna of columnasDependientes" class="text-center">
+                  {{columna.titulo}}
+                </th>
+              </tr>
+              </thead>
+              <tbody *ngIf="registrosDependientes.length === 0">
+              <tr class="gradeA odd">
+                <th class="text-center" colspan="4">
+                  No hay Registros
+                </th>
+              </tr>
+              </tbody>
+              <tbody *ngIf="registrosDependientes.length !== 0">
+              <tr *ngFor="let registro of registrosDependientes" class="gradeA odd">
+                <td class="text-center">{{registro.nombreCompleto}}</td>
+                <td class="text-center">{{registro.parentesco.valor}}</td>
+                <td class="text-center">{{registro.getFechaNacimientoConFormato()}}</td>
+                <td class="text-center">{{registro.sexo.valor}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h6 class="form-heading text-muted text-semibold text-sm">CONTACTO DE EMERGENCIAS</h6>
+
+          <h6 class="control-label text-center padding-xs-vr">
+            Indique si tiene algún padecimiento o enfermedad crónica que considere importante y que
+            debemos conocer para cualquier emergencia o eventualidad.
+          </h6>
+
+          <div class="col-md-12 padding-xs-vr">
+            <div class="row">
+              <textarea class="form-control" disabled>{{entidadAspirante?.contactoEmergencia?.padecimiento}}</textarea>
+            </div>
+          </div>
+
+          <h6 class="control-label text-center padding-xs-vr">Indicar los datos de una persona a la que se
+            pueda acudir en
+            caso de emergencia
+          </h6>
+
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Nombre completo:
+                    </dt>
+                    <dd class="col-md-6">
+                      {{entidadAspirante?.contactoEmergencia?.nombreCompleto}}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Parentesco:
+                    </dt>
+                    <dd class="col-md-6">
+                      {{entidadAspirante?.contactoEmergencia?.parentesco?.valor}}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-md-12">
+            <div class="row">
+              <div *ngIf="entidadAspirante?.contactoEmergencia?.pais?.id != 82" class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Pa&iacute;s:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.contactoEmergencia?.pais?.valor}}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+              <div *ngIf="entidadAspirante?.contactoEmergencia?.pais?.id == 82" class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Calle y n&uacute;mero:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.contactoEmergencia?.calleNumero}}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+              <div *ngIf="entidadAspirante?.contactoEmergencia?.pais?.id != 82" class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Direcci&oacute;n:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.contactoEmergencia?.calleNumero}}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+              <div *ngIf="entidadAspirante?.contactoEmergencia?.pais?.id === 82" class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Colonia:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.contactoEmergencia?.colonia}}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="row">
+              <div *ngIf="entidadAspirante?.contactoEmergencia?.pais?.id === 82" class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      C.P.:
+                    </dt>
+                    <dd class="col-md-6">
+                      {{entidadAspirante?.contactoEmergencia?.codigoPostal}}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+              <div *ngIf="entidadAspirante?.contactoEmergencia?.pais?.id === 82" class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Pa&iacute;s:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.contactoEmergencia?.pais?.valor}}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="entidadAspirante?.contactoEmergencia?.pais?.id === 82" class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Estado:
+                    </dt>
+                    <dd class="col-md-6">
+                      {{entidadAspirante?.contactoEmergencia?.entidadFederativa?.valor}}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Municipio:
+                    </dt>
+                    <dd class="col-md-6">
+                      {{entidadAspirante?.contactoEmergencia?.municipio?.valor}}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Tel&eacute;fono:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.contactoEmergencia?.telefono}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">
+                      Celular:
+                    </dt>
+                    <dd class="col-md-6">{{entidadAspirante?.contactoEmergencia?.celular}}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Correo
+                  electr&oacute;nico:
+                </dt>
+                <dd class="col-md-6">{{entidadAspirante?.contactoEmergencia?.correoElectronico}}
+                </dd>
+              </dl>
+            </div>
+          </div>
+
+        </accordion-group>
+      </accordion>
+
+    </div>
+  </div>
+</div>
+
+<!-->INICIA MODAL DETALLE DIRECCION</!-->
+
+<modal [animation]="animation" [keyboard]="keyboard" 
+  [backdrop]="backdrop" #modalDetalleDireccion>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalDetalleDireccion()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Detalle direcci&oacute;n</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+      <div class="col-md-12">
+
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6 form-group-margin">
+                                <div class="row">
+                                    <dl class="form-horizontal">
+                                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Tipo de dirección:
+                                        </dt>
+                                        <dd class="col-md-6">{{entidadDireccion?.tipo?.valor}}</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6 form-group-margin">
+                                <div class="row">
+                                    <dl class="form-horizontal">
+                                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">País:</dt>
+                                        <dd class="col-md-6">{{entidadDireccion?.pais?.valor}}</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group-margin" *ngIf="mostrarDireccionPais()">
+                                <div class="row">
+                                    <dl class="form-horizontal">
+                                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estado:
+                                        </dt>
+                                        <dd class="col-md-6">{{entidadDireccion?.entidadFederativa?.valor}}</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12" *ngIf="mostrarDireccionPais()">
+                        <div class="row">
+                            <div class="col-md-6 form-group-margin">
+                                <div class="row">
+                                    <dl class="form-horizontal">
+                                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Municipio:</dt>
+                                        <dd class="col-md-6">{{entidadDireccion?.municipio?.valor}}</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group-margin">
+                                <div class="row">
+                                    <dl class="form-horizontal">
+                                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">C&oacute;digo postal:
+                                        </dt>
+                                        <dd class="col-md-6">{{entidadDireccion?.codigoPostal}}</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6 form-group-margin">
+                                <div class="row">
+                                    <dl class="form-horizontal">
+                                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">{{validarPaisMexico ? 'Calle y N&uacute;mero' : 'Dirección' }}:</dt>
+                                        <dd class="col-md-6">{{entidadDireccion?.calle}}</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group-margin" *ngIf="mostrarDireccionPais()">
+                                <div class="row">
+                                    <dl class="form-horizontal">
+                                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Colonia:
+                                        </dt>
+                                        <dd class="col-md-6">{{entidadDireccion?.colonia}}</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6 form-group-margin">
+                                <div class="row">
+                                    <dl class="form-horizontal">
+                                        <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Tel&eacute;fono de domicilio:</dt>
+                                        <dd class="col-md-6">{{entidadDireccion?.telefono}}</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+     <button class="btn btn-default" type="submit" (click)="cerrarModalDetalleDireccion()"><i class="fa fa-close"></i> Cerrar</button>
+  </modal-footer>
+</modal>
+<!-->FINAL MODAL DETALLE DIRECCION</!-->

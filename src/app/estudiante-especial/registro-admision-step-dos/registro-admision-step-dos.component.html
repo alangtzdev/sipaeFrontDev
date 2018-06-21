@@ -1,0 +1,108 @@
+<div class="row">
+  <form [formGroup]="formulario">
+
+    <!-- div para los Datos Academicos-->
+    <div class="col-md-12">
+      <h6 class="form-heading text-muted text-semibold text-sm">Datos Acad&eacute;micos</h6>
+    </div>
+
+    <div class="col-md-12">
+      <div class="row">
+        <div [ngClass]="{ 'has-error': getControlErrors('programaAcademico') }">
+          <div class=" col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Programa académico
+                que cursa actualmente:</label>
+              <div class="col-md-6">
+                <input class="form-control" type="text" placeholder="Programa Academico" #programaAcademico
+                       formControlName="programaAcademico">
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('programaAcademico'))">
+                                        {{errorMessage(getControl('programaAcademico'))}}
+                                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div [ngClass]="{ 'has-error': getControlErrors('institucion') }">
+          <div class=" col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Instituci&oacute;n:</label>
+              <div class="col-md-6">
+                <input class="form-control" type="text" placeholder="Institución" #institucion
+                       formControlName="institucion" maxlength="50">
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('institucion'))">
+                                    {{errorMessage(getControl('institucion'))}}
+                            </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--div para la Facultad y el Total de Semestres-->
+    <div class="col-md-12">
+      <div class="row">
+        <div [ngClass]="{ 'has-error': getControlErrors('facultad') }">
+          <div class="col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Facultad:</label>
+              <div class="col-md-6">
+                <input class="form-control" type="text" placeholder="Facultad" #facultad formControlName="facultad">
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('facultad'))">
+                                        {{errorMessage(getControl('facultad'))}}
+                                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div [ngClass]="{ 'has-error': getControlErrors('totalSemestre') }">
+          <div class="col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Total de semestres:</label>
+              <div class="col-md-6">
+                <input class="form-control" type="text" #totalSemestre formControlName="totalSemestre">
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('totalSemestre'))"  maxlength="4">
+                                        {{errorMessage(getControl('totalSemestre'))}}
+                                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- div para el Semestre que cursa y Promedio General-->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="text-right">
+          <div>
+            <label class="col-md-3">Semestre que cursa:<br><br></label>
+            <div class="col-md-3">
+              <input class="form-control" type="text" placeholder="Semestre" #semestre formControlName="semestre" maxlength="4">
+            </div>
+          </div>
+        </div>
+        <div class="text-right">
+          <div [ngClass]="{ 'has-error': getControlErrors('promedioGeneral') }">
+            <label class="col-md-3">Promedio general:</label>
+            <div class="col-md-3">
+              <input class="form-control" type="text" #promedioGeneral formControlName="promedioGeneral" maxlength="10">
+              <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('promedioGeneral'))" maxlength="10">
+                                {{errorMessage(getControl('promedioGeneral'))}}
+                        </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12 padding-xs-vr">
+      <label for="comentarios" class="fat-commentarios">La información que contiene este documento forma parte del
+        sistema de datos personales bajo la responsabilidad de la Dirección de Docencia de El Colegio de San
+        Luis, A.C. y queda protegida por la Ley de Transparencia y Acceso a la
+        Información Pública Gubernamental, con fundamento en lo que establecen los artículos 13, 14 y 20 de la
+        Ley y 26 y 37 de su
+        Reglamento.</label>
+    </div>
+  </form>
+</div>

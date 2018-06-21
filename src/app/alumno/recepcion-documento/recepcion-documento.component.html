@@ -1,0 +1,432 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12 text-center text-left-sm">
+      <h1>Entrega de documentaci&oacute;n</h1>
+      <p>
+        <small>Lista de aspirantes aceptados</small>
+      </p>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-sm-12 col-md-8">
+                <div class="row">
+                  <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                    <label for="programaDocente">Programa docente:</label>
+                    <select #programaDocenteSelection class="form-control" id="programaDocente"
+                            (change)="cambioProgramaDocenteFiltro(programaDocenteSelection.value)"
+                            (change)="activarBotonBusqueda(2)">
+                      <option value="" selected>Selecciona...</option>
+                      <option *ngFor="let opciones of opcionesProgramaDocente"
+                              [value]="opciones.id">
+                        {{opciones.text}}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                    <label for="tipoPromocion">Promoci&oacute;n:</label>
+                    <select #promocion class="form-control" id="tipoPromocion" (change)="activarBotonBusqueda(1)">
+                      <option value="" selected>Selecciona...</option>
+                      <option *ngFor="let promocionItem of opcionesPromocion"
+                              [value]="promocionItem.id">
+                        {{promocionItem.text}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+                <!--<div class="row">-->
+                <button class="btn" (click)="buscarCriteriosCabezer(
+                          programaDocenteSelection.value,
+                          promocion.value)" [disabled]="!botonValido"
+                >Buscar <span class="fa fa-search"></span></button>
+                <!--</div>-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!--termino row-->
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-12 ">
+    <!--        <div class="row"> -->
+              <div class="col-md-10 "><!-- cont-botones-->
+                <div class="text-right">
+                  <button *ngIf="mostrarDetalle()" class="btn btn-labeled btn-success form-group-margin"
+                          (click)="descargarFormatoInscripcion()"
+                  >
+                    Formato de inscripción-recepción
+                  </button>
+                  <button *ngIf="ocultarRecepcionDocumentos" class="btn btn-labeled btn-success form-group-margin"
+                          (click)="modalDetalleInscripcion(true)">
+                    Entrega de documentos
+                  </button>
+                  <button *ngIf="mostrarDetalle()" class="btn btn-labeled btn-default form-group-margin"
+                          (click)="modalDetalleInscripcion(false)"><span
+                    class="btn-label icon fa fa-eye"></span>Detalle
+                  </button>
+
+
+
+                            <div class="btn-group form-group-margin" dropdown>
+                  <button id="split-button" type="button" class="btn btn-conacyt dropdown-toggle">
+                    <span class="btn-label icon fa fa-download"></span> Exportar </button>
+                
+                  <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                    <i class="fa fa-caret-down"></i>
+                  </button>
+
+
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+                    <li role="menuitem">
+                      <a
+                        class="dropdown-item"
+                        (click)="exportar('Excel')"
+                      >
+                        Exportar a Excel
+                      </a>
+                    </li>
+                    <li class="divider dropdown-divider"></li>
+                    <li role="menuitem">
+                      <a
+                        class="dropdown-item"
+                        (click)="exportar('PDF')"
+                      >
+                        Exportar a PDF
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+          </div> 
+          </div> <!-- cont-botones-->
+
+
+             <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+                <div class="row">
+                  <div class="col-md-12 pull-right text-right">
+                    <div class="row">
+                    <input
+                      #filtro
+                      type="text"
+                      class="form-control"
+                      id="buscar"
+                      placeholder="Buscar..."
+                      (keyup.enter)="filtroChanged(filtro.value)"
+                      (blur)="limpiarFiltroBusqueda(); filtro.value=''"
+                    >
+                    </div>
+                  </div>
+                </div>
+              </div> <!-- cont-buscar-->  
+
+
+            </div>
+          </div>
+
+          <div class="col-md-12"> <!-- cont-tabla-->
+            <!--DATA-TABLE-->
+            <div role="grid" id="jq-datatables-example_wrapper"
+                 class="dataTables_wrapper form-inline no-footer table-responsive">
+              <div class="table-header clearfix">
+                <div class="table-caption">Lista de aspirantes aceptados</div>
+                <div class="DT-lf-right">
+                  <div class="DT-per-page">
+                    <div class="dataTables_length" id="jq-datatables-example_length">
+                      <label>
+                        Registros por página
+                        <select
+                          #limiteControl
+                          name="jq-datatables-example_length"
+                          aria-controls="jq-datatables-example"
+                          class="form-control input-sm"
+                          (change)="setLimite(limiteControl.value)"
+                        >
+                          <option value="10">10</option>
+                          <option value="25">25</option>
+                          <option value="50">50</option>
+                          <option value="100">100</option>
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table cellpadding="0" cellspacing="0" border="0"
+                       class="table table-striped table-bordered dataTable no-footer"
+                       id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                  <thead>
+                  <tr role="row">
+                    <th
+                      *ngFor="let columna of columnas"
+                      [ngClass]="{
+                                                    'sorting_desc': columna.sort === 'desc',
+                                                    'sorting_asc': columna.sort === 'asc',
+                                                    'sorting': columna.sort !== false
+                                                }"
+                      (click)="sortChanged(columna)"
+                    >
+                      {{columna.titulo}}
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody *ngIf="registros.length === 0">
+                  <tr class="gradeA odd">
+                    <th class="text-center" colspan="5">
+                      Cambie sus criterios de búsqueda
+                    </th>
+                  </tr>
+                  </tbody>
+                  <tbody *ngIf="registros.length !== 0">
+                  <tr
+                    *ngFor="let registro of registros"
+                    class="gradeA odd"
+                    [ngClass]="{
+                                'seleccionado': rowSeleccionado(registro)
+                              }"
+                    (click)="getAspirante(registro)"
+                  >
+                    <td class="center">{{registro?.estudiante?.foliosSolicitud?.folioCompleto}}</td>
+                    <td class="center">{{registro?.estudiante?.datosPersonales.getNombreCompleto()}}</td>
+                    <td class="center">{{registro?.estatus?.valor}}</td>
+                    <td class="center">{{mostrarEstatus(registro?.estudiante?.estatus?.id)}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-footer clearfix">
+                <div class="DT-pagination" *ngIf="isSetPaginacion()">
+                  <div class="dataTables_paginate paging_simple_numbers">
+                    <pagination
+                            class="pagination"
+                            [totalItems] = "paginacion.registrosTotales"
+                            [itemsPerPage] = "limite"
+                            [maxSize] = "maxSizePags"
+                            [rotate]="false"
+                            [(ngModel)] = "paginaActual"
+                            (pageChanged) = "cambiarPagina($event)"
+                            previousText = "Anterior"
+                            nextText = "Siguiente"
+                    >
+                    </pagination>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>  <!-- cont-tabla-->
+        </div> <!--panel-body-->
+      </div> 
+    </div>
+</div> <!--termino row-->
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalDetalle  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModal()">×</button>
+    <h4 class="modal-title">{{entrega ? 'Inscripción-recepción de documentos' : 'Actualizar documentos de inscripción '}}</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+      <div class="col-md-12">
+        <h5 class="form-heading text-muted text-semibold text-sm">Aspirante aceptado</h5>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre:</dt>
+
+                    <dd class="col-md-6">{{entidadPagoEstudiante?.estudiante?.datosPersonales?.getNombreCompleto()}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente:</dt>
+
+                    <dd class="col-md-6">{{entidadPagoEstudiante?.estudiante?.getProgramaDocente()}}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Correo:</dt>
+
+                    <dd class="col-md-6">{{entidadPagoEstudiante?.estudiante?.datosPersonales?.email}}</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="col-md-6 form-group-margin">
+                <div class="row">
+                  <dl class="form-horizontal">
+                    <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Folio COLSAN:</dt>
+                    <dd class="col-md-6">{{entidadPagoEstudiante?.estudiante?.foliosSolicitud?.folioCompleto}}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <h5 class="form-heading text-muted text-semibold text-sm">Agregar documentos</h5>
+        <div class="row">
+          <form class="form-horizontal" (ngSubmit)="enviarFormulario()" [formGroup]="formulario">
+            <div class="col-md-4 col-sm-6 col-xs-12 padding-sm-vr no-padding-b">
+              <div class="row">
+                <label class="col-md-12 text-left" for="tipoDocumento">Documentos:</label>
+                <div class="col-md-12">
+                  <select #idTipoDocumento ngControl="idTipoDocumento" class="form-control" id="tipoDocumento"
+                          (change)="verificarDocumentoAgregado(idTipoDocumento.value)"
+                          formControlName="idTipoDocumento"
+                  ><!-- [disabled]="edicionFormulario"-->
+                    <option value="" disabled selected> Selecciona...</option>
+                    <option *ngFor="let tipoDocumentoConvocatoria of opcionesTiposDocumentos"
+                            value="{{tipoDocumentoConvocatoria?.tipoDocumento?.id}}"
+                    >
+                      {{tipoDocumentoConvocatoria?.tipoDocumento?.valor}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 col-xs-12 padding-sm-vr no-padding-b">
+              <div class="row">
+                <label class="col-md-12 text-left" for="tipoDocumento">Clasificar:</label>
+                <div class="col-md-12 text-left">
+                  <input [checked]="registroSeleccionado?.entregado" id="entregado" name="radios" type="radio" (change)="cambioRadio(true)"> Entregado
+                </div>
+                <div class="col-md-12 text-left">
+                  <input [checked]="!registroSeleccionado?.entregado" id="entregadoNO" name="radios" type="radio" (change)="cambioRadio(false)"> No Entregado
+                </div>
+                <!-- <control-mensaje class="col-lg-12" control="dictamen"></control-mensaje> -->
+
+              </div>
+            </div>
+
+            <div class="col-md-5 col-sm-12 col-xs-12 padding-sm-vr no-padding-b">
+              <div class="row">
+                <label class="col-sm-12 text-left" for="tipoDocumento">Comentarios:</label>
+                <div class="col-sm-12 text-left">
+                            <textarea
+                                    class="form-control"
+                                    type="text"
+                                    rows="2"
+                                    id="comentarios"
+                                    maxlength="500"
+                                    ngControl="comentarios"
+                                    #comentarios formControlName="comentarios"
+                            >
+                            </textarea>
+                  (M&aacute;ximo 500 caracteres)
+                </div>
+              </div>
+            </div>
+            </form>
+            <div class="col-md-12 col-sm-12 col-xs-12 text-right">
+              <button type="button" class="btn btn-success" *ngIf="estadoBotonAgregar" (click)="enviarFormulario()">
+                <i class="fa fa-plus"></i>{{edicionFormulario? '&nbsp;&nbsp;Actualizar' : '&nbsp;&nbsp;Agregar'}}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <h5 class="form-heading text-muted text-semibold text-sm">Lista de documentos</h5>
+          <div role="grid" id="jq-datatables-example_wrapper" class="dataTables_wrapper form-inline no-footer table-responsive">
+            <div class="table-responsive table-scroll-modal" style="height:100px; overflow: scroll;">
+              <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                <thead>
+                <tr role="row">
+                  <th
+                          *ngFor="let columna of columnasDetalle"
+                          [ngClass]="{
+                                                  'sorting_desc': columna.sort === 'desc',
+                                                  'sorting_asc': columna.sort === 'asc',
+                                                  'sorting': columna.sort !== false
+                                              }"
+                  >
+                    {{columna.titulo}}
+                  </th>
+                </tr>
+                </thead>
+                <tbody *ngIf = "registrosDetalle.length === 0">
+                <tr class="gradeA odd">
+                  <th class="text-center" colspan="5">
+                    No hay Registros
+                  </th>
+                </tr>
+                </tbody>
+                <tbody *ngIf = "registrosDetalle.length !== 0">
+                <tr
+                        *ngFor="let registro of registrosDetalle let i = index"
+                        class="gradeA odd"
+                        [ngClass]="{
+                                      'seleccionado': rowSeleccionadoDetalle(registro)
+                              }"
+                        (click) = "rowSeleccionDetalle(registro)"
+                >
+                  <td class="center">{{registro.tipoDocumento.valor}}</td>
+                  <td class="center"><input disabled [checked]="registro.entregado" id={{i}}  name="radios{{i}}" type="checkbox"/></td>
+                  <td class="center">{{registro.comentarios}}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+        <div *ngIf="entrega" class="col-md-12 padding-xs-vr text-right">
+          <!-- <form [formGroup]="formularioInscripcion"> -->
+          <label class="checkbox-inline">
+            <span class="lbl">¿Desea inscribir a este aspirante?</span>
+          </label>
+          <input [checked]="entidadPagoEstudiante?.estudiante?.estatus?.id === 1006" [disabled]="entidadPagoEstudiante?.estudiante?.estatus?.id === 1006" id="inscrito" name="radioss" type="radio" (change)="cambioRadioInscrito(true)"> S&iacute;
+          <input [checked]="entidadPagoEstudiante?.estudiante?.estatus?.id === 1002" [disabled]="entidadPagoEstudiante?.estudiante?.estatus?.id === 1006" id="inscritoNO" name="radioss" type="radio" (change)="cambioRadioInscrito(false)"> No
+        <!-- </form> -->
+      </div>
+
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button  class="btn btn-default" data-dismiss="modal" type="button" (click)="cerrarModal()" ><span class="glyphicon glyphicon-remove"></span> Cerrar</button>
+    <button class="btn btn-success" type="button" (click)="enviarFormularioInscripcion()">
+      <i class="fa fa-floppy-o"></i> &nbsp;&nbsp;{{entrega ? 'Guardar' : 'Actualizar'}}
+    </button>
+  </modal-footer>
+</modal>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-alert modal-danger" #modalAcepRecha >
+  <div class="modal-header text-left">
+    <i class="fa fa-times"></i>
+  </div>
+  <div class="modal-body">
+    <div class="col-md-12 text-center">
+      <div class="text-center">
+        <span>Ese documento ya se encuentra agregado a la tabla.</span>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" (click)="cerrarModal1()"><i class="fa fa-times"></i> Cerrar</button>
+  </div>
+</modal>

@@ -1,0 +1,559 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12 text-center text-left-sm">
+      <h1>Administraci&oacute;n de cat&aacute;logos</h1>
+      <p>
+        <small>{{edicionFormulario ? 'Editar registro de promoci&oacute;n' :  'Crear nuevo registro de promoci&oacute;n'}}</small>
+      </p>
+    </div>
+  </div>
+</div>
+<div class="panel">
+  <div class="panel-body">
+    <div class="col-md-12" *ngIf="erroresConsultas.lenght !== 0">
+      <alert
+        *ngFor="let alerta of erroresConsultas"
+        [type]="alerta.tipo"
+        dismissible="true">
+        {{ alerta?.mensaje }}
+      </alert>
+    </div>
+
+    <div class="col-md-12" *ngIf="fechaInvalida">
+      <alert
+        *ngFor="let alerta of mensajeErrors"
+        [type]="alerta.tipo"
+        dismissible="true">
+        {{ alerta?.mensaje }}
+      </alert>
+    </div>
+
+    <div class="col-md-12" *ngIf="!erroresConsultas.lenght || erroresConsultas.lenght === 0">
+      <alert
+        *ngFor="let alerta of erroresGuardado"
+        [type]="alerta.tipo"
+        dismissible="true">
+        {{ alerta?.mensaje }}
+      </alert>
+      <div class="row">
+
+        <div class="text-right-lg text-left-md text-left-sm text-left-xs">
+          <div class="row">
+            <form class="form-horizontal" [formGroup]="formularioPromociones">
+              <div class="col-md-12">
+                <div class="row">
+
+                  <div [ngClass]="{'has-error': getControlErrors('idProgramaDocente') }">
+                    <div class="col-md-6 padding-xs-vr">
+                      <div class="row">
+                        <label for="idProgramaDocente" class="col-md-6 control-label text-left">Programa
+                          docente: *</label>
+                        <div class="col-md-6">
+                          <select class="form-control" #programaDocenteSelection
+                                  formControlName='idProgramaDocente'
+                                  (change)="obtenerProgramaDocente(programaDocenteSelection.value)"
+                                  [disabled]="edicionFormulario">
+                            <option value="" selected>Selecciona...</option>
+                            <option
+                              *ngFor="let catalogoItem of opcionesProgramasDocente"
+                              value="{{catalogoItem.id}}"
+                            >
+                              {{catalogoItem.text}}
+                            </option>
+                          </select>
+                          <span id="idProgramaDocente" class="help-block"
+                                *ngIf="(getControlErrors('idProgramaDocente'))">
+                                                            {{errorMessage(getControl('idProgramaDocente'))}}
+                                                    </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div [ngClass]="{'has-error': getControlErrors('idEstatus') }">
+                    <div class="col-md-6 padding-xs-vr">
+                      <div class="row">
+                        <label for="idEstatus" class="col-md-6 control-label text-left">Estatus:
+                          *</label>
+                        <div class="col-md-6">
+                          <select class="form-control" id="idEstatus" formControlName='idEstatus'>
+                            <option value="" selected>Selecciona...</option>
+                            <option
+                              *ngFor="let catalogoItem of opcionesEstatus"
+                              value="{{catalogoItem.id}}"
+                            >
+                              {{catalogoItem.text}}
+                            </option>
+                          </select>
+                          <span id="idEstatus" class="help-block"
+                                *ngIf="(getControlErrors('idEstatus'))">
+                                                          {{errorMessage(getControl('idEstatus'))}}
+                                                    </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <div>
+                    <div class=" col-md-6 padding-xs-vr">
+                      <div class="row">
+                        <label for="abreviatura" class="col-md-6 control-label text-left">Abreviatura: </label>
+                        <div class="col-md-6">
+                          <input
+                            class="form-control"
+                            type="text" maxlength="50"
+                            id="abreviatura"
+                            placeholder=""
+                            disabled
+                            formControlName="abreviatura"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="col-md-6 padding-xs-vr">
+                      <div class="row">
+                        <label for="consecutivo" class="col-md-6 control-label text-left">Consecutivo: </label>
+                        <div class="col-md-6">
+                          <input
+                            class="form-control"
+                            type="text" maxlength="50"
+                            id="consecutivo"
+                            placeholder=""
+                            disabled
+                            formControlName="consecutivo"
+                            value="{{consecutivo?consecutivo:''}}"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 padding-xs-vr">
+                    <div class="row">
+                        <label class="col-md-6 control-label text-left" for="fecha">Inicio
+                        del plan de estudios: </label>
+                        <div class="col-md-6">
+                            <div class="dropdown" dropdown autoClose="outsideClick">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="planEstuidosInicio" name="planEstuidosInicio" readonly="readonly"
+                                            *ngIf="dt" value="{{ getDate()}}" ngControl="planEstuidosInicio"
+                                                   
+                                    >
+                                    <span class="input-group-btn">
+                                        <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                     </span>
+                                </div>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" dropdownMenu >
+                                    <li>
+                                        <div style="display:inline-block;">
+                                            <datepicker [(ngModel)]="dt" [minDate]="minDate" [showWeeks]="true"
+                                            [ngModelOptions]="{standalone: true}" [dateDisabled]="dateDisabled"></datepicker>
+                                         </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="col-md-6 padding-xs-vr">
+                    <div class="row">
+                        <label class="col-md-6 control-label text-left" for="fecha">T&eacute;rmino
+                        del plan de estudios:</label>
+                        <div class="col-md-6">
+                            <div class="dropdown" dropdown autoClose="outsideClick">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="planEstudiosFin" name="planEstudiosFin" readonly="readonly"
+                                            *ngIf="dt" value="{{ getDate2()}}" ngControl="planEstudiosFin"
+                                                   
+                                    >
+                                    <span class="input-group-btn">
+                                        <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                     </span>
+                                </div>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" dropdownMenu >
+                                    <li>
+                                        <div style="display:inline-block;">
+                                            <datepicker [(ngModel)]="dt2" [minDate]="minDate" [showWeeks]="true"
+                                            [ngModelOptions]="{standalone: true}" [dateDisabled]="dateDisabled"></datepicker>
+                                         </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 padding-xs-vr">
+                    <div class="row">
+                        <label class="col-md-6 control-label text-left" for="fecha">Cohorte: </label>
+                        <div class="col-md-6">
+                            <div class="dropdown" dropdown autoClose="outsideClick">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="cohorte" name="cohorte" readonly="readonly"
+                                            *ngIf="dt" value="{{ getDate3()}}" ngControl="cohorte"
+                                                   
+                                    >
+                                    <span class="input-group-btn">
+                                        <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                     </span>
+                                </div>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" dropdownMenu >
+                                    <li>
+                                        <div style="display:inline-block;">
+                                            <datepicker [(ngModel)]="dt3" [minDate]="minDate" [showWeeks]="true"
+                                            [ngModelOptions]="{standalone: true}" [dateDisabled]="dateDisabled"></datepicker>
+                                         </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                      </div>
+                  </div>
+                  
+                  <div [ngClass]="{ 'has-error': getControlErrors('idPlanEstudios')}">
+                    <div class="col-md-6 padding-xs-vr">
+                      <div class="row">
+                        <label for="idPlanEstudios" class="col-md-6 control-label text-left">Plan
+                          de estudios: *</label>
+                        <div class="col-md-6">
+                          <select class="form-control" id="idPlanEstudios"
+                                  formControlName='idPlanEstudios'>
+                            <option value="" selected>Selecciona...</option>
+                            <option
+                              *ngFor="let catalogoItem of opcionesPlanEstudios"
+                              value="{{catalogoItem.id}}"
+                            >
+                              {{catalogoItem.text}}
+                            </option>
+                          </select>
+                          <span id="idPlanEstudios" class="help-block"
+                                *ngIf="(getControlErrors('idPlanEstudios'))">
+                                                            {{errorMessage(getControl('idPlanEstudios'))}}
+                                                    </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <div>
+                    <div class="col-md-6 padding-xs-vr">
+                      <div class="row">
+                        <label for="idPeriodoEscolarInicio"
+                               class="col-md-6 control-label text-left">Per&iacute;odo escolar
+                          inicio: </label>
+                        <div class="col-md-6">
+                          <select class="form-control" id="idPeriodoEscolarInicio"
+                                  formControlName="idPeriodoEscolarInicio"
+                                  name="idPeriodoEscolarInicio">
+                            <option value="" selected>Selecciona...</option>
+                            <option
+                              *ngFor="let catalogoItem of opcionesPeriodosEscolar"
+                              value="{{catalogoItem.id}}"
+                            >
+                              {{catalogoItem.text}}
+                            </option>
+                          </select>
+                          <!-- <span id="idPeriodoEscolarInicio" class="help-block" *ngIf="(getControlErrors('idPeriodoEscolarInicio'))">
+                                   {{errorMessage(getControl('idPeriodoEscolarInicio'))}}
+                           </span>-->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="col-md-6 padding-xs-vr">
+                      <div class="row">
+                        <label for="idPeriodoEscolarFin"
+                               class="col-md-6 control-label text-left">Per&iacute;odo escolar
+                          fin: </label>
+                        <div class="col-md-6">
+                          <select class="form-control" id="idPeriodoEscolarFin"
+                                  name="idPeriodoEscolarFin"
+                                  formControlName="idPeriodoEscolarFin">
+                            <option value="" selected>Selecciona...</option>
+                            <option
+                              *ngFor="let catalogoItem of opcionesPeriodosEscolar"
+                              value="{{catalogoItem.id}}"
+                            >
+                              {{catalogoItem.text}}
+                            </option>
+                          </select>
+                          <!--<span id="idPeriodoEscolarFin" class="help-block" *ngIf="(getControlErrors('idPeriodoEscolarFin'))">
+                                   {{errorMessage(getControl('idPeriodoEscolarFin'))}}
+                           </span>-->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+            <div class="col-md-12" *ngIf="edicionFormulario">
+              <br>
+              <div class="col-md-6 padding-xs-vr">
+                <div class="row">
+                  <div class="col-md-12">
+                    <h5 class="form-heading text-muted text-semibold text-sm text-left">
+                      AGREGAR Y/O ELIMINAR PER&Iacute;ODOS ESCOLARES
+                    </h5>
+                  </div>
+                  <form class="form-horizontal" [formGroup]="formularioPeriodo">
+                    <div [ngClass]="{'has-error': getControlErrorsPeriodo('idPeriodoEscolar') }">
+                      <div class="col-md-12  padding-xs-vr">
+                        <div class="row">
+                          <label for="idPeriodoEscolar"
+                                 class="col-md-6 control-label text-lef">Per&iacute;odo escolar: </label>
+                          <div class="col-md-6">
+                            <select class="form-control" id="idPeriodoEscolar"
+                                    formControlName='idPeriodoEscolar'
+                                    (change)="cambioPeriodoEscolarSelect(idPeriodoEscolar.value)"
+                                    #idPeriodoEscolar
+                            >
+                              <option value="" selected>Selecciona...</option>
+                              <option
+                                *ngFor="let catalogoItem of opcionesPeriodosEscolar"
+                                value="{{catalogoItem.id}}"
+                              >
+                                {{catalogoItem.text}}
+                              </option>
+                            </select>
+                            <span id="idPeriodoEscolar" class="help-block"
+                                  *ngIf="(getControlErrorsPeriodo('idPeriodoEscolar'))">
+                                                            {{errorMessage(getControlPeriodo('idPeriodoEscolar'))}}
+                                                    </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div [ngClass]="{'has-error': getControlErrorsPeriodo('numSemestre') }">
+                      <div class="col-md-12  padding-xs-vr" *ngIf="mostrarCamposPeriodo()">
+                        <div class="row">
+                          <label for="numSemestre" class="col-md-6 control-label text-left">
+                            No. semestre:*
+                          </label>
+                          <div class="col-md-6">
+                            <input id="numSemestre" type="number" class="form-control"
+                                   placeholder="No. semestre"
+                                   value=""
+                                   formControlName="numSemestre"
+                                   min="1" max="10">
+                            <span id="numSemestre" class="help-block"
+                                  *ngIf="(getControlErrorsPeriodo('numSemestre'))">
+                                                            {{errorMessage(getControlPeriodo('numSemestre'))}}
+                                                    </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12 padding-xs-vr" *ngIf="mostrarCamposPeriodo()">
+                      <div class="row">
+                        <div class="col-md-6 padding-xs-vr">
+                          <div class="row">
+                            <label for="inicio" class="col-md-10 control-label text-left">Per&iacute;odo
+                              inicio: </label>
+                            <div class="col-md-2">
+                              <div class="checkbox">
+                                <label>
+                                  <input id="inicio" formControlName="inicio"
+                                         type="checkbox" name="inicio">
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 padding-xs-vr">
+                          <div class="row">
+                            <label for="fin" class="col-md-10 control-label text-left">Per&iacute;odo
+                              fin: </label>
+                            <div class="col-md-2">
+                              <div class="checkbox">
+                                <label>
+                                  <input id="fin" formControlName="fin"
+                                         type="checkbox" name="fin">
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+
+                  <div class="col-md-12">
+                    <div class="row text-right">
+                      <button type="button" *ngIf="mostrarCamposPeriodo()"
+                              class="btn btn-success form-group-margin"
+                              (click)="agregarPeriodoEscolar()">
+                        <i class="fa fa-plus"></i> Agregar
+                      </button>
+                      <button type="button" *ngIf="mostrarBtnEliminar()"
+                              class="btn btn-danger form-group-margin"
+                              (click)="eliminarPeriodoEscolar()"><i
+                        class="fa fa-times"></i>&nbsp;&nbsp;Eliminar
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-12 padding-xs-vr">
+                    <div class="table-default  table-scroll-modal">
+                      <table cellpadding="0" cellspacing="0" border="0"
+                             class="table table-striped table-bordered dataTable no-footer table-responsive"
+                             id="jq-datatables-example2"
+                             aria-describedby="jq-datatables-example_info">
+                        <thead>
+                        <tr role="row">
+                          <th *ngFor="let columna of columnasT2" class="text-center">
+                            {{columna.titulo}}
+                          </th>
+                        </tr>
+                        </thead>
+                        <tbody *ngIf="registrosPromPeriodoEscolar.length === 0">
+                        <tr class="gradeA odd">
+                          <th class="text-center" colspan="4">
+                            No hay registros
+                          </th>
+                        </tr>
+                        </tbody>
+                        <tbody *ngIf="registrosPromPeriodoEscolar.length !== 0">
+                        <tr
+                          *ngFor="let registro of registrosPromPeriodoEscolar"
+                          class="gradeA odd"
+                          [ngClass]="{
+                                                                              'seleccionado': rowSeleccionado(registro)
+                                                                            }"
+                          (click)="rowSeleccion(registro)"
+                        >
+                          <td class="text-center">
+                            {{registro?.numSemestre}}
+                          </td>
+                          <td class="text-center">
+                            {{registro?.idPeriodoEscolar?.getPeriodoAnioConsecutivo()}}
+                          </td>
+                          <td class="text-center">
+                            <div class="checkbox">
+                              <label>
+                                <input *ngIf="registro?.fin || registro?.inicio"
+                                       checked readonly disabled
+                                       type="checkbox">
+                                <input *ngIf="!registro?.fin || registro?.inicio"
+                                       readonly disabled type="checkbox">
+                              </label>
+                            </div>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 padding-xs-vr" *ngIf="mostrarLgac">
+                <div class="row">
+                  <div class="col-md-12">
+                    <h5 class="form-heading text-muted text-semibold text-sm text-left">
+                      AGREGAR Y/O ELIMINAR LGAC's
+                    </h5>
+                  </div>
+                  <form class="form-horizontal" [formGroup]="formularioLGAC">
+                    <div class="col-md-12 padding-xs-vr">
+                      <div class="row">
+                        <label for="idLgac"
+                               class="col-md-6 control-label text-left">LGAC: </label>
+                        <div class="col-md-6">
+                          <select class="form-control" id="idLgac" #idSelectLGAC
+                                  formControlName="idLgac"
+                                  (change)="cambioLGACSelec(idSelectLGAC.value)">
+                            <option value="" disabled selected>Selecciona...</option>
+                            <option
+                              *ngFor="let catalogoItem of opcionesLgacs"
+                              value="{{catalogoItem.id}}"
+                            >
+                              {{catalogoItem.text}}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <div class="col-md-12">
+                    <div class="row text-right">
+                      <button type="button" *ngIf="mostrarBotonAgregar()"
+                              class="btn btn-success form-group-margin"
+                              (click)="agregarLgacs(idSelectLGAC)">
+                        <i class="fa fa-plus"></i> Agregar
+                      </button>
+
+                      <button type="button" *ngIf="registroSeleccionadoPromLgac"
+                              class="btn btn-danger form-group-margin"
+                              (click)="eliminarLgac()"><i
+                        class="fa fa-times"></i> Eliminar
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-12 padding-xs-vr">
+                    <div class="table-default  table-scroll-modal">
+                      <table cellpadding="0" cellspacing="0" border="0"
+                             class="table table-striped table-bordered dataTable no-footer table-responsive"
+                             id="jq-datatables-example2"
+                             aria-describedby="jq-datatables-example_info">
+                        <thead>
+                        <tr role="row">
+                          <th *ngFor="let columna of columnas" class="text-center">
+                            {{columna.titulo}}
+                          </th>
+                        </tr>
+                        </thead>
+                        <tbody *ngIf="registroPromocionLgac.length === 0">
+                        <tr class="gradeA odd">
+                          <th class="text-center" colspan="4">
+                            No hay registros
+                          </th>
+                        </tr>
+                        </tbody>
+                        <tbody *ngIf="registroPromocionLgac.length !== 0">
+                        <tr
+                          *ngFor="let registro of registroPromocionLgac"
+                          class="gradeA odd"
+                          [ngClass]="{
+                                                                  'seleccionado': rowSeleccionadoLgacs(registro)
+                                                                }"
+                          (click)="rowSeleccionLgacs(registro)"
+                        >
+                          <td class="text-center">{{registro.lgac.denominacion}}</td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 text-right"><br><br>
+            <a class="btn btn-default" (click)="regresarLista()">
+              <i class="fa fa-times"></i>&nbsp;&nbsp;Cancelar
+            </a>
+            <button class="btn btn-success" type="submit" (click)="enviarFormulario($event)">
+              <i class="fa fa-floppy-o"></i> {{edicionFormulario ? '&nbsp;&nbsp;Actualizar' : '&nbsp;&nbsp;Guardar'}}
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

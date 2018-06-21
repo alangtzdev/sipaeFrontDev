@@ -1,0 +1,954 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12 text-center text-left-sm">
+      <h1>Historial de movilidad</h1>
+      <p>
+        <small>Historial de movilidad.</small>
+      </p>
+    </div>
+  </div>
+</div>
+<div class="panel">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="row">
+
+          <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+            <label >Modalidad:</label>
+            <select #movilidadSelection class="form-control">
+              <option value="" selected> Selecciona...</option>
+              <option *ngFor="let movilidadItem of opcionesSelectModalidad" [value]="movilidadItem.id">
+                {{movilidadItem.text}}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+            <label >Promoción:</label>
+            <select #promociones class="form-control">
+              <option value="" selected> Selecciona...</option>
+              <option *ngFor="let promocionesItem of opcionesPromociones" [value]="promocionesItem.id">
+                {{promocionesItem.text}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+        <button class="btn" (click)="buscarCriteriosCabezera(movilidadSelection.value, promociones.value)">
+          Buscar <span class="fa fa-search"></span>
+        </button>
+      </div>
+
+    </div>
+    <div class="col-md-12 text-left padding-sm-vr no-padding-b">
+      <div class="row">
+        <label>
+          *Buscar por modalidad ó promoción.
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-10">
+          <div class="text-right">
+
+            <button *ngIf="mostrarBotonesActivas()" class="btn btn-labeled btn-danger form-group-margin" (click)="modalCulminacion()"><span
+              class="btn-label icon fa fa-flag-checkered"></span> Finalizaci&oacute;n</button>
+
+            <div *ngIf="mostrarBotonesActivas()" class="btn-group form-group-margin" dropdown>
+              <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">Agregar
+                <span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li role="menuitem"><a class="dropdown-item" *ngIf="mostrarInformacionComplementaria()" (click)="informacionComplementaria()">Información complementaria</a></li>
+                <li class="divider dropdown-divider" *ngIf="mostrarInformacionComplementaria()"></li>
+                <li role="menuitem" ><a class="dropdown-item" (click)="modalDocumentoMovilidad()">Documento</a></li>
+              </ul>
+            </div>
+            <button *ngIf="mostrarBotonesFinalizada()" class="btn btn-labeled btn-success form-group-margin" (click)="descargarActaCalificaciones()"><span
+              class="btn-label icon fa fa-plus"></span>Acta de calificaciones</button>
+
+            <button  *ngIf="mostrarBotonesActivas()" class="btn btn-labeled btn-danger form-group-margin" (click)="rechazarMovilidad()">
+              <span class="btn-label icon fa fa-times"></span>Rechazar</button>
+
+            <button *ngIf="mostarBotonEdicionSolicitudCargaCurricular()"
+                    class="btn btn-labeled btn-warning form-group-margin"
+                    (click)="modalEdicionSolicitudMovilidad()">
+              <span class="btn-label icon fa fa-pencil-square-o"></span>Editar
+            </button>
+
+            <button *ngIf="mostarBotonEdicionSolicitudEstanciaInvestiacion()"
+                    class="btn btn-labeled btn-warning form-group-margin"
+                    (click)="modalEdicionSolicitudEstanciaInvestigcion()">
+              <span class="btn-label icon fa fa-pencil-square-o"></span>Editar
+            </button>
+
+            <button *ngIf="mostarBotonEdicionSolicitudTrabajoCampo()"
+                    class="btn btn-labeled btn-warning form-group-margin"
+                    (click)="modalEdicionSolicitudTrabajoCampo()">
+              <span class="btn-label icon fa fa-pencil-square-o"></span>Editar
+            </button>
+
+            <button *ngIf="mostrarBotones()" class="btn btn-labeled btn-default form-group-margin" (click)="detallesEstudianteMovilidad()">
+              <span class="btn-label icon fa fa-eye"></span> Detalle</button>
+
+            <div class="btn-group form-group-margin" dropdown>
+              <button class="btn btn-conacyt dropdown-toggle" type="button" data-toggle="dropdown">
+               <span class="btn-label icon fa fa-download"></span> Exportar </button>  
+                <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                    <i class="fa fa-caret-down"></i>
+                  </button>           
+                <ul class="dropdown-menu">
+                <li role="menuitem"><a class="dropdown-item" (click)="exportar('Excel')">Exportar a Excel</a></li>
+                <li class="divider dropdown-divider"></li>
+                <li role="menuitem" ><a class="dropdown-item" (click)="exportar('PDF')">Exportar a PDF</a></li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+          <div class="row">
+            <div class="col-md-12 pull-right text-right">
+              <div class="row">
+                <input
+                  #filtro
+                  type="text"
+                  class="form-control"
+                  id="buscar"
+                  placeholder="Buscar..."
+                  (keyup.enter)="filtroChanged(filtro.value)"
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="table-default">
+      <div role="grid" class="dataTables_wrapper form-inline">
+        <div class="table-header clearfix">
+          <div class="table-caption">Lista de alumnos en movilidad</div>
+          <div class="DT-lf-right">
+            <div class="DT-per-page">
+              <div class="dataTables_length" id="jq-datatables-example_length">
+                <label>Registros por página:
+                  <select
+                    #limiteControl
+                    name="jq-datatables-example_length"
+                    aria-controls="jq-datatables-example"
+                    class="form-control input-sm"
+                    (change) = "setLimite(limiteControl.value)"
+                  >
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table cellpadding="0" cellspacing="0" border="0"
+                 class="table table-striped table-bordered dataTable no-footer"
+                 id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+            <thead>
+            <tr role="row">
+              <th
+                *ngFor="let columna of columnas"
+                [ngClass]="{
+							        		'sorting_desc': columna.sort === 'desc',
+							        		'sorting_asc': columna.sort === 'asc',
+							        		'sorting': columna.sort !== false
+							        	}"
+                (click)="sortChanged(columna)"
+              >
+                {{columna.titulo}}
+              </th>
+            </tr>
+            </thead>
+            <tbody *ngIf = "registros.length === 0">
+            <tr class="gradeA odd">
+              <th class="text-center" colspan="5">
+                No hay Registros
+              </th>
+            </tr>
+            </tbody>
+            <tbody *ngIf = "registros.length !== 0">
+            <tr
+              *ngFor="let registro of registros"
+              class="gradeA odd"
+              [ngClass]="{
+                        'seleccionado': rowSeleccionado(registro)
+                      }"
+              (click) = "rowSeleccion(registro)"
+            >
+              <td class="center">{{registro?.estudiante?.matricula?.matriculaCompleta}}</td>
+              <td class="center">{{registro?.estudiante?.datosPersonales?.getNombreCompleto()}}
+              <td class="center">{{registro?.tipoMovilidad?.valor}}</td>
+              <td class="center" *ngIf="registro?.tipoMovilidad?.id == 2">
+                {{registro?.estancia}}
+              </td>
+              <td class="center" *ngIf="registro?.tipoMovilidad?.id == 3">
+                {{registro?.trabajoCampo}}
+              </td>
+              <td class="text-center" *ngIf="registro?.tipoMovilidad?.id == 1">
+                ---
+              </td>
+              <td class="center">{{registro?.estatus.valor}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-footer clearfix">
+          <div class="DT-pagination" *ngIf="isSetPaginacion()">
+            <div class="dataTables_paginate paging_simple_numbers">
+              <pagination
+                class="pagination"
+                [totalItems] = "paginacion.registrosTotales"
+                [itemsPerPage] = "limite"
+                [maxSize] = "maxSizePags"
+                [rotate]="false"
+                [(ngModel)] = "paginaActual"
+                (pageChanged) = "cambiarPagina($event)"
+                previousText = "Anterior"
+                nextText = "Siguiente"
+              >
+              </pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-default" #modalDocumentos >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalDocumentos()">×</button>
+    <h4 class="modal-title">Agregar documento</h4>
+  </modal-header>
+  <modal-body>
+    <form role="form" [formGroup]="formularioDocumentos">
+      <div class="row">
+        <div class="col-md-12">
+
+          <div class="col-md-12">
+            <div class="row">
+              <div [ngClass]="{'has-error': getControlErrorsAgregarDoc('idTipoDocumento')}" >
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Documento: *</label>
+                    <div class="col-md-6">
+                      <select class="form-control" (change)="habilitarOtro(idTipoDocumento.value)"
+                              ngControl="idTipoDocumento" #idTipoDocumento formControlName="idTipoDocumento">
+                        <option disabled selected value="">Selecciona...</option>
+                        <option *ngFor="let doc of listaDocumentos" value="{{doc.id}}">{{doc.text}}</option>
+                      </select>
+                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrorsAgregarDoc('idTipoDocumento'))" >
+                            {{errorMessage(getControlAgregarDoc('idTipoDocumento'))}}
+                    </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="!otro">
+            <div class="col-md-12">
+              <div class="row">
+                <div [ngClass]="{ 'has-error': getControlErrorsAgregarDoc('auxiliar')}" >
+                  <div class="col-md-6 padding-xs-vr" >
+                    <div class="row">
+                      <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Otro: *</label>
+                      <div class="col-md-6">
+                        <input type="text" class="form-control" placeholder="Por favor especifique" ngControl="otroTipoDocumento"
+                               (keyup)="cambiarAuxiliar()" #otroTipoDocumento formControlName="otroTipoDocumento">
+                      <span id="helpBlock2" class="help-block" *ngIf="(getControlErrorsAgregarDoc('auxiliar'))" >
+                              {{errorMessage(getControlAgregarDoc('auxiliar'))}}
+                      </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><br/>
+        <div *ngIf="nombreArchivo" class="col-md-12 text-center">
+          <label>Archivo cargado: {{nombreArchivo}}</label>
+        </div>
+        <div class="col-md-12">
+          <div [ngClass]="{  'has-error': getControlErrorsAgregarDoc('idArchivo') }"  >
+            <div id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome"
+                 style="min-height: 185px;">
+              <div class="dz-default dz-message " ngFileSelect [options]="options" (onUpload)="handleDropUpload($event)">
+                <i class="fa fa-cloud-upload"></i>
+                Arrastre archivos aquí<br><span class="dz-text-small">o de clic para seleccionarlo manualmente</span>
+              </div>
+              <input type="file" ngFileSelect [options]="options" (onUpload)="handleBasicUpload($event)">
+            </div>
+                            <span id="helpBlock2" class="help-block" *ngIf="(getControlErrorsAgregarDoc('idArchivo'))" >
+                                    No se ha cargado el archivo
+                            </span>
+          </div>
+          <div class="progress">
+            <div
+              *ngIf="enableBasic()"
+              class="progress-bar"
+              role="progressbar"
+              aria-valuenow="basicProgress"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [style.width]="basicProgress + '%'">
+              {{basicProgress}}%
+            </div>
+
+            <div
+              *ngIf="enableDrop()"
+              class="progress-bar"
+              role="progressbar"
+              aria-valuenow="dropProgress"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [style.width]="dropProgress + '%'">
+              {{dropProgress}}%
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cerrarModalDocumentos()"><i class="fa fa-close"></i> Cancelar</button>
+    <button type="button" class="btn btn-success" (click)="enviarFormularioAgregarDoc()"><i class="fa fa-plus"></i> Agregar</button>
+
+  </modal-footer>
+</modal>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-default" #modalEditarSolMov >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalSolicitudMovilidad()">×</button>
+    <h4 class="modal-title" id="myModalLabel">
+      Editar movilidad con carga curricular
+    </h4>
+  </modal-header>
+  <modal-body>
+    <form role="form" [formGroup]="formularioEditarMovCurricular">
+      <div class="row text-right-lg text-right-md text-left-sm text-left-xs">
+        <div class="col-md-12">
+          <div class="row">
+            <div [ngClass]="{ 'has-error': getControlErrorsCurricular('idConvenio') }">
+              <div class="col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label for="Input" class="col-md-6 control-label">Convenio institucional:</label>
+                  <div class="col-md-6">
+                    <select #convenio class="form-control" (change)="habilitarInstitucion(convenio.value)"
+                            ngControl="idConvenio" #idConvenio formControlName="idConvenio">
+                      <option selected disabled value="">Selecciona...</option>
+                      <option *ngFor="let convenio of listaConvenios" value="{{convenio.id}}">{{convenio.text}}</option>
+                    </select>
+                            <span id="helpBlock2" class="help-block" *ngIf="(getControlErrorsCurricular('idConvenio'))" >
+                                    {{errorMessage(getControlCurricular('idConvenio'))}}
+                            </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div [ngClass]="{'has-error': getControlErrorsCurricular('idPais') }">
+              <div class="col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label for="Input" class="col-md-6 control-label">País: *</label>
+                  <div class="col-md-6">
+                    <select  id="Option" class="form-control" ngControl="idPais"
+                             #idPais formControlName="idPais">
+                      <option selected disabled value="">Selecciona...</option>
+                      <option *ngFor="let pais of listaPaises" value="{{pais.id}}">{{pais.text}}</option>
+                    </select>
+                            <span id="helpBlock2" class="help-block" *ngIf="(getControlErrorsCurricular('idPais'))" >
+                                    {{errorMessage(getControlCurricular('idPais'))}}
+                            </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12 padding-xs-vr">
+          <div class="row">
+            <div [ngClass]="{ 'has-error': getControlErrorsCurricular('institucionInteres')}">
+              <label for="Input" class="col-md-3 control-label">Institución en la que está interesado: *</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" maxlength="400" ngControl="institucionInteres"
+                       placeholder="Institución" #institucionInteres formControlName="institucionInteres">
+              <span id="helpBlock2" class="help-block" *ngIf="(getControlErrorsCurricular('institucionInteres'))" maxlength="400">
+                {{errorMessage(getControlCurricular('institucionInteres'))}}
+              </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div [ngClass]="{ 'has-error': getControlErrorsCurricular('idMateria')}">
+          <div class="col-md-12 padding-xs-vr">
+            <div class="row">
+              <label for="Input" class="col-md-3 control-label">Materia: *</label>
+              <div class="col-md-9">
+                <select  id="idMateria" class="form-control" ngControl="idMateria"
+                         #idMateria formControlName="idMateria">
+                  <option selected disabled value="">Selecciona...</option>
+                  <option *ngFor="let materiaPlan of listaMaterias" value="{{materiaPlan.materia.id}}">{{materiaPlan.materia.descripcion}}</option>
+                </select>
+                          <span id="helpBlock2" class="help-block" *ngIf="(getControlErrorsCurricular('idMateria'))" >
+                                  {{errorMessage(getControlCurricular('idMateria'))}}
+                          </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div [ngClass]="{ 'has-error': getControlErrorsCurricular('materiaCursar')}">
+          <div class="col-md-12 padding-xs-vr">
+            <div class="row">
+              <label for="Input" class="col-md-3 control-label">Materia con la que convalida: *</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" id="Input" ngControl="materiaCursar" placeholder="Materia"
+                       #materiaCursar formControlName="materiaCursar">
+              <span id="helpBlock2" class="help-block" *ngIf="(getControlErrorsCurricular('materiaCursar'))"
+                    maxlength="400" #materiaCursar formControlName="materiaCursar">
+                      {{errorMessage(getControlCurricular('materiaCursar'))}}
+              </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div [ngClass]="{ 'has-error': getControlErrorsCurricular('nombreContacto') }">
+          <div class="col-md-12 padding-xs-vr">
+            <div class="row">
+              <label for="Input" class="col-md-3 control-label">Nombre del contacto: *</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" ngControl="nombreContacto" placeholder="Contacto"
+                       #nombreContacto formControlName="nombreContacto">
+              <span id="helpBlock2" class="help-block" *ngIf="(getControlErrorsCurricular('nombreContacto'))"
+                    maxlength="400" #nombreContacto formControlName="nombreContacto">
+                      {{errorMessage(getControlCurricular('nombreContacto'))}}
+              </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div [ngClass]="{ 'has-error': getControlErrorsCurricular('puestoContacto') }">
+          <div class="col-md-12 padding-xs-vr" >
+            <div class="row">
+              <label for="Input" class="col-md-3 control-label">Puesto del contacto: *</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" ngControl="puestoContacto" placeholder="Puesto del contacto" maxlength="400"
+                       #puestoContacto formControlName="puestoContacto">
+              <span id="helpBlock2" class="help-block" *ngIf="(getControlErrorsCurricular('puestoContacto'))">
+                      {{errorMessage(getControlCurricular('puestoContacto'))}}
+              </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 padding-xs-vr text-right-lg text-right-md text-left-sm text-left-xs">
+              <div class="row">
+                <label class="col-md-6 control-label" for="fecha">Fecha inicio:</label>
+                <div class="col-md-6">
+                  <div class="dropdown" dropdown autoClose="outsideClick">
+                    <div class="input-group">
+                      <input type="text" class="form-control" value="{{getFechaInicioMovCurricular()}}" disabled>
+                                            <span class="input-group-btn">
+                                                <button class="btn dropdown-toggle fa fa-calendar" (click)="elegirFechaInicio()" type="button" id="menu" data-toggle="dropdown" dropdownToggle></button>
+                                            </span>
+                    </div>
+                    ​
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu" dropdownMenu >
+                      <li>
+                        <div style="display:inline-block;">
+                          <datepicker [(ngModel)]="dt" [minDate]="fechaMinima" [showWeeks]="true" [ngModelOptions]="{standalone: true}"></datepicker>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 padding-xs-vr text-right-lg text-right-md text-left-sm text-left-xs">
+              <div class="row">
+                <label class="col-md-6 control-label">Fecha fin:</label>
+                <div class="col-md-6">
+                  <div class="dropdown" dropdown autoClose="outsideClick">
+                    <div class="input-group">
+                      <input type="text" class="form-control" value="{{getFechaHastaMovCurricular()}}" disabled>
+                                            <span class="input-group-btn">
+                                                <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                            </span>
+                    </div>
+                    ​
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu1" aria-labelledby="menu1" dropdownMenu >
+                      <li>
+                        <div style="display:inline-block;">
+                          <datepicker [(ngModel)]="dt2" [minDate]="fechaMaxima" [showWeeks]="true" (click)="elegirFechaFin()"
+                                      [ngModelOptions]="{standalone: true}"></datepicker>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </form>
+
+  </modal-body>
+  <modal-footer>
+
+    <button class="btn " (click)="cerrarModalSolicitudMovilidad()"><i class="fa fa-times"></i> Cancelar</button>
+    <button class="btn btn-success" type="submit" (click)="editarFormularioSolicitudMovilidad('curricular')"><i class="fa fa-check"></i>&nbsp;&nbsp;Editar</button>
+
+  </modal-footer>
+</modal>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-default" #modalEditarSolMovEstancias >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalSolicitudMovilidadEstancias()">×</button>
+    <h4 class="modal-title">
+      Editar solicitud de movilidad en estancia de investigación
+    </h4>
+  </modal-header>
+  <modal-body>
+    <form role="form" [formGroup]="formularioEditarMovEstancias">
+      <div class="row text-right-lg text-left-md text-left-sm text-left-xs">
+
+        <div class="col-md-12">
+          <div class="row">
+
+            <div [ngClass]="{'has-error': getControlErrorsEstancias('estancia')}">
+              <div class=" col-md-6 padding-xs-vr">
+                <div class="row">
+                  <label for="Input" class="col-md-6 control-label">Estancia: *</label>
+                  <div class="col-md-6">
+                    <input type="text" class="form-control" id="estancia" name="estancia"
+                           ngControl="estancia" maxlength="400"
+                           #estancia formControlName="estancia">
+                    <span
+                      id="helpBlock2"
+                      class="help-block"
+                      *ngIf="(getControlErrorsEstancias('estancia'))">
+                          {{errorMessage(getControlEstancias('estancia'))}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class=" col-md-6 padding-xs-vr">
+              <div class="row">
+                <label class="col-md-6 control-label">Convenio institucional:</label>
+                <div class="col-md-6">
+                  <select #convenioSelected class="form-control" (change)="habilitarInstitucion(convenioSelected.value)"
+                          ngControl="idConvenio" #idConvenio formControlName="idConvenio">
+                    <option disabled selected value="">Selecciona...</option>
+                    <option *ngFor="let convenio of listaConvenios" value="{{convenio.id}}">{{convenio.text}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-12 padding-xs-vr">
+          <div class="row">
+            <div [ngClass]="{ 'has-error': getControlErrorsEstancias('institucionInteres')}">
+              <label class="col-md-3 control-label">Institución en la que está interesado:</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" ngControl="institucionInteres" placeholder="Institución"
+                       #institucionInteres formControlName="institucionInteres">
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrorsEstancias('institucionInteres'))" maxlength="400">
+                      {{errorMessage(getControlEstancias('institucionInteres'))}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div [ngClass]="{ 'has-error': getControlErrorsEstancias('nombreContacto') }">
+          <div class="col-md-12 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-3 control-label">Profesor anfitrión: *</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" ngControl="nombreContacto" placeholder="Profesor anfitrión"
+                       maxlength="400" #nombreContacto formControlName="nombreContacto">
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrorsEstancias('nombreContacto'))" >
+                  {{errorMessage(getControlEstancias('nombreContacto'))}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 padding-xs-vr text-right-lg text-right-md text-left-sm text-left-xs">
+              <div class="row">
+                <label class="col-md-6 control-label" for="fecha">Fecha inicio:</label>
+                <div class="col-md-6">
+                  <div class="dropdown" dropdown autoClose="outsideClick">
+                    <div class="input-group">
+                      <input type="text" class="form-control" value="{{getFechaInicioEstancias()}}" disabled>
+                                            <span class="input-group-btn">
+                                                <button class="btn dropdown-toggle fa fa-calendar" (click)="elegirFechaInicio()" type="button" id="menu" data-toggle="dropdown" dropdownToggle></button>
+                                            </span>
+                    </div>
+                    ​
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu" dropdownMenu >
+                      <li>
+                        <div style="display:inline-block;">
+                          <datepicker [(ngModel)]="dt" [minDate]="fechaMinima" [showWeeks]="true" [ngModelOptions]="{standalone: true}"></datepicker>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 padding-xs-vr text-right-lg text-right-md text-left-sm text-left-xs">
+              <div class="row">
+                <label class="col-md-6 control-label">Fecha fin:</label>
+                <div class="col-md-6">
+                  <div class="dropdown" dropdown autoClose="outsideClick">
+                    <div class="input-group">
+                      <input type="text" class="form-control" value="{{getFechaHastaMovEstancias()}}" disabled>
+                                            <span class="input-group-btn">
+                                                <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                            </span>
+                    </div>
+                    ​
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu1" aria-labelledby="menu1" dropdownMenu >
+                      <li>
+                        <div style="display:inline-block;">
+                          <datepicker [(ngModel)]="dt2" [minDate]="fechaMaxima" [showWeeks]="true" (click)="elegirFechaFin()"
+                                      [ngModelOptions]="{standalone: true}"></datepicker>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </form>
+
+  </modal-body>
+  <modal-footer>
+
+    <button class="btn " (click)="cerrarModalSolicitudMovilidadEstancias()"><i class="fa fa-times"></i> Cancelar</button>
+    <button class="btn btn-success" type="button" (click)="editarFormularioSolicitudMovilidad('estancias')"><i class="fa fa-check"></i>&nbsp;&nbsp;Editar
+      solicitud
+    </button>
+  </modal-footer>
+</modal>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-default" #modalEditarSolMovTrabajo1 >
+
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalSolicitudMovilidadTrabajoCampo()">×</button>
+    <h4 class="modal-title">
+      Editar movilidad por trabajo de campo
+    </h4>
+  </modal-header>
+  <modal-body>
+    <form role="form" [formGroup]="formularioEditarMovTrabajo">
+      <div class="row text-right-lg text-left-md text-left-sm text-left-xs">
+        <div [ngClass]="{'has-error': getControlErrorsTrabajoCampo('trabajoCampo')}">
+          <div class="col-md-12 padding-xs-vr">
+            <div class="row">
+              <label for="nombreTrabajoCampo" class="col-md-3 control-label">Trabajo de campo:*</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" id="nombreTrabajoCampo" name="trabajoCampo"
+                       placeholder="Trabajo de campo" ngControl="trabajoCampo" maxlength="400"
+                       #trabajoCampo formControlName="trabajoCampo">
+                <span
+                  id="helpBlock2"
+                  class="help-block"
+                  *ngIf="(getControlErrorsTrabajoCampo('trabajoCampo'))">
+                  {{errorMessage(getControlTrabajoCampo('trabajoCampo'))}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div [ngClass]="{'has-error': getControlErrorsTrabajoCampo('lugar')}">
+          <div class="col-md-12 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-3 control-label">Lugar:*</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" id="Otro" placeholder="Lugar"
+                       ngControl="lugar" maxlength="400"
+                       #lugar formControlName="lugar">
+                <span
+                  id="helpBlock2"
+                  class="help-block"
+                  *ngIf="(getControlErrorsTrabajoCampo('lugar'))">
+                  {{errorMessage(getControlTrabajoCampo('lugar'))}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 padding-xs-vr text-right-lg text-right-md text-left-sm text-left-xs">
+              <div class="row">
+                <label class="col-md-6 control-label" for="fecha">Fecha inicio:</label>
+                <div class="col-md-6">
+                  <div class="dropdown" dropdown autoClose="outsideClick">
+                    <div class="input-group">
+                      <input type="text" class="form-control" value="{{getFechaInicioMovTrabajo()}}" disabled>
+                                            <span class="input-group-btn">
+                                                <button class="btn dropdown-toggle fa fa-calendar" (click)="elegirFechaInicio()" type="button" id="menu" data-toggle="dropdown" dropdownToggle></button>
+                                            </span>
+                    </div>
+                    ​
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu" dropdownMenu >
+                      <li>
+                        <div style="display:inline-block;">
+                          <datepicker [(ngModel)]="dt" [minDate]="fechaMinima" [showWeeks]="true" [ngModelOptions]="{standalone: true}"></datepicker>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 padding-xs-vr text-right-lg text-right-md text-left-sm text-left-xs">
+              <div class="row">
+                <label class="col-md-6 control-label">Fecha fin:</label>
+                <div class="col-md-6">
+                  <div class="dropdown" dropdown autoClose="outsideClick">
+                    <div class="input-group">
+                      <input type="text" class="form-control" value="{{getFechaHastaMovTrabajo()}}" disabled>
+                                            <span class="input-group-btn">
+                                                <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                                            </span>
+                    </div>
+                    ​
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu1" aria-labelledby="menu1" dropdownMenu >
+                      <li>
+                        <div style="display:inline-block;">
+                          <datepicker [(ngModel)]="dt2" [minDate]="fechaMaxima" [showWeeks]="true" (click)="elegirFechaFin()"
+                                      [ngModelOptions]="{standalone: true}"></datepicker>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+
+    <button class="btn " (click)="cerrarModalSolicitudMovilidadTrabajoCampo()"><i class="fa fa-times"></i> Cancelar</button>
+    <button type="button" class="btn btn-success" (click)="editarFormularioSolicitudMovilidad('trabajoCampo')"><i class="fa fa-check"></i>&nbsp;&nbsp;Editar</button>
+
+  </modal-footer>
+</modal>
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-default" #modalTerminarMovilidad  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalTerminarMovilidad()">×</button>
+    <h4 class="modal-title">Finalización de movilidad</h4>
+  </modal-header>
+  <modal-body>
+    <div class="col-md-12">
+      <alert
+        *ngFor="let alerta of alertas;let i = index"
+        [type]="alerta.type"
+        dismissible="true"
+        (close)="cerrarAlerta(i)">
+        {{ alerta?.msg }}
+      </alert>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 form-group-margin">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs" for="estudiante">Estudiante:</dt>
+            <dd class="col-md-6">{{entidadMovilidadCurricular?.estudiante?.datosPersonales?.getNombreCompleto()}}</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="col-md-6 form-group-margin">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs" for="matricula">Matr&iacute;cula:</dt>
+            <dd class="col-md-6">{{entidadMovilidadCurricular?.estudiante?.matricula?.matriculaCompleta}}</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div class="col-md-6 form-group-margin">
+        <div class="row ">
+          <dl class="form-horizontal">
+            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs" for="programDoc">
+              Programa docente:
+            </dt>
+            <dd class="col-md-6">{{entidadMovilidadCurricular?.estudiante?.promocion?.programaDocente?.descripcion}}</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="col-md-6 form-group-margin">
+        <div class="row ">
+          <dl class="form-horizontal">
+            <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs" for="trabajoCampo">
+              Tipo movilidad:
+            </dt>
+            <dd class="col-md-6">{{entidadMovilidadCurricular?.tipoMovilidad?.valor}}</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <form role="form" [formGroup]="formularioTeminacionMov">
+      <div class="row">
+        <div class="col-md-6 padding-xs-vr">
+          <div class="row ">
+            <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs" for="fechaCulm">
+              Fecha de conclusi&oacute;n:*
+            </label>
+            <div class="col-md-6">
+              <div class="dropdown" dropdown autoClose="outsideClick">
+                <div class="input-group">
+                  <input type="text" class="form-control" value="{{ getFechaEjemplo()}}" disabled>
+                  <span class="input-group-btn">
+                      <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                  </span>
+                </div>
+
+                <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1" dropdownMenu >
+                  <li>
+                    <div style="display:inline-block;">
+                      <datepicker [(ngModel)]="dt" [minDate]="fechaMinima" [showWeeks]="true"
+                                  [ngModelOptions]="{standalone: true}"></datepicker>
+                    </div>
+                  </li>
+                </ul>
+											<span id="helpBlock2" class="help-block" *ngIf="(getControlErrorsTerminacion('fechaCulminacion'))" >
+											{{errorMessage(getControlTerminacion('fechaCulminacion'))}}
+									</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div  *ngIf="activarCali" >
+          <div class="col-md-6 padding-xs-vr">
+            <div class="row">
+              <div  [ngClass]="{'has-error': getControlErrorsTerminacion('calificacionOrdinaria')}">
+                <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs" for="regCalif">
+                  Registro de calificaci&oacute;n:*
+                </label>
+                <div class="col-md-6">
+                  <input ngControl='calificacionOrdinaria' class="form-control" placeholder="90" #calificacionOrdinaria formControlName="calificacionOrdinaria">
+										<span id="helpBlock" class="help-block" *ngIf="(getControlErrorsTerminacion('calificacionOrdinaria'))" >
+											{{errorMessage(getControlTerminacion('calificacionOrdinaria'))}}
+									</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div  *ngIf="activarCali" >
+          <div class="col-md-6 padding-xs-vr">
+            <div class="row">
+              <div  ><!--[ngClass]="{'has-error': getControlErrors('idMateriaImpartida')}"-->
+                <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs" for="materia">
+                  Materia COLSAN:*
+                </label>
+                <div class="col-md-6">
+                  {{entidadMovilidadCurricular?.materia?.descripcion}}
+                  <!--<select class="form-control form-group-margin" ngControl='idMateriaImpartida'>
+                                        <option value="" selected>Selecciona...</option>
+                                        <option *ngFor="let opcionMateria of opcionesCatalogoMateria"
+                                                value="{{opcionMateria.id}}">
+                                            {{opcionMateria.text}}</option>
+                                    </select>
+                                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idMateriaImpartida'))" >
+                                            {{errorMessage(getControl('idMateriaImpartida'))}}
+                                    </span>-->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 padding-xs-vr">
+            <div class="row">
+              <div  >
+                <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs" for="materia">
+                  Materia que convalida:*
+                </label>
+                <div class="col-md-6">
+                  {{entidadMovilidadCurricular?.materiaCursar}}
+                  <!--<select class="form-control form-group-margin" ngControl='idMateriaImpartida'>
+                                        <option value="" selected>Selecciona...</option>
+                                        <option *ngFor="let opcionMateria of opcionesCatalogoMateria"
+                                                value="{{opcionMateria.id}}">
+                                            {{opcionMateria.text}}</option>
+                                    </select>
+                                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idMateriaImpartida'))" >
+                                            {{errorMessage(getControl('idMateriaImpartida'))}}
+                                    </span>-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+
+    <button class="btn btn-default" type="button" (click)="cerrarModalTerminarMovilidad()">
+      <i class="fa fa-times"></i>&nbsp;&nbsp;Cancelar
+    </button>
+    <button *ngIf="mostarBotonGuardar" (click)="enviarFormularioTerminacion()" class="btn btn-success" type="button">
+      <i class="fa fa-plus"></i>&nbsp;&nbsp;Finalizar movilidad
+
+    </button>
+  </modal-footer>
+</modal>

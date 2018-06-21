@@ -1,0 +1,35 @@
+<div class="tab-pane fade active in" id="tab3">
+  <h5 class="form-heading text-muted text-semibold text-sm">LISTA DE IDIOMAS DE ACREDITACI&Oacute;N</h5>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="table-responsive">
+        <br>
+        <table
+          class="table table-bordered table-hover table-striped table-condensed">
+          <thead class="panel-title">
+          <tr class="panel-title">
+            <th class="text-center">Idiomas</th>
+          </tr>
+          </thead>
+          <tbody *ngIf="registros.length === 0">
+          <tr class="gradeA odd">
+            <th class="text-center" colspan="1">
+              No hay Registros
+            </th>
+          </tr>
+          </tbody>
+
+          <tbody *ngIf = "registros.length !== 0">
+          <tr
+            *ngFor="let registro of registros"
+            class="gradeA odd"
+          >
+            <td class="text-center">{{registro?.idiomaPlan?.descripcion}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- / .tab-content panel -->

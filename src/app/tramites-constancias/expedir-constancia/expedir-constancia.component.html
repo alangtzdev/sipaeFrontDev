@@ -1,0 +1,91 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+      <h1>Solicitud de constancia</h1>
+      <p><small>Expedir constancia</small></p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel colourable">
+      <div class="panel-body">
+
+        <h5 class="form-heading text-muted text-semibold text-sm">Detalles del alumno</h5>
+
+        <div class="col-xs-12 col-sm-12 col-md-12 form-horizontal">
+          <div class="col-xs-12 col-sm-6 col-md-6">
+            <dt class="col-xs-12 col-sm-6 col-md-6 control-right">Nombre del alumno:</dt><dl class="col-xs-12 col-sm-6 col-md-6">{{entidadSolicitudConstancia?.estudiante?.datosPersonales?.getNombreCompleto()}}</dl>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6">
+            <dt class="col-xs-12 col-sm-6 col-md-6 control-right">Matr&iacute;cula:</dt><dl class="col-xs-12 col-sm-6 col-md-6">{{entidadSolicitudConstancia?.estudiante?.matricula?.matriculaCompleta}}</dl>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6">
+            <dt class="col-xs-12 col-sm-6 col-md-6 control-right">Programa docente:</dt><dl class="col-xs-12 col-sm-6 col-md-6">{{entidadSolicitudConstancia?.estudiante?.promocion?.programaDocente?.descripcion}}</dl>
+          </div>
+        </div>
+
+        <h5 class="form-heading text-muted text-semibold text-sm">Detalles del documento</h5>
+
+        <div class="col-xs-12 col-sm-12 col-md-12 form-horizontal">
+          <div class="col-xs-12 col-sm-6 col-md-6">
+            <dt class="col-xs-12 col-sm-6 col-md-6 control-right">Dirigido a:</dt><dl class="col-xs-12 col-sm-6 col-md-6">{{entidadSolicitudConstancia?.dirigida}}</dl>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-12 form-horizontal">
+          <div class="col-xs-12 col-sm-12 col-md-12">
+            <dt class="col-xs-12 col-sm-12 col-md-12 text-left">Prop&oacute;sito del documento:</dt>
+            <dl class="col-xs-12 col-sm-12 col-md-12">
+                                <textarea class="form-control" rows="5" cols="200" maxlength="500">{{entidadSolicitudConstancia?.proposito}}
+                                </textarea>
+            </dl>
+          </div>
+        </div>
+
+
+        <div class="col-xs-12 col-sm-12 col-md-12 form-horizontal">
+          <div class="col-xs-12 col-sm-12 col-md-12">
+            <dt class="col-xs-12 col-sm-12 col-md-12 text-left">Consideraciones particulares:</dt>
+            <dl class="col-xs-12 col-sm-12 col-md-12">
+                                <textarea class="form-control" rows="5" cols="200" maxlength="500">{{entidadSolicitudConstancia?.consideraciones}}
+                                </textarea>
+            </dl>
+          </div>
+        </div>
+
+        <h5 class="form-heading text-muted text-semibold text-sm">Redacci&oacute;n del documento</h5>
+
+        <div class="col-xs-12 col-sm-12 col-md-12 form-horizontal">
+          <div class="col-xs-12 col-sm-6 col-md-6">
+            <dt class="col-xs-12 col-sm-6 col-md-6 control-right">Formato:</dt>
+            <dl class="col-xs-12 col-sm-6 col-md-6">
+              <select class="form-control" #idPlantilla (change)="obtenerHtml(idPlantilla.value)">
+                <option>Selecciona...</option>
+                <option
+                        *ngFor="let plantilla of listaPlantillas"
+                        value="{{plantilla.id}}"
+                >
+                  {{plantilla.nombre}}
+                </option>
+              </select>
+            </dl>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-12 form-horizontal">
+
+          <tiny-mce-editor></tiny-mce-editor>
+        </div>
+
+        <div class="col-md-12 text-right">
+          <br>
+          <button class="btn btn-labeled btn-default" (click)="crearConstancia('vistaPrevia')" [disabled]="disableButton"><span class="btn-label icon fa fa-eye"></span>Vista previa</button>
+          <button class="btn btn-labeled btn-success" (click)="crearConstancia('expedir')" [disabled]="disableButton"><span class="btn-label icon fa fa-check"></span>Expedir constancia</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

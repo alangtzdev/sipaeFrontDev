@@ -1,0 +1,539 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+      <h1>Expediente</h1>
+      <p><small>Estudiante: {{estudianteActula?.datosPersonales?.getNombreCompleto()}}</small></p>
+      <p><small>Matricula: {{estudianteActula?.matricula?.matriculaCompleta}}</small></p>
+    </div>
+  </div>
+</div>
+<!--<div class="col-md-12">
+  <alert *ngFor="let mensaje of erroresConsultas" [type]="mensaje.tipo" dismissible="true">
+    {{ mensaje?.mensaje }}
+  </alert>
+  <alert *ngFor="let mensajeError of erroresGuardado" [type]="mensajeError.tipo" dismissible="true">
+    {{ mensajeError?.mensaje }}
+  </alert>
+</div>-->
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel colourable">
+      <div class="panel-body">
+        <div class="col-md-3 text-center">
+
+          <div class="panel profile-photo col-md-offset-3 col-md-6 ">
+            <img class="img-responsive" src="{{imagenPerfil ? imagenPerfil : 'https://image.freepik.com/vector-gratis/icono-de-usuario-masculino_17-810120247.jpg'}}" alt="imagen">
+          </div>
+          <div class="col-md-12 text-center">
+            <h5>{{estudianteActula?.convocatoria?.programaDocente?.descripcion}}
+              <p><small>{{estudianteActula?.convocatoria?.programaDocente?.abreviatura}}</small></p>
+            </h5>
+          </div>
+
+        </div>
+
+        <div class="col-md-9">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre:</dt>
+                      <dd class="col-md-6">{{estudianteActula?.datosPersonales?.nombre}}</dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Primer apellido:</dt>
+                      <dd class="col-md-6">{{estudianteActula?.datosPersonales?.primerApellido}}</dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Segundo apellido:</dt>
+                      <dd class="col-md-6">{{estudianteActula?.datosPersonales?.segundoApellido}}</dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha de nacimiento:</dt>
+                      <dd class="col-md-6">{{obtenerFecha(estudianteActula?.datosPersonales?.fechaNacimiento)}}</dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nacionalidad:</dt>
+                      <dd class="col-md-6">{{estudianteActula?.datosPersonales?.nacionalidad?.valor}}</dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Promoci&oacute;n:</dt>
+                      <dd class="col-md-6">{{estudianteActula?.promocion?.getClavePromocion()}}</dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Correo institucional:</dt>
+                      <dd class="col-md-6 romper-texto">{{estudianteActula?.usuario?.email}}</dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Correo de contacto:</dt>
+                      <dd class="col-md-6 romper-texto">{{estudianteActula?.datosPersonales?.email}}</dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group-margin">
+                  <div class="row">
+                    <dl class="form-horizontal">
+                      <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Estatus:</dt>
+                      <dd class="col-md-6">{{estudianteActula?.estatus?.valor}}</dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="panel">
+      <div class="panel-body">
+        <h5 class="form-heading text-muted text-semibold text-sm">SERVICIOS</h5>
+
+        <div class="col-md-12">
+          <div class="row">
+
+            <div class="col-md-3 text-center">
+              <a (click)="detalleCargaAcademica()" class="thumbnail">
+                <img class="fa-img-icono" src="assets/images/iconos/carga-academica.png" alt="">
+                <hr>
+                <h4>Carga acad&eacute;mica</h4>
+              </a>
+            </div>
+
+            <div class="col-md-3 text-center">
+              <a (click)="detalleIdiomas()" class="thumbnail">
+                <i class="fa fa-comments fa-5x"></i>
+                <hr>
+                <h4 class="">Idiomas</h4>
+              </a>
+            </div>
+
+            <div class="col-md-3 text-center">
+              <a (click)="detallePagos()" class="thumbnail">
+                <i class="fa fa-money fa-5x"></i>
+                <hr>
+                <h4 class="">Pagos</h4>
+              </a>
+            </div>
+
+            <div class="col-md-3 text-center">
+              <a (click)="detalleHistorialAcademico()" class="thumbnail">
+                <i class="fa fa-list-alt fa-5x"></i>
+                <hr>
+                <h4 class="">Historial acad&eacute;mico</h4>
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+
+            <!--<div class="col-md-3 text-center">
+                            <a href="#" class="thumbnail">
+                                <i class="fa fa-graduation-cap fa-5x"></i>
+                                <hr>
+                                <h4 class="">Titulaci&oacute;n</h4>
+                            </a>
+                        </div>-->
+
+            <div class="col-md-3 text-center">
+              <a (click)="detalleDocumentos()" class="thumbnail">
+                <i class="fa fa-file-text fa-5x"></i>
+                <hr>
+                <h4 class="">Documentos</h4>
+              </a>
+            </div>
+
+            <div class="col-md-3 text-center">
+              <a (click)="detalleSolicitud()" class="thumbnail">
+                <i class="fa fa-eye fa-5x"></i>
+                <hr>
+                <h4 class="">Ver solicitud</h4>
+              </a>
+            </div>
+
+            <div class="col-md-3 text-center">
+              <a (click)="editarSolicitud()" class="thumbnail">
+                <i class="fa fa-pencil-square-o fa-5x"></i>
+                <hr>
+                <h4 class="">Editar solicitud</h4>
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-md-6">
+    <div class="panel colourable">
+      <div class="panel-body">
+        <h5 class="form-heading text-muted text-semibold text-sm">Tr&aacute;mites especiales</h5>
+        <div class="col-md-6 text-center" *ngIf="false">
+          <a (click)="detalleEvaluacionDocente()" class="thumbnail">
+            <i class="fa fa-list-ol fa-5x"></i>
+            <hr>
+            <h4 class="">Evaluaci&oacute;n docente</h4>
+          </a>
+        </div>
+
+        <div class="col-md-6 text-center">
+          <a (click)="bajaInstitucional()" class="thumbnail">
+            <i class="fa fa-user-times fa-5x"></i>
+            <hr>
+            <h4 class="">Baja institucional</h4>
+          </a>
+        </div>
+
+
+        <div class="col-md-6 text-center">
+          <a (click)="detalleNoAdeudos()" class="thumbnail" >
+            <img class="fa-img-icono" src="assets/images/iconos/no-adeudo.png" alt="">
+            <hr>
+            <h4>Carta de no adeudo</h4>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="panel colourable">
+      <div class="panel-body">
+        <h5 class="form-heading text-muted text-semibold text-sm">MOVILIDAD</h5>
+        <div class="col-md-6 text-center">
+          <a (click)="detalleMovilidad()" class="thumbnail">
+            <img class="fa-img-icono-movilidad" src="assets/images/iconos/movilidad.png" alt="">
+            <hr>
+            <h4 class="">Movilidad acad&eacute;mica</h4>
+          </a>
+        </div>
+
+        <div class="col-md-6 text-center">
+          <a (click)="detalleInterprogramas()" class="thumbnail">
+            <i class="fa fa-users fa-5x"></i>
+            <hr>
+            <h4 class="">Interprogramas</h4>
+          </a>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalBaja>
+  <modal-header>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click) = "cerrarModal()">x</button>
+    <h4 class="modal-title">Baja estudiante</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+      <form [formGroup]="formulario">
+        <div class="col-md-12">
+          <h5 class="form-heading text-muted text-semibold text-sm">DATOS PERSONALES</h5>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <dl class="col-md-6 dl-horizontal">
+              <dt>Nombre:</dt>
+              <dd>{{estudianteActula?.datosPersonales?.getNombreCompleto()}}</dd>
+            </dl>
+            <dl class="col-md-6 dl-horizontal">
+              <dt>Matr&iacute;cula:</dt>
+              <dd>{{estudianteActula?.matricula?.matriculaCompleta}}</dd>
+            </dl>
+          </div>
+          <div class="col-md-12">
+            <dl class="col-md-6 dl-horizontal">
+              <dt>Programa docente:</dt>
+              <dd>{{estudianteActula?.usuario?.programaDocente?.descripcion}}</dd>
+            </dl>
+            <dl class="col-md-6 dl-horizontal">
+              <dt>Promoci&oacute;n:</dt>
+              <dd>{{estudianteActula?.promocion?.getClavePromocion()}}</dd>
+            </dl>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <h5 class="form-heading text-muted text-semibold text-sm">DOCUMENTACION</h5>
+          <div class="col-md-6">
+            <dl class="dl-horizontal">
+              <dt>Documentos:</dt>
+              <dd>
+                <select #tipoDocumento formControlName="seteador" class="form-control" id="documentos" name="documentos" (change)="seleccionarTipoDocumento(tipoDocumento.value)">
+                  <option selected disabled value="">Selecciona...</option>
+                  <option *ngFor="let doc of listaDocumentos" value="{{doc.id}}">{{doc.text}}</option>
+                </select>
+              </dd>
+            </dl>
+            <div class="col-md-12 padding-xs-vr">
+
+              <div *ngIf="documentoSeleccionado" id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome"
+                   style="min-height: 185px;">
+                <div class="dz-default dz-message " [options]="options" ngFileSelect (onUpload)="handleDropUpload($event)">
+                  <i class="fa fa-cloud-upload"></i>
+                  Arrastre archivos aquí<br><span class="dz-text-small">o de clic para seleccionarlo manualmente</span>
+                </div>
+                <input type="file" [options]="options" ngFileSelect (onUpload)="handleBasicUpload($event)">
+              </div>
+              <div class="progress">
+                <div
+                        *ngIf="enableBasic()"
+                        class="progress-bar"
+                        role="progressbar"
+                        aria-valuenow="basicProgress"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        [style.width]="basicProgress + '%'">
+                  {{basicProgress}}%
+                </div>
+
+                <div
+                        *ngIf="enableDrop()"
+                        class="progress-bar"
+                        role="progressbar"
+                        aria-valuenow="dropProgress"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        [style.width]="dropProgress + '%'">
+                  {{dropProgress}}%
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-md-6 dl-horizontal text-right">
+            <div class="text-right">
+              <button type="button" class="btn btn-danger" [disabled]="!registroSeleccionado" (click)="eliminarDocumento()"><i class="fa fa-times"></i>&nbsp;&nbsp;Eliminar</button>
+            </div>
+            <br>
+            <div class="table-default">
+              <div role="grid" class="dataTables_wrapper form-inline">
+                <div class="table-header clearfix">
+                  <div class="table-caption">Listas de documentos</div>
+                </div>
+                <div class="table-responsive">
+                  <table cellpadding="0" cellspacing="0" border="0"
+                         class="table table-striped table-bordered dataTable no-footer"
+                         id="jq-datatables-example"
+                         aria-describedby="jq-datatables-example_info">
+                    <thead>
+                    <tr role="row">
+                      <th class="text-center" tabindex="0"
+                          rowspan="1" colspan="1">Nombre</th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf = "registros.length === 0">
+                    <tr class="gradeA odd">
+                      <th class="text-center" colspan="1">
+                        No hay Registros
+                      </th>
+                    </tr>
+                    </tbody>
+                    <tbody *ngIf = "registros.length !== 0">
+                    <tr
+                            *ngFor="let registro of registros"
+                            class="gradeA odd"
+                            [ngClass]="{ 'seleccionado': rowSeleccionado(registro) }"
+                            (click) = "rowSeleccion(registro)"
+                    >
+                      <td class="text-center">{{registro?.nombreArchivo}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <br>
+          <dl class="col-md-12 dl-horizontal">
+            <dt>Observaciones:</dt>
+            <dd>
+                      <textarea formControlName="observaciones" class="form-control" rows="3" cols="200" maxlength="500">
+                                  			</textarea>
+              <div class="text-right">(M&aacute;ximo 500 caracteres)</div>
+            </dd>
+          </dl>
+        </div>
+      </form>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button class="btn btn-default" type="button" (click)="cancelarModal()"><i class="fa fa-times"></i> Cancelar</button>
+    <button class="btn btn-success" type="button" (click)="modalConfirmarBaja()" [disabled]="estudianteActula?.estatus?.id == 1105"><i class="fa fa-check"></i> Baja</button>
+  </modal-footer>
+</modal>
+
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalConfirmaBaja class="modal-alert modal-danger">
+  <modal-header>
+    <i class="fa fa-exclamation-triangle"></i>
+  </modal-header>
+  <div class="modal-title">¿Est&aacute;s seguro que deseas dar de baja al estudiante?</div>
+  <modal-body>
+    <div class="pull-left">Nota: Al dar de baja
+      al estudiante, dejará de ser parte del sistema y no podr&aacute; realizar
+      ninguna actividad de éste.
+    </div><br><br>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="cerrarModalConfirmaBaja()">No</button>
+    <button type="button" class="btn btn-success" data-dismiss="modal" (click)="aceptarBaja()">Sí</button>
+  </modal-footer>
+</modal>
+
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalDetalleBaja>
+  <modal-header>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click) = "cerrarModalDetalleBaja()">x</button>
+    <h4 class="modal-title">Detalle baja estudiante</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+      <div class="col-md-12">
+        <h5 class="form-heading text-muted text-semibold text-sm">DATOS PERSONALES</h5>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <dl class="col-md-6 dl-horizontal">
+            <dt>Nombre:</dt>
+            <dd>{{estudianteActula?.datosPersonales?.getNombreCompleto()}}</dd>
+          </dl>
+          <dl class="col-md-6 dl-horizontal">
+            <dt>Matr&iacute;cula:</dt>
+            <dd>{{estudianteActula?.matricula?.matriculaCompleta}}</dd>
+          </dl>
+        </div>
+        <div class="col-md-12">
+          <dl class="col-md-6 dl-horizontal">
+            <dt>Programa docente:</dt>
+            <dd>{{estudianteActula?.usuario?.programaDocente?.descripcion}}</dd>
+          </dl>
+          <dl class="col-md-6 dl-horizontal">
+            <dt>Promoci&oacute;n:</dt>
+            <dd>{{estudianteActula?.promocion?.getClavePromocion()}}</dd>
+          </dl>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <h5 class="form-heading text-muted text-semibold text-sm">DOCUMENTACION</h5>
+        <div class="table-default">
+          <div role="grid" class="dataTables_wrapper form-inline">
+            <div class="table-header clearfix">
+              <div class="table-caption">Listas de documentos</div>
+              <div class="text-right">
+                <button *ngIf="registroSeleccionadoDetalleBaja" class="btn  btn-warning fa fa-download left" (click)="descargarArchivo(registroSeleccionadoDetalleBaja?.archivo?.id)"></button>
+                <button *ngIf="registroSeleccionadoDetalleBaja" class="btn  btn-default fa fa-eye right" (click)="verArchivo(registroSeleccionadoDetalleBaja?.archivo?.id)"></button>
+
+              </div>
+            </div>
+            <div class="table-scroll-modal">
+              <table cellpadding="0" cellspacing="0" border="0"
+                     class="table table-striped table-bordered dataTable no-footer"
+                     id="jq-datatables-example"
+                     aria-describedby="jq-datatables-example_info">
+                <thead>
+                <tr role="row">
+                  <th class="text-center" tabindex="0"
+                      rowspan="1" colspan="1">Nombre</th>
+                </tr>
+                </thead>
+                <tbody *ngIf = "registrosDetalleBaja.length === 0">
+                <tr class="gradeA odd">
+                  <th class="text-center" colspan="1">
+                    No hay Registros
+                  </th>
+                </tr>
+                </tbody>
+                <tbody *ngIf = "registrosDetalleBaja.length !== 0">
+                <tr
+                        *ngFor="let registro of registrosDetalleBaja"
+                        class="gradeA odd"
+                        [ngClass]="{ 'seleccionado': rowSeleccionadoModalDetalleBaja(registro) }"
+                        (click) = "rowSeleccionModalDetalleBaja(registro)"
+                >
+                  <td class="text-center">{{registro?.archivo?.nombre}}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <br>
+        <dl class="col-md-12 dl-horizontal">
+          <dt>Observaciones:</dt>
+          <dd>{{entidadBajaEstudiante?.observaciones}}</dd>
+        </dl>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button class="btn btn-default" type="button" (click)="cerrarModalDetalleBaja()"><i class="fa fa-times"></i> Cancelar</button>
+  </modal-footer>
+</modal>

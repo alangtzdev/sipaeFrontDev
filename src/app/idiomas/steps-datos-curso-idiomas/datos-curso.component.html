@@ -1,0 +1,300 @@
+<form  [formGroup]="formularioDatosCurso" (submit)="enviarFormulario($event)">
+
+  <div [ngClass]="{'has-error': getControlErrors('idioma')}">
+    <div class=" col-md-6 padding-xs-vr">
+      <div class="row">
+        <label for="idioma" class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Idioma: *</label>
+        <div class="col-md-6">
+          <select required class="form-control" id="idioma" name="idioma"
+                  formControlName="idioma">
+            <option value="" disabled selected> Seleccione...</option>
+            <option *ngFor="let idioma of opcionesIdioma" value="{{idioma.id}}">{{idioma.text}}</option>
+          </select>
+          <span id="helpBlock1"
+                class="help-block"
+                *ngIf="(getControlErrors('idioma'))">
+                            {{errorMessage(getControl('idioma'))}}
+                        </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="row">
+      <h5 class="form-heading text-muted text-semibold text-sm">REGISTRO DE CURSO</h5>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="row">
+      <div [ngClass]="{'has-error': getControlErrors('institucionAcreditadora')}">
+        <div class=" col-md-6 padding-xs-vr">
+          <div class="row">
+            <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Institución acreditadora:*</label>
+            <div class="col-md-6">
+              <input type="text" value="01/22/1991" formControlName="institucionAcreditadora" class="form-control" id="institucionAcreditadora"/>
+              <span id="helpBlock2"
+                    class="help-block"
+                    *ngIf="(getControlErrors('institucionAcreditadora'))">
+                                    {{errorMessage(getControl('institucionAcreditadora'))}}
+                                </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div [ngClass]="{'has-error': getControlErrors('periodo')}">
+        <div class=" col-md-6 padding-xs-vr">
+          <div class="row">
+            <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Periodo:*</label>
+            <div class="col-md-6">
+              <select required class="form-control" id="periodo" name="periodo" formControlName="periodo">
+                <option value="" disabled selected> Selecciona...</option>
+                <option *ngFor="let periodo of opcionesPeriodo" value="{{periodo.id}}">{{periodo.text}}</option>
+              </select>
+              <span id="helpBlock5"
+                    class="help-block"
+                    *ngIf="(getControlErrors('periodo'))">
+                                    {{errorMessage(getControl('periodo'))}}
+                                </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="row">
+      <div [ngClass]="{'has-error': getControlErrors('profesor')}">
+        <div class=" col-md-6 padding-xs-vr">
+          <div class="row">
+            <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Profesor:*</label>
+            <div class="col-md-6">
+              <input type="text" class="form-control" formControlName="profesor" id="profesor" name="profesor" placeholder="Nombre(s) Apellido(s)">
+              <span id="helpBlock4"
+                    class="help-block"
+                    *ngIf="(getControlErrors('profesor'))">
+                                    {{errorMessage(getControl('profesor'))}}
+                                </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div [ngClass]="{'has-error': getControlErrors('nivel')}">
+        <div class=" col-md-6 padding-xs-vr">
+          <div class="row">
+            <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Nivel: *</label>
+            <div class="col-md-6">
+              <select required class="form-control" id="nivel" formControlName="nivel" name="nivel">
+                <option value="" selected>Selecciona...</option>
+                <option *ngFor="let nivel of opcionesNivel" value="{{nivel.id}}">{{nivel.text}}</option>
+              </select>
+              <span id="helpBlock5"
+                    class="help-block"
+                    *ngIf="(getControlErrors('nivel'))">
+                                    {{errorMessage(getControl('nivel'))}}
+                                </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-6 padding-xs-vr">
+        <div class="row">
+          <div [ngClass]="{'has-error': getControlErrors('inicioCurso')}">
+            <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs" for="fecha">Inicio de curso: *</label>
+            <div class="col-md-6">
+              <div class="dropdown" dropdown autoClose="disabled">
+                <div class="input-group">
+                  <input type="text" value="{{ getFechaInicioCurso()}}" class="form-control" id="inicioCurso" disabled>
+                  <span class="input-group-btn">
+                                            <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle
+                                                    (click)="elegirFechaInicio()"></button>
+                                        </span>
+                </div>
+
+                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" dropdownMenu >
+                  <li>
+                    <div style="display:inline-block;">
+                      <datepicker [(ngModel)]="inicioCurso" [ngModelOptions]="{standalone: true}" [showWeeks]="true"></datepicker>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <span id="helpBlock6"
+                    class="help-block"
+                    *ngIf="(getControlErrors('inicioCurso'))">
+                                    {{errorMessage(getControl('inicioCurso'))}}
+                                </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 padding-xs-vr">
+        <div class="row">
+          <div [ngClass]="{'has-error': getControlErrors('finCurso')}">
+            <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs" for="fecha">Fin de curso:*</label>
+            <div class="col-md-6">
+              <div class="dropdown" dropdown autoClose="disabled" keyboardNav="true">
+                <div class="input-group">
+                  <input type="text" value="{{ getFechaFinCurso()}}" class="form-control" id="finCurso" disabled>
+                  <span class="input-group-btn">
+                                            <button class="btn dropdown-toggle fa fa-calendar" (click)="elegirFechaFin()" type="button" id="menu2" data-toggle="dropdown" dropdownToggle></button>
+                                        </span>
+                </div>
+
+                <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu2">
+                  <li>
+                    <div style="display:inline-block;">
+                      <datepicker [(ngModel)]="finCurso" [ngModelOptions]="{standalone: true}" [minDate]="fechaMinima" [showWeeks]="true" ></datepicker>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <span id="helpBlock7"
+                    class="help-block"
+                    *ngIf="(getControlErrors('finCurso'))">
+                                    {{errorMessage(getControl('finCurso'))}}
+                                </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-md-6 padding-xs-vr">
+    <div class="row">
+      <div [ngClass]="{'has-error': getControlErrors('horario')}">
+        <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Horario: *</label>
+        <div class="col-md-6">
+          <input type="text" class="form-control" formControlName="horario" id="horario" name="horario" placeholder="9:00 am a 10:00 am">
+          <span id="helpBlock2"
+                class="help-block"
+                *ngIf="(getControlErrors('horario'))">
+                          {{errorMessage(getControl('horario'))}}
+                        </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="col-md-12 padding-xs-vr">
+    <div class="row">
+      <div [ngClass]="{'has-error': getControlErrors('dia')}">
+        <label class="col-md-3 control-label text-right-lg text-right-md text-left-sm text-left-xs" for="finCurso">Días que se imparte: *</label>
+        <div class="col-md-9">
+          <div class="table-light table-responsive no-margin">
+            <table class="table table-bordered no-margin">
+              <thead>
+              <tr bgcolor="#d3d3d3">
+                <th class="text-center">Lunes</th>
+                <th class="text-center">Martes</th>
+                <th class="text-center">Mi&eacute;rcoles</th>
+                <th class="text-center">Jueves</th>
+                <th class="text-center">Viernes</th>
+                <th class="text-center">S&aacute;bado</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr align="center">
+                <td *ngFor="let dia of diasCurso">
+                  <input type = "checkbox" formControlName="dia"
+
+                         (click)="onClick(dia)"
+                         [checked] = "dia['checked']">
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <span id="helpBlock8"
+                class="alert alert-danger" style="padding-top: 0%; padding-bottom: 1%;"
+                *ngIf="(getControlErrors('dia'))">
+                                        {{errorMessage(getControl('dia'))}}
+                                </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <alert
+          *ngFor="let alerta of alertas;let i = index"
+          [type]="alerta.type"
+          class="col-md-12 text-center"
+          dismissible="true"
+          (close)="cerrarAlerta(i)">
+    {{ alerta?.msg }}
+  </alert>
+
+  <!---->
+  <div class="col-md-6 padding-xs-vr">
+    <div class="row">
+      <label for="nombreArchivo" class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Nombre del documento:</label>
+      <div class="col-md-6">
+        <input type="text" class="form-control" id="nombreArchivo" name="nombreArchivo" size="35" maxlength="50"
+               formControlName="nombreArchivo" placeholder="" readonly="readonly" >
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12 padding-xs-vr">
+    <div class="row">
+      <label class="col-md-3 control-label text-right-lg text-right-md text-left-sm text-left-xs">Programa particular: *</label>
+      <div class="col-md-9">
+        <div id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome" style="min-height: 185px;">
+          <div class="dz-default dz-message " ngFileSelect [options]="options"
+               (onUpload)="handleDropUpload($event)">
+            <i class="fa fa-cloud-upload"></i>
+            Soltar el archivo aqu&iacute;<br><span class="dz-text-small">o da clic para subir manualmente</span>
+          </div>
+          <input type="file" name="file" ngFileSelect [options]="options"
+                 (onUpload)="handleBasicUpload($event, 'base')"
+                 accept="application/pdf">
+        </div>
+        <div class="progress no-padding">
+          <div
+                  *ngIf="enableBasic()"
+                  class="progress-bar"
+                  role="progressbar"
+                  aria-valuenow="basicProgress"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  [style.width]="basicProgress + '%'">
+            {{basicProgress}}%
+          </div>
+
+          <div
+                  *ngIf="enableDrop()"
+                  class="progress-bar"
+                  role="progressbar"
+                  aria-valuenow="dropProgress"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  [style.width]="dropProgress + '%'">
+            {{dropProgress}}%
+          </div>
+        </div>
+      </div>
+      <div [ngClass]="{'has-error': getControlErrors('archivoPrograma')}"
+           class="col-sm-9 pull-rigth-idioma pull-right">
+                <span id="helpBlock9"
+                      class="alert alert-danger" style="padding-top: 2%; padding-bottom: 1%;"
+                      *ngIf="(getControlErrors('archivoPrograma'))">
+                            {{errorMessage(getControl('archivoPrograma'))}}
+                </span>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,297 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+      <h1>Carga acad&eacute;mica</h1>
+      <p><small>Lista de materias</small></p>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel">
+      <div class="panel-body">
+        <div class="col-md-6 col-sm-6" style="padding: 0">
+          <h5 class="form-heading text-muted text-semibold text-sm">MATR&Iacute;CULA: {{entidadEtudiante?.matricula?.matriculaCompleta}}</h5>
+        </div>
+        <div class="col-md-6  col-sm-6 text-left" style="padding: 0">
+          <h5 class="form-heading text-muted text-semibold text-sm text-right-sm">ESTUDIANTE: {{entidadEtudiante?.datosPersonales?.getNombreCompleto()}}</h5>
+        </div>
+
+        <div class="note note-info" *ngIf="!periodoActual && !entidadEtudiante">
+          <h4 class="note-title">Nota:</h4>
+          Aún no tienes materias asignadas por el área de coordinaci&oacute;n.
+        </div>
+      </div>
+      <div class="panel-body" *ngIf="(entidadEtudiante && (!sinAdeudos || !evaluacionesTermandas))
+				&& !verificarUnicaMateriaInter()">
+        <div class="note note-info">
+          <h4 class="note-title">Nota:</h4>
+          Actualmente no puedes ver tus calificaciones debido a falta de pago o
+          no has realizado la evaluación docente del periodo actual.
+        </div>
+      </div>
+      <div class="panel-body" *ngIf="!entidadEtudiante && !evaluacionesTermandas && periodoActual
+			&& !verificarUnicaMateriaInter()">
+        <div class="note note-info">
+          <h4 class="note-title">Nota:</h4>
+          Actualmente no puedes ver tus calificaciones debido a que
+          no has realizado la evaluación docente del periodo actual.
+        </div>
+      </div>
+      <div class="panel-body" *ngIf="entidadEtudiante ? 'true' : periodoActual">
+        <div class="col-md-12" *ngIf="erroresConsultas.lenght !== 0" >
+          <alert
+            *ngFor="let alerta of erroresConsultas"
+            [type]="alerta.tipo"
+            dismissible="true">
+            {{ alerta?.mensaje }}
+          </alert>
+        </div>
+        <div class="col-md-12" *ngIf="semestreActual || periodoActual">
+          <div class="row">
+            <h5 *ngIf="entidadEtudiante"><strong>Semestre Actual:</strong> {{semestreActual}}°</h5>
+            <h5 *ngIf="!entidadEtudiante"><strong>Periodo:</strong> {{periodoActual}}</h5>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div *ngIf="!permisoDocencia" class="text-right">
+              <button *ngIf="habilitarBotonRecursoExamen() && (sinAdeudos && evaluacionTermanadaMateriaSeleccionada())"  class="btn btn-labeled btn-success form-group-margin" (click)="modalSoliciudExamenRecuperacion('licTrabajoRecuperacion')"><span class="btn-label icon fa fa-check"></span>Trabajo de recuperaci&oacute;n</button>
+              <button *ngIf="habilitarBotonRecursoRevision() && (evaluacionTermanadaMateriaSeleccionada())" class="btn btn-labeled btn-success form-group-margin" (click)="modalSoliciudExamenRecuperacion('postRecurso')"><span class="btn-label icon fa fa-check"></span>Solicitar recurso de revisi&oacute;n</button>
+              <button *ngIf="boletaExportable" class="btn btn-labeled btn-success form-group-margin" (click)="expedirBoleta()"><span class="btn-label icon fa fa-check"></span>Generar boleta</button>
+              <!--<button *ngIf="habilitarBotonDescargarPrograma()" class="btn btn-warning form-group-margin" (click)="descargarProgramaParticular()"><span class="glyphicon glyphicon-download-alt"></span>&nbsp;Descargar programa</button>-->
+              <button class="btn btn-conacyt form-group-margin" (click)="exportarHorario()">Exportar horario</button>
+              <div *ngIf="registrosTemariosParticularesMateria.length > 0" class="btn-group form-group-margin" dropdown>
+                <button id="split-button" type="button" class="btn btn-conacyt"><span class="btn-label icon fa fa-download"></span> Temario particular</button>
+                <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                  <i class="fa fa-caret-down"></i>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+                  <li role="menuitem" *ngFor="let temario of registrosTemariosParticularesMateria"
+                      (click)="descargarTemarioParticular(temario.archivoTemario.id)" >
+                    <a class="dropdown-item">
+                      {{temario.archivoTemario.nombre}}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div role="grid" id="jq-datatables-example_wrapper" class="dataTables_wrapper form-inline no-footer table-responsive">
+              <div class="table-header clearfix">
+                <div class="table-caption">Lista de materias</div>
+              </div>
+
+              <div class="table-responsive">
+                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                  <thead>
+                  <tr role="row">
+                    <th *ngFor="let columna of columnas">
+                      {{columna.titulo}}
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody *ngIf = "registros.length === 0">
+                  <tr class="gradeA odd">
+                    <th class="text-center" colspan="6">
+                      No hay Registros
+                    </th>
+                  </tr>
+                  </tbody>
+                  <tbody *ngIf = "registros.length !== 0">
+                  <tr
+                    *ngFor="let registro of registros"
+                    class="gradeA odd"
+                    [ngClass]="{
+							        		'seleccionado': rowSeleccionado(registro)
+							        }"
+                    (click) = "rowSeleccion(registro)"
+                  >
+                    <td class="text-left" *ngIf="!registro.interprograma">{{registro?.materiaImpartida?.materia?.clave}}</td>
+                    <td class="text-left" *ngIf="registro.interprograma">{{registro?.materiaInterprograma?.materia?.clave}}</td>
+                    <!--td class="center">{{registro.materia}}</td-->
+                    <td class="text-left" *ngIf="!registro.interprograma">
+                      {{registro?.materiaImpartida?.materia?.descripcion}}
+                      <div *ngIf="registro.materiaImpartida.materia.tipoMateria.id == 1 || registro.materiaImpartida.materia.tipoMateria.id == 2">
+                        {{registro?.materiaImpartida?.cursoOptativo?.descripcion}}
+                      </div>
+                    </td>
+                    <td class="text-left" *ngIf="registro.interprograma">{{registro?.materiaInterprograma?.materia?.descripcion}} **</td>
+                    <td class="text-left">{{registro?.materiaImpartida?.materia?.tipoMateria?.valor}}</td>
+                    <td class="text-left" *ngIf="!registro.interprograma">{{(registro?.materiaImpartida?.getProfesorTitular()) ? registro?.materiaImpartida?.getProfesorTitular() : tutor}}</td>
+                    <td class="text-left" *ngIf="registro.interprograma">{{(registro?.materiaInterprograma?.getProfesorTitular()) ? registro?.materiaInterprograma?.getProfesorTitular() : tutor}}</td>
+
+                    <td *ngIf="registro?.calificacionRevision && (entidadEtudiante && sinAdeudos)" class="text-center">
+                      {{registro?.calificacionRevision}}
+                    </td>
+
+                    <td *ngIf="!registro?.calificacionRevision && sinAdeudos &&
+											registro?.materiaImpartida?.materia?.tipoMateria?.id != 3 " class="text-center">
+                      {{mostrarCamposEvaluados(registro?.id) ? (registro?.calificacionOrdinaria ? registro?.calificacionOrdinaria : '----' ) : '---'}}
+                    </td>
+
+                    <td *ngIf="!registro?.calificacionRevision && !sinAdeudos &&
+											registro?.materiaImpartida?.materia?.tipoMateria?.id != 3 " class="text-center">
+                      ---
+                    </td>
+                    <td *ngIf="(!registro?.calificacionRevision && registro?.calificacionOrdinaria) && (entidadEtudiante && sinAdeudos) &&
+											registro?.materiaImpartida?.materia?.tipoMateria?.id == 3" class="text-center">{{registro?.calificacionOrdinaria}}</td>
+                    <td *ngIf="(!registro?.calificacionOrdinaria || !sinAdeudos) &&
+											(entidadEtudiante) &&
+											registro?.materiaImpartida?.materia?.tipoMateria?.id == 3" class="text-center">----</td>
+                    <td *ngIf="!entidadEtudiante" class="text-center">
+                      {{mostrarCamposEvaluados(registro?.id) ? (registro?.calificacionOrdinaria ? registro?.calificacionOrdinaria : '---' ) : '---'}}
+                    </td>
+                    <td class="text-center"*ngIf="!registro.interprograma">{{registro?.materiaImpartida?.materia?.creditos}}</td>
+                    <td class="text-center"*ngIf="registro.interprograma">{{registro?.materiaInterprograma?.materia?.creditos}}</td>
+                    <!--td class="center">{{registro}}</td-->
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="entidadEtudiante">
+          ** Materia de interprograma.
+        </div>
+        <br><br>
+        <!--Tabla de idiomas -->
+        <div class="col-md-12" *ngIf="entidadEtudiante">
+          <div class="row">
+            <div role="grid" id="jq-datatables-example_wrapper" class="dataTables_wrapper form-inline no-footer table-responsive">
+              <div class="table-header clearfix">
+                <div class="table-caption">Lista de idiomas</div>
+              </div>
+
+              <div class="table-responsive">
+                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                  <thead>
+                  <tr role="row">
+                    <th class="text-center" *ngFor="let columna of columnasIdioma">
+                      {{columna.titulo}}
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody *ngIf = "registrosIdiomas.length === 0">
+                  <tr class="gradeA odd">
+                    <th class="text-center" colspan="4">
+                      No hay Registros
+                    </th>
+                  </tr>
+                  </tbody>
+                  <tbody *ngIf = "registrosIdiomas.length !== 0">
+                  <tr *ngFor="let registro of registrosIdiomas"
+                      class="gradeA odd" >
+                    <td class="text-center">{{registro?.grupoIdioma?.idioma?.descripcion}}</td>
+                    <td class="text-center">{{registro?.grupoIdioma?.periodo?.getPeriodo()}}</td>
+                    <td class="text-center">{{registro?.grupoIdioma?.nivel?.valor}}</td>
+                    <td *ngIf="registro.calificacion && (sinAdeudos && evaluacionesTermandas)" class="text-center">{{mostrarCalificacionIdioma(registro?.calificacion)}}</td>
+                    <td *ngIf="!registro.calificacion && (sinAdeudos && evaluacionesTermandas)" class="text-center">---</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #solicitudExamenRecuperacion  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalSolicitudExamenRecuparacion()">×</button>
+    <h4 class="modal-title">{{esRecusroRevision ? 'Solicitud de recurso de revisi&oacute;n' : 'Trabajo de recuperaci&oacute;n'}}</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+      <form [formGroup]="formularioSoliciudExamenRecuperacion">
+
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Materia:</dt>
+                  <dd class="col-md-6">{{estudianteMateriaImpartida?.materiaImpartida?.materia?.descripcion}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Clave materia:</dt>
+                  <dd class="col-md-6">{{estudianteMateriaImpartida?.materiaImpartida?.materia?.clave}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Calificaci&oacute;n original:</dt>
+              <dd class="col-md-6">{{estudianteMateriaImpartida?.calificacionOrdinaria}}</dd>
+            </dl>
+          </div>
+        </div>
+
+        <div class="col-md-12 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Descripci&oacute;n general de la inconformidad:*</dt>
+              <dd class="col-md-9">
+                <div [ngClass]="{ 'has-error': getControlErrorsSolicitudExamenRecuparacion('descripcion')}">
+                <textarea class="form-control" rows="3" ngControl='descripcion'
+                          maxlength="250" #descripcion formControlName="descripcion"></textarea>
+                    <span id="helpBlockProgramaDocente" class="help-block" *ngIf="(getControlErrorsSolicitudExamenRecuparacion('descripcion'))">
+                        {{errorMessage(getControlSolicitudExamenRecuparacion('descripcion'))}}
+                    </span>
+                </div>
+                <dl class="col-md-12 text-right">M&aacute;ximo 250 caracteres</dl>
+              </dd>
+            </dl>
+          </div>
+        </div>
+
+
+      </form>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="submit" class="btn btn-success" (click)="confirmarSolicitud()"><i class="fa fa-check"></i>&nbsp;&nbsp;Enviar solicitud</button>
+  </modal-footer>
+</modal>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-alert modal-success" #confirmarsolicitudExamenTrabajo  >
+  <modal-header>
+    <button type="button" class="close" (click)="closeModalConfirmarRecusroTrabajo(); modalDetalle();" aria-hidden="true">×</button>
+    <i class="fa fa-check-circle"></i>
+  </modal-header>
+  <modal-body>
+    <div *ngIf="!esRecusroRevision" class="modal-title">
+      Al solicitar un trabajo de recuperaci&oacute;n renuncias a tu calificaci&oacute;n original
+    </div>
+    <div *ngIf="esRecusroRevision" class="modal-title">
+      Al solicitar un recurso de revisi&oacute;n renuncias a tu calificaci&oacute;n original
+    </div>
+    <div class="modal-body">
+      <div class="checkbox" style="margin: 0;">
+        <label>
+          <span class="lbl">¿Deseas continuar?</span>
+        </label>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button data-dismiss="modal" class="btn btn-danger" type="button" (click)="closeModalConfirmarRecusroTrabajo()">No</button>
+    <button class="btn btn-success" type="button"  [disabled]="deshabilitarBotonRecurso" (click)="enviarFormularioRecursoTrabajo()">Sí</button>
+  </modal-footer>
+</modal>
+

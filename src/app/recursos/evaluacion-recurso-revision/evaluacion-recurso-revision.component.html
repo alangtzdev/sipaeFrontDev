@@ -1,0 +1,366 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+      <h1>Evaluación del recurso de revisión</h1>
+      <p><small>Listas de evaluación del recurso de revisión.</small></p>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <!--<form class="form-horizontal" [(ngFormModel)]="formularioCriterios" >-->
+    <div class="col-md-12">
+      <div class="panel">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="row">
+                <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+
+                  <label>
+                    Programa Docente:
+                  </label>
+
+                  <select #programaDocenteId class="form-control"
+                          (change) ="obtenerPromocion(programaDocenteId.value)"
+                  >
+                    <option value="" disabled selected>Seleccione...</option>
+                    <option  *ngFor="let programaDocenteItem of programasDocentesSelect"
+                             [value]="programaDocenteItem.id"
+                    >
+                      {{programaDocenteItem.text}}
+                    </option>
+                  </select>
+
+
+                </div>
+                <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+
+                  <label >
+                    Promoción:
+                  </label>
+
+                  <select #promocion class="form-control"
+                          (change) ="listarPeriodos(promocion.value)"
+                          ngControl="seteador"
+                  >
+                    <option value="" disabled selected>Seleccione...</option>
+                    <option *ngFor="let promocionItem of promocionSelect" [value]="promocionItem.id"> {{promocionItem.getClavePromocion()}} </option>
+                  </select>
+
+
+                </div>
+                <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                  <label>Per&iacute;odo escolar:</label>
+                  <select class="form-control" #idPeriodoEscolar ngControl="seteadorPeriodo" (change)="mostrarBoton(idPeriodoEscolar.value)">
+                    <option value="" disabled selected>Selecciona...</option>
+                    <option
+                      *ngFor="let catalogoPeriodo of listaPeriodos"
+                      value="{{catalogoPeriodo.idPeriodoEscolar?.id}}"
+                    >
+                      {{catalogoPeriodo?.idPeriodoEscolar?.getPeriodo()}}
+                    </option>
+                  </select>
+                </div>
+
+              </div>
+            </div>
+            <div *ngIf ="mostrarBotonBuscar" class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+              <br>
+
+              <button
+                class="btn" (click)="buscarCriteriosCabezera(
+                            programaDocenteId.value,
+                            promocion.value,
+                            idPeriodoEscolar.value
+                          )"
+              >
+                Buscar <span class="fa fa-search"></span>
+              </button>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  <!--</form>-->
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel colourable">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-12">
+
+            <div class="text-right">
+              <div class="col-md-10"><!-- cont-botones-->
+                <div class="text-right">
+                  <button  *ngIf="desabilitarRecurso()" class="btn btn-labeled btn-success form-group-margin" (click)="evaluarRecursoRevision()"><span class="btn-label icon fa fa-file-text-o"></span>Evaluar recurso de revisión</button>
+                  <button *ngIf= "mostrarDetalle()" class="btn btn-labeled btn-default form-group-margin" (click)="modalDetalle()"><span class="btn-label icon fa fa-eye"></span>Detalle</button>
+                </div>
+              </div>
+              <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+                <div class="row">
+                  <div class="col-md-12 pull-right text-right">
+                    <div class="row">
+                      <input
+                        #filtro
+                        type="text"
+                        class="form-control"
+                        id="buscar"
+                        placeholder="Buscar..."
+                        (keyup.enter)="filtroChanged(filtro.value)"
+                        [disabled]="desabilitarFiltro()"
+                        (blur)="limpiarBuscador(); filtro.value=''"
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div role="grid" class="dataTables_wrapper form-inline">
+              <div class="table-header clearfix">
+                <div class="table-caption">Lista de estudiantes para evaluar el recurso de revisi&oacute;n</div>
+                <div class="DT-lf-right">
+                  <div class="DT-per-page">
+                    <div class="dataTables_length" id="jq-datatables-example_length">
+                      <label>Registros por página:
+                        <select #limiteControl name="jq-datatables-example_length" aria-controls="jq-datatables-example" class="form-control input-sm" (change) = "setLimite(limiteControl.value)" [disabled]="desabilitarFiltro()">
+                          <option value="10">10</option>
+                          <option value="25">25</option>
+                          <option value="50">50</option>
+                          <option value="100">100</option>
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                  <thead>
+                  <tr role="row">
+                    <th
+                      *ngFor="let columna of columnas"
+                      [ngClass]="{
+                                               'sorting_desc': columna.sort === 'desc',
+                                               'sorting_asc': columna.sort === 'asc',
+                                               'sorting': columna.sort !== false
+                                             }"
+                      (click)="sortChanged(columna, columna.titulo)"
+                    >
+                      {{columna.titulo}}
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody *ngIf = "registros.length === 0">
+                  <tr class="gradeA odd">
+                    <th class="text-center" colspan="6">
+                      Cambie sus criterios de búsqueda
+                    </th>
+                  </tr>
+                  </tbody>
+                  <tbody *ngIf = "registros.length !== 0">
+
+                  <tr class="gradeA odd" *ngFor="let registro of registros"
+                      [ngClass]="{
+                                            'seleccionado': rowSeleccionado(registro)}"
+                      (click) = "rowSeleccion(registro)"
+                  >
+                    <td class="text-center">{{registro?.recursoRevision?.estudiante?.matricula?.matriculaCompleta}}</td>
+                    <td class="text-center">{{registro?.recursoRevision?.estudiante?.datosPersonales?.getNombreCompleto()}}</td>
+                    <td class="text-center">{{registro?.recursoRevision?.materiaImpartida?.materia?.clave}}</td>
+                    <td class="text-center">{{registro?.recursoRevision?.profesor?.getNombreCompleto()}}</td>
+                    <td class="text-center">{{registro?.recursoRevision?.materiaImpartida?.materia?.descripcion}}</td>
+                    <td class="text-center">{{cambiarEstatus(registro?.estatus?.valor)}}</td>
+
+                  </tr>
+
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-footer clearfix">
+                <div class="DT-pagination" *ngIf="isSetPaginacion()">
+                  <div class="dataTables_paginate paging_simple_numbers">
+                    <pagination
+                      class="pagination"
+                      [totalItems] = "paginacion.registrosTotales"
+                      [itemsPerPage] = "limite"
+                      [maxSize] = "maxSizePags"
+                      [rotate]="false"
+                      [(ngModel)] = "paginaActual"
+                      (pageChanged) = "cambiarPagina($event)"
+                      previousText = "Anterior"
+                      nextText = "Siguiente"
+                    >
+                    </pagination>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-->INICIA MODAL DE DETALLE RECURSO REVISION</!-->
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #detalleRecursoRevision  >
+  <modal-header>
+    <button type="button" class="close" (click)="closeModalDetalle()" aria-hidden="true">×</button>
+    <h4 class="modal-title" id="myModalLabel">
+      Detalle de evaluaci&oacute;n de recurso de revisi&oacute;n
+    </h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+      <div class="col-lg-12 table-scroll">
+
+        <h6 class="form-heading text-muted text-semibold text-sm">DETALLE DEL ALUMNO</h6>
+
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="row">
+
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre del alumno:</dt>
+                  <dd class="col-md-6">{{entidadRecursoRevision?.estudiante?.getNombreCompleto()}}</dd>
+                </dl>
+              </div>
+            </div>
+
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Matr&iacute;cula:</dt>
+                  <dd class="col-md-6">{{entidadRecursoRevision?.estudiante?.matricula?.matriculaCompleta}}</dd>
+                </dl>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-md-12 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente:</dt>
+              <dd class="col-md-9">{{entidadRecursoRevision?.estudiante?.promocion?.programaDocente?.descripcion}}</dd>
+            </dl>
+          </div>
+        </div>
+
+
+        <h6 class="form-heading text-muted text-semibold text-sm"> INCONFORMIDAD</h6>
+
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Materia:</dt>
+                  <dd class="col-md-6">{{entidadRecursoRevision?.materiaImpartida?.materia?.descripcion}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Clave de asignatura:</dt>
+                  <dd class="col-md-6">{{entidadRecursoRevision?.materiaImpartida?.materia?.clave}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Titular:</dt>
+                  <dd class="col-md-6">{{entidadRecursoRevision?.profesor?.getNombreCompleto()}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Periodo:</dt>
+                  <dd class="col-md-6">{{entidadRecursoRevision?.estudiante?.periodoActual?.anio}}-{{entidadRecursoRevision?.estudiante?.periodoActual?.periodo}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Calificaci&oacute;n original:</dt>
+                  <dd class="col-md-6">{{entidadRecursoRevision?.calificacionOriginal}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"></dt>
+                  <dd class="col-md-6"></dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-12 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Descripción general de la inconformidad:</dt>
+              <dd class="col-md-9"><textarea class="form-control" rows="6" cols="200" disabled>{{entidadRecursoRevision?.descripcion}}</textarea></dd>
+            </dl>
+          </div>
+        </div>
+
+        <h5 class="form-heading text-muted text-semibold text-sm">INFORME DEL PROFESOR TITULAR</h5>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel" style="width:100%;height: 200px; overflow-y: scroll; margin: auto">
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-md-3 text-center"  *ngIf="entidadRecursoRevision?.archivoInformeProfesor?.id">
+                    <div class="thumbnail">
+                      <i class="fa fa-file-text-o fa-5x"></i>
+                      <h5 class="">{{entidadRecursoRevision?.archivoInformeProfesor?.nombre}}</h5>
+                      <hr>
+                      <button class="btn  btn-warning fa fa-download left" (click)="descargarArchivo(entidadRecursoRevision?.archivoInformeProfesor?.id)"></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> <!-- col-md-12 -->
+        </div>
+
+      </div>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" (click)="closeModalDetalle()" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> Cerrar</button>
+  </modal-footer>
+</modal>
+<!-->TERMINA MODAL DE DETALLE RECURSO REVISION</!-->
+

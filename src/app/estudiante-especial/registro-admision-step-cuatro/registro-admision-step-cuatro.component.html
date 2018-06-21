@@ -1,0 +1,203 @@
+<!-- div para las opciones de Documentos-->
+<div class="col-md-12 ">
+  <p class="text-danger"><strong>*Nota: Para enviar solicitud debe agregar todos los documentos (mínimo seis), del programa docente y seleccionar la declaración de datos.</strong></p>
+  <br><br><h5 class="form-heading text-muted text-semibold text-sm">LISTA DE DOCUMENTOS</h5>
+</div>
+<div class="col-md-12 ">
+  <div class="row text-right">
+    <button class="btn btn-danger form-group-margin" type="button" *ngIf="registroSeleccionado" (click)="eliminarDocumento()" [disabled]="!btnEliminar">
+      <i class="fa fa-times"></i> Eliminar
+    </button>
+    <button class="btn btn-success form-group-margin" type="submit" (click)="modalAgregarDocumento()">
+      <i class="fa fa-plus"></i> Agregar
+    </button>
+  </div>
+</div>
+
+<!-- div para la tabla de Documentos-->
+<div class="col-md-12">
+  <div class="row">
+    <div class="table-responsive">
+      <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+        <thead>
+        <tr class="active">
+          <th
+                  *ngFor="let columna of columnas"
+                  [ngClass]="{
+                                                            'sorting_desc': columna.sort === 'desc',
+                                                            'sorting_asc': columna.sort === 'asc',
+                                                            'sorting': columna.sort !== false
+                                                        }"
+                  (click)="sortChanged(columna)"
+          >
+            {{columna.titulo}}
+          </th>
+        </tr>
+        </thead>
+        <tbody *ngIf = "registros.length === 0">
+        <tr class="gradeA odd">
+          <th class="text-center" colspan="4">
+            No hay Registros
+          </th>
+        </tr>
+        </tbody>
+        <tbody *ngIf = "registros.length !== 0">
+        <tr
+                *ngFor="let registro of registros"
+                class="gradeA odd"
+                [ngClass]="{
+                                                            'seleccionado': rowSeleccionado(registro)
+                                                    }"
+                (click) = "rowSeleccion(registro)"
+        >
+          <td class="center">{{registro?.tipoDocumento?.valor}}</td>
+          <td class="center">{{registro?.archivo.nombre}}</td>
+          <td class="center">{{registro?.getFechaFormato()}}</td>
+          <td class="center">{{estadoEvaluacionDocumentacion(registro?.valido)}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div><!--fin de la tabla de Lista de documentos-->
+
+<!--Row para aceptar los datos-->
+<div class="col-md-12">
+  <div class="row">
+    <div class="checkbox panel-padding">
+      <label>
+        <input type="checkbox" #declaracion (click)="validarEnvioSolicitud(declaracion.checked, registros.length)" [disabled]="!checkBoxDocumento"> DECLARO QUE TODOS LOS DATOS ASENTADOS EN ESTA SOLICITUD
+        Y EN LOS FORMULARIOS ANEXOS SON VERACES.
+      </label>
+    </div>
+  </div>
+</div>
+
+<!--Fin del row para aceptar los datos-->
+<!--div para las descargas-->
+
+<div class="col-md-12 text-left">
+  <div class="row">
+    <button class="btn btn-warning form-group-margin texto-largo" (click)="generarFormatoInscripcion()" type="button"><i class="fa fa-download"></i> Formato de inscripci&oacute;n</button>
+  </div>
+</div>
+
+<div class="col-md-12 padding-xs-vr">
+  <label for="comentarios" class="fat-commentarios">La información que contiene este documento forma parte del
+    sistema de datos personales bajo la responsabilidad de la Dirección de Docencia de El Colegio de San
+    Luis, A.C. y queda protegida por la Ley de Transparencia y Acceso a la
+    Información Pública Gubernamental, con fundamento en lo que establecen los artículos 13, 14 y 20 de la
+    Ley y 26 y 37 de su
+    Reglamento.</label>
+</div>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalAgregaDocumento>
+  <modal-header>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" style="">Agregar documento</h4>
+  </modal-header>
+  <modal-body>
+    <form class="form-horizontal" [formGroup]="formulario">
+      <br>
+      <div class="row">
+        <div class="col-md-12">
+          <alert
+                  *ngFor="let alerta of alertas;let i = index"
+                  [type]="alerta.type"
+                  dismissible="true"
+                  (close)="cerrarAlertaModal(i)">
+            {{ alerta?.msg }}
+          </alert>
+        </div>
+        <div class="col-md-12">
+          <div class="text-rigth">
+            <div
+                    [ngClass]="{
+              'has-error': getControlErrors('idTipoDocumento')
+            }"
+            >
+              <label class="col-sm-2 control-label" for="idTipoDocumento">Documento:*</label>
+              <div class="col-sm-5 text-center">
+                <select class="form-control" #idTipoDocumento formControlName="idTipoDocumento" (change)="cargarTipoDocumento(idTipoDocumento.value)">
+                  <option value="" selected>Selecciona...</option>
+                  <option
+                          *ngFor="let catalogoTipoDocumento of opcionesSelectTipoDocumento"
+                          value="{{catalogoTipoDocumento.id}}"
+                  >
+                    {{catalogoTipoDocumento.text}}
+                  </option>
+                </select>
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idTipoDocumento'))" >
+                    {{errorMessage(getControl('idTipoDocumento'))}}
+            </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+
+      <div *ngIf="validarDrop()" class="row">
+        <div *ngIf="nombreArchivo" class="col-md-6 text-center">
+          <label>Archivo cargado: {{nombreArchivo}}</label>
+        </div>
+        <div class="col-md-12">
+
+          <div class="col-lg-6">
+            <div
+                    [ngClass]="{
+                  'has-error': getControlErrors('auxiliar')
+                }"
+            >
+              <div id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome"
+                   style="min-height: 185px;">
+                <div class="dz-default dz-message " ngFileSelect [options]="options" (onUpload)="handleDropUpload($event)">
+                  <i class="fa fa-cloud-upload"></i>
+                  Soltar archivo aqu&iacute;<br><span class="dz-text-small">o clic para cargar manualmente</span>
+                </div>
+                <input type="file" name="file" accept="application/pdf" ngFileSelect [options]="options" (onUpload)="handleBasicUpload($event)">
+              </div>
+              <div class="progress">
+                <div
+                        *ngIf="enableBasic()"
+                        class="progress-bar"
+                        role="progressbar"
+                        aria-valuenow="basicProgress"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        [style.width]="basicProgress + '%'">
+                  {{basicProgress}}%
+                </div>
+
+                <div
+                        *ngIf="enableDrop()"
+                        class="progress-bar"
+                        role="progressbar"
+                        aria-valuenow="dropProgress"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        [style.width]="dropProgress + '%'">
+                  {{dropProgress}}%
+                </div>
+
+              </div>
+              <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('auxiliar'))" >
+                        ¡No se ha cargado ningun archivo!
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <div class="text-right">
+      <button class="btn btn-default" type="button" data-dismiss="modal" (click)="cerrarModal()"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+      <button *ngIf="nombreArchivo" type="submit" class="btn btn-success"  [disabled]="ocultarBoton" (click)="enviarFormulario()"><span class="glyphicon glyphicon-plus"></span> Agregar</button>
+    </div>
+  </modal-footer>
+</modal>
+

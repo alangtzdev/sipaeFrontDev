@@ -1,0 +1,191 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-xs-12 col-sm-4 text-center text-left-sm">
+      <h1>Evaluaci&oacute;n de recurso de revisi&oacute;n</h1>
+      <p><small>Detalle de resoluci&oacute;n.</small></p>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-body">
+
+    <h6 class="form-heading text-muted text-semibold text-sm">DETALLE DEL ALUMNO</h6>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="row">
+
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre del alumno:</dt>
+                <dd class="col-md-6">{{entidadRecursoRevision?.estudiante?.getNombreCompleto()}}</dd>
+              </dl>
+            </div>
+          </div>
+
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Matr&iacute;cula:</dt>
+                <dd class="col-md-6">{{entidadRecursoRevision?.estudiante?.matricula?.matriculaCompleta}}</dd>
+              </dl>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-12 form-group-margin">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente:</dt>
+            <dd class="col-md-9">{{entidadRecursoRevision?.estudiante?.promocion?.programaDocente?.descripcion}}</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <h6 class="form-heading text-muted text-semibold text-sm"> INCONFORMIDAD</h6>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Materia:</dt>
+                <dd class="col-md-6">{{entidadRecursoRevision?.materiaImpartida?.materia?.descripcion}}</dd>
+              </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Clave de asignatura:</dt>
+                <dd class="col-md-6">{{entidadRecursoRevision?.materiaImpartida?.materia?.clave}}</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Titular:</dt>
+                <dd class="col-md-6">{{entidadRecursoRevision?.profesor?.getNombreCompleto()}}</dd>
+              </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Periodo:</dt>
+                <dd class="col-md-6">{{entidadRecursoRevision?.estudiante?.periodoActual?.anio}}-{{entidadRecursoRevision?.estudiante?.periodoActual?.periodo}}</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="row">
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Calificaci&oacute;n original:</dt>
+                <dd class="col-md-6">{{entidadRecursoRevision?.calificacionOriginal}}</dd>
+              </dl>
+            </div>
+          </div>
+          <div class="col-md-6 form-group-margin">
+            <div class="row">
+              <dl class="form-horizontal">
+                <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs"></dt>
+                <dd class="col-md-6"></dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12 form-group-margin">
+        <div class="row">
+          <dl class="form-horizontal">
+            <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Descripción general de la inconformidad:</dt>
+            <dd class="col-md-9"><textarea class="form-control" rows="6" cols="200" disabled>{{entidadRecursoRevision?.descripcion}}</textarea></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <h5 class="form-heading text-muted text-semibold text-sm">INFORME DEL PROFESOR TITULAR</h5>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel" style="width:100%;height: 200px; overflow-y: scroll; margin: auto">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-3 text-center"  *ngIf="entidadRecursoRevision?.archivoInformeProfesor?.id">
+                <div class="thumbnail">
+                  <i class="fa fa-file-text-o fa-5x"></i>
+                  <h5 class="">{{entidadRecursoRevision?.archivoInformeProfesor?.nombre}}</h5>
+                  <hr>
+                  <button class="btn  btn-warning fa fa-download left" (click)="descargarArchivo(entidadRecursoRevision?.archivoInformeProfesor?.id)"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- col-md-12 -->
+    </div>
+
+    <h5 class="form-heading text-muted text-semibold text-sm">EVALUACIÓN</h5>
+    <div class="row">
+      <form class="form-horizontal" [formGroup]="formulario" >
+
+
+
+        <div [ngClass]="{'has-error': getControlErrors('calificacionDefinitiva')}">
+          <div class=" col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label">Calificaci&oacute;n definitiva:*</label>
+              <div class="col-md-6">
+                <input id="calificacionDefinitiva" type="text" class="form-control" ngControl="calificacionDefinitiva"
+                       name="calificacionDefinitiva" maxlength="3" #calificacionDefinitiva formControlName="calificacionDefinitiva">
+                              <span id="helpBlock2" class="help-block " *ngIf="(getControlErrors('calificacionDefinitiva'))" >
+                                      {{errorMessage(getControl('calificacionDefinitiva'))}}
+                              </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12 form-group-margin">
+          <div class="row">
+            <dl class="form-horizontal">
+              <dt class="col-md-3 text-right-lg text-right-md text-left-sm text-left-xs">Comentario de la evaluaci&oacute;n:*</dt>
+              <dd class="col-md-9">
+                <div [ngClass]="{'has-error': getControlErrors('comentariosEvaluacion')}">
+                  <textarea id="comentariosEvaluacion" class="form-control" rows="6" cols="200"
+                            maxlength="500" ngControl="comentariosEvaluacion" #comentariosEvaluacion formControlName="comentariosEvaluacion">
+                  </textarea>
+                  <span id="helpBlock2" class="help-block " *ngIf="(getControlErrors('comentariosEvaluacion'))" >
+                        {{errorMessage(getControl('comentariosEvaluacion'))}}
+                  </span>
+                </div>
+              </dd>
+            </dl>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-success texto-largo" (click)="evaluacionRecursoRevision()" type="submit"><i class="fa fa-check"></i> Emitir calificaci&oacute;n de recurso de revisi&oacute;n</button>
+  </div>
+</div>
+

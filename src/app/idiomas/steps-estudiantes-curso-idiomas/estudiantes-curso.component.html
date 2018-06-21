@@ -1,0 +1,94 @@
+<form [formGroup]="formularioAgregarEstudiantes">
+  <h5 class="form-heading text-muted text-semibold text-sm form-group-margin">Asistentes</h5>
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-6 padding-xs-vr">
+        <div class="row">
+          <label for="agregarAsistentes" class="col-md-6 control-label text-left">Estudiante: </label>
+          <div class="container-fluid col-md-6">
+            <input formControlName="agregarAsistentes" id="agregarAsistentes" name="agregarAsistentes" #agregarAsistentes
+                   class="form-control"
+                   ng2-auto-complete
+                   [(ngModel)]="searchStr2"
+                   [source]="opcions"
+                   [min-chars] = "2"
+                   display-property-name="name"
+                   list-formatter="name"
+                   loading-text="Buscando..."
+                   no-match-found-text = "No hay coincidencias"
+                   list-formatter="name"
+                   (valueChanged)= "autocompleteOnSelect(searchStr2)"
+                   (keyup.enter) = "autocompleteOnSelect(searchStr2)"
+                   />
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2 padding-xs-vr">
+        <button class="btn btn-success" type="reset" (click)="agregarEstudiante()"><i class="fa fa-plus"></i> Agregar</button>
+      </div>
+
+      <div class="col-md-4">
+        <alert
+                *ngFor="let alerta of alertas;let i = index"
+                [type]="alerta.type"
+                class="col-md-12 text-center"
+                dismissible="true"
+                (close)="cerrarAlerta(i)"
+                dismissOnTimeout="4000">
+          {{ alerta?.msg }}
+        </alert>
+      </div>
+    </div>
+  </div>
+
+  <h5 class="form-heading text-muted text-semibold text-sm form-group-margin">Lista de estudiantes:</h5>
+
+  <div class="col-md-12">
+    <div class="row">
+      <div class="text-right">
+        <button *ngIf="registroSeleccionado" type="button" class="btn btn-danger form-group-margin" (click)="removerEstudiante()"><i class="fa fa-times"></i>&nbsp;&nbsp;Eliminar</button>
+      </div>
+      <div class="table-default table-responsive table-scroll">
+        ​
+        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+          <thead>
+          <tr role="row">
+            <th  *ngFor="let columna of columnas"
+                 [ngClass]="{'sorting_desc': columna.sort === 'desc',
+                                     'sorting_asc': columna.sort === 'asc',
+                                     'sorting': columna.sort !== false
+                                    }"
+                 >
+              {{columna.titulo}}
+            </th>
+          </tr>
+          </thead>
+          <tbody *ngIf = "registros.length === 0">
+          <tr class="gradeA odd">
+            <th class="text-center" colspan="8">
+              No hay Registros
+            </th>
+          </tr>
+          </tbody>
+
+          <tbody *ngIf = "registros.length !== 0">
+          <tr *ngFor="let estudiante of registros"
+              class="gradeA odd"
+              [ngClass]="{'seleccionado': rowSeleccionado(estudiante)}"
+              (click) = "rowSeleccion(estudiante)">
+            <td class="text-left">
+              {{estudiante?.matricula?.matriculaCompleta}}
+            </td>
+            <td class="text-left">{{estudiante?.datosPersonales?.nombre}}
+              {{estudiante?.datosPersonales?.primerApellido}}
+              {{estudiante?.datosPersonales?.segundoApellido}}
+            </td>
+            <td class="text-left">{{estudiante?.promocion?.programaDocente?.descripcion}}
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,344 @@
+<div class="col-md-12">
+  <div class="row">
+
+    <h6 class="form-heading text-muted text-semibold text-sm">Documentos</h6>
+    <div class="col-md-12">
+      <alert
+        *ngFor="let alerta of alertas;let i = index"
+        [type]="alerta.type"
+        dismissible="true"
+        (close)="cerrarAlerta(i)">
+        {{ alerta?.msg }}
+      </alert>
+    </div>
+
+    <div class="col-md-12"> Nota: Sólo acepta archivos con extensión .pdf</div>
+    <div class=" col-md-6 padding-xs-vr">
+      <div class="row">
+        <div class="col-md-12">
+          <label for="horario" class="control-label text-left">Certificado:</label>
+          {{nombreArchivoCertificado ? nombreArchivoCertificado : idPlanEstudios?.archivoCertificado?.nombre}}
+        </div>
+        <div class="row-centered">
+          <div class="col-md-12">
+            <div id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome"
+                 style="min-height: 185px;">
+              <div class="dz-default dz-message " ngFileSelect [options]="options"
+                   (onUpload)="handleDropUpload($event)">
+                <i class="fa fa-cloud-upload"></i>
+                Suelte el archivo aqu&iacute;<br><span class="dz-text-small">o da clic para subir manualmente</span>
+              </div>
+              <input type="file" ngFileSelect [options]="options" (onUpload)="handleBasicUpload($event, 'certificado')">
+            </div>
+            <div class="progress">
+              <div
+                *ngIf="enableBasic('mapa')"
+                class="progress-bar"
+                role="progressbar"
+                aria-valuenow="basicProgressMapa"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [style.width]="basicProgressCertificado + '%'">
+                {{basicProgressCertificado}}%
+              </div>
+
+              <div
+                *ngIf="enableDrop()"
+                class="progress-bar"
+                role="progressbar"
+                aria-valuenow="dropProgress"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [style.width]="dropProgress + '%'">
+                {{dropProgress}}%
+              </div>
+            </div>
+
+          </div>
+        </div>
+<!--        <div class="col-md-12">
+          <div id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome">
+            <div class="dz-default dz-message " [ng-file-drop]="options" (onUpload)="handleDropUpload($event)">
+              <i class="fa fa-cloud-upload"></i>
+              Suelte el archivo aqu&iacute;<br><span class="dz-text-small">o da clic para subir manualmente</span>
+            </div>
+            <input type="file" name="file" [ng-file-select]="options" (onUpload)="handleBasicUpload($event, 'certificado')">
+          </div>
+          <div class="progress">
+            <div
+              *ngIf="enableBasic('certificado')"
+              class="progress-bar"
+              role="progressbar"
+              aria-valuenow="basicProgressCertificado"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [style.width]="basicProgressCertificado + '%'">
+              {{basicProgressCertificado}}%
+            </div>
+
+            <div
+              *ngIf="enableDrop()"
+              class="progress-bar"
+              role="progressbar"
+              aria-valuenow="dropProgress"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [style.width]="dropProgress + '%'">
+              {{dropProgress}}%
+            </div>
+          </div>
+          <span id="helpBlock3" class="help-block" *ngIf="(getControlErrors('idArchivoCertificado'))">
+                                    {{errorMessage(getControl('idArchivoCertificado'))}}
+                                </span>
+        </div>-->
+      </div>
+    </div>
+
+
+    <div class=" col-md-6 padding-xs-vr">
+      <div class="row">
+        <div class="col-md-12">
+          <label for="horario" class="control-label text-left">Dictamen:</label>
+          {{nombreArchivoDictamen ? nombreArchivoDictamen : idPlanEstudios?.archivoDictamen?.nombre}}
+        </div>
+        <div class="row-centered">
+          <div class="col-md-12">
+            <div id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome"
+                 style="min-height: 185px;">
+              <div class="dz-default dz-message " ngFileSelect [options]="options"
+                   (onUpload)="handleDropUpload($event)">
+                <i class="fa fa-cloud-upload"></i>
+                Suelte el archivo aqu&iacute;<br><span class="dz-text-small">o da clic para subir manualmente</span>
+              </div>
+              <input type="file" ngFileSelect [options]="options" (onUpload)="handleBasicUpload($event, 'dictamen')">
+            </div>
+            <div class="progress">
+              <div
+                *ngIf="enableBasic('mapa')"
+                class="progress-bar"
+                role="progressbar"
+                aria-valuenow="basicProgressMapa"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [style.width]="basicProgressDictamen + '%'">
+                {{basicProgressDictamen}}%
+              </div>
+
+              <div
+                *ngIf="enableDrop()"
+                class="progress-bar"
+                role="progressbar"
+                aria-valuenow="dropProgress"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [style.width]="dropProgress + '%'">
+                {{dropProgress}}%
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!--<div class="col-md-12">
+          <div id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome">
+            <div class="dz-default dz-message " [ng-file-drop]="options" (onUpload)="handleDropUpload($event)">
+              <i class="fa fa-cloud-upload"></i>
+              Suelte el archivo aqu&iacute;<br><span class="dz-text-small">o da clic para subir manualmente</span>
+            </div>
+            <input type="file" name="file" [ng-file-select]="options" (onUpload)="handleBasicUpload($event, 'dictamen')">
+
+          </div>
+          <div class="progress">
+            <div
+              *ngIf="enableBasic('dictamen')"
+              class="progress-bar"
+              role="progressbar"
+              aria-valuenow="basicProgressDictamen"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [style.width]="basicProgressDictamen + '%'">
+              {{basicProgressDictamen}}%
+            </div>
+
+
+            <div
+              *ngIf="enableDrop()"
+              class="progress-bar"
+              role="progressbar"
+              aria-valuenow="dropProgress"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [style.width]="dropProgress + '%'">
+              {{dropProgress}}%
+            </div>
+          </div>
+          <span id="helpBlock3" class="help-block" *ngIf="(getControlErrors('idArchivoDictamen'))">
+                                    {{errorMessage(getControl('idArchivoDictamen'))}}
+                                </span>
+        </div>-->
+      </div>
+    </div>
+
+    <div class=" col-md-6 padding-xs-vr">
+      <div class="row">
+        <div class="col-md-12">
+          <label for="horario" class="control-label text-left">Estructura:</label>
+          {{nombreArchivoEstructura ? nombreArchivoEstructura : idPlanEstudios?.archivoEstructura?.nombre}}
+        </div>
+        <div class="row-centered">
+          <div class="col-md-12">
+            <div id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome"
+                 style="min-height: 185px;">
+              <div class="dz-default dz-message " ngFileSelect [options]="options"
+                   (onUpload)="handleDropUpload($event)">
+                <i class="fa fa-cloud-upload"></i>
+                Suelte el archivo aqu&iacute;<br><span class="dz-text-small">o da clic para subir manualmente</span>
+              </div>
+              <input type="file" ngFileSelect [options]="options" (onUpload)="handleBasicUpload($event, 'estructura')">
+            </div>
+            <div class="progress">
+              <div
+                *ngIf="enableBasic('mapa')"
+                class="progress-bar"
+                role="progressbar"
+                aria-valuenow="basicProgressMapa"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [style.width]="basicProgressEstructura + '%'">
+                {{basicProgressEstructura}}%
+              </div>
+
+              <div
+                *ngIf="enableDrop()"
+                class="progress-bar"
+                role="progressbar"
+                aria-valuenow="dropProgress"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [style.width]="dropProgress + '%'">
+                {{dropProgress}}%
+              </div>
+            </div>
+
+          </div>
+        </div>
+       <!-- <div class="col-md-12">
+          <div id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome">
+            <div class="dz-default dz-message " [ng-file-drop]="options" (onUpload)="handleDropUpload($event)">
+              <i class="fa fa-cloud-upload"></i>
+              Suelte el archivo aqu&iacute;<br><span class="dz-text-small">o da clic para subir manualmente</span>
+            </div>
+            <input type="file" name="file" [ng-file-select]="options" (onUpload)="handleBasicUpload($event, 'estructura')">
+          </div>
+          <div class="progress">
+            <div
+              *ngIf="enableBasic('estructura')"
+              class="progress-bar"
+              role="progressbar"
+              aria-valuenow="basicProgressEstructura"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [style.width]="basicProgressEstructura + '%'">
+              {{basicProgressEstructura}}%
+            </div>
+
+            <div
+              *ngIf="enableDrop()"
+              class="progress-bar"
+              role="progressbar"
+              aria-valuenow="dropProgress"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [style.width]="dropProgress + '%'">
+              {{dropProgress}}%
+            </div>
+          </div>
+          <span id="helpBlock3" class="help-block" *ngIf="(getControlErrors('idArchivoEstructura'))">
+                            {{errorMessage(getControl('idArchivoEstructura'))}}
+                        </span>
+        </div>-->
+      </div>
+    </div>
+
+    <div class=" col-md-6 padding-xs-vr">
+      <div class="row">
+        <div class="col-md-12">
+          <label for="horario" class="control-label text-left">Mapa:</label>
+          {{nombreArchivoMapa ? nombreArchivoMapa : idPlanEstudios?.archivoMapa?.nombre}}
+        </div>
+        <div class="row-centered">
+          <div class="col-md-12">
+            <div id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome"
+                 style="min-height: 185px;">
+              <div class="dz-default dz-message " ngFileSelect [options]="options"
+                   (onUpload)="handleDropUpload($event)">
+                <i class="fa fa-cloud-upload"></i>
+                Suelte el archivo aqu&iacute;<br><span class="dz-text-small">o da clic para subir manualmente</span>
+              </div>
+              <input type="file" ngFileSelect [options]="options" (onUpload)="handleBasicUpload($event, 'mapa')">
+            </div>
+            <div class="progress">
+              <div
+                *ngIf="enableBasic('mapa')"
+                class="progress-bar"
+                role="progressbar"
+                aria-valuenow="basicProgressMapa"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [style.width]="basicProgressMapa + '%'">
+                {{basicProgressMapa}}%
+              </div>
+
+              <div
+                *ngIf="enableDrop()"
+                class="progress-bar"
+                role="progressbar"
+                aria-valuenow="dropProgress"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [style.width]="dropProgress + '%'">
+                {{dropProgress}}%
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!--<div class="col-md-12">
+          <div id="dropzonejs-example" class="dropzone-box dz-clickable dropzone-custome">
+            <div class="dz-default dz-message " [ng-file-drop]="options" (onUpload)="handleDropUpload($event)">
+              <i class="fa fa-cloud-upload"></i>
+              Suelte el archivo aqu&iacute;<br><span class="dz-text-small">o da clic para subir manualmente</span>
+            </div>
+            <input type="file" name="file" [ng-file-select]="options" (onUpload)="handleBasicUpload($event, 'mapa')">
+          </div>
+          <div class="progress">
+            <div
+              *ngIf="enableBasic('mapa')"
+              class="progress-bar"
+              role="progressbar"
+              aria-valuenow="basicProgressMapa"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [style.width]="basicProgressMapa + '%'">
+              {{basicProgressMapa}}%
+            </div>
+
+            <div
+              *ngIf="enableDrop()"
+              class="progress-bar"
+              role="progressbar"
+              aria-valuenow="dropProgress"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [style.width]="dropProgress + '%'">
+              {{dropProgress}}%
+            </div>
+          </div>
+          <span id="helpBlock3" class="help-block" *ngIf="(getControlErrors('idArchivoMapa'))">
+                            {{errorMessage(getControl('idArchivoMapa'))}}
+                        </span>
+        </div>-->
+      </div>
+    </div>
+  </div>
+</div>
+

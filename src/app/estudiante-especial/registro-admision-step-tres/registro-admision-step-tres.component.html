@@ -1,0 +1,124 @@
+<form [formGroup]="formulario">
+  <h6 class="form-heading text-muted text-semibold text-sm">DATOS DE INVESTIGADOR ANFITRI&Oacute;N</h6>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+
+        <div [ngClass]="{'has-error': getControlErrors('idProgramaDocente')}">
+          <div class=" col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs" for="programa">Programa: *</label>
+              <div class="col-md-6">
+                <select class="form-control" #idProgramaDocente formControlName="idProgramaDocente"
+                        (change)="obtenerIntegrantesNab(programaDocente.value)"
+                        #programaDocente>
+                  <option value="" disabled selected >Selecciona...</option>
+                  <option *ngFor="let programa of programasDocente" value="{{programa.id}}">{{programa.text}}</option>
+                </select>
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idProgramaDocente'))" >
+                                        {{errorMessage(getControl('idProgramaDocente'))}}
+                                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div [ngClass]="{'has-error': getControlErrors('idProfesor')}">
+          <div class=" col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs" for="nombre">Nombre: *</label>
+              <div class="col-md-6">
+                <select class="form-control" #idProfesor formControlName="idProfesor">
+                  <option value="" disabled selected>Selecciona...</option>
+                  <option *ngFor="let profesor of profesores" value="{{profesor.id}}">
+                    {{profesor.getNombreCompleto()}}
+                  </option>
+                </select>
+                <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idProfesor'))" >
+                                        {{errorMessage(getControl('idProfesor'))}}
+                                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div (click)="$event.preventDefault()">
+      <div class="col-md-12">
+        <div class="row">
+          <div class=" col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Fecha de inicio de la estancia: </label>
+              <div class="col-md-6">
+                <div class="dropdown" dropdown autoClose="disabled">
+                  <div class="input-group">
+                    <input type="text" class="form-control" value="{{getFechaEjemplo()}}" disabled>
+                    <span class="input-group-btn">
+                                <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                              </span>
+                  </div>
+                  ​
+                  <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1" dropdownMenu >
+                    <li>
+                      <div style="display:inline-block;">
+                        <datepicker [(ngModel)]="dt" [ngModelOptions]="{standalone: true}" [showWeeks]="true"></datepicker>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class=" col-md-6 padding-xs-vr">
+            <div class="row">
+              <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs">Fecha de t&eacute;rmino de la estancia: </label>
+              <div class="col-md-6">
+                <div class="dropdown" dropdown autoClose="disabled">
+                  <div class="input-group">
+                    <input type="text" class="form-control" value="{{getFechaFin()}}" disabled>
+                    <span class="input-group-btn">
+                                <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu1" data-toggle="dropdown" dropdownToggle></button>
+                              </span>
+                  </div>
+                  ​
+                  <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1" dropdownMenu >
+                    <li>
+                      <div style="display:inline-block;">
+                        <datepicker [(ngModel)]="dt2" [ngModelOptions]="{standalone: true}" [showWeeks]="true"></datepicker>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="row">
+        <label class="col-md-3 control-label text-right-lg text-right-md text-left-sm text-left-xs">Tipo de vinculación académica que realizará con el investigador:</label>
+        <div class="col-md-9">
+          <textarea rows="" class="form-control" #tipoVinculacion formControlName="tipoVinculacion" maxlength="1000"></textarea>
+          <span style="float: right">
+                            (M&aacute;ximo 1000 caracteres)
+                     </span>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-md-12 padding-xs-vr">
+      <label for="comentarios" class="fat-commentarios">La información que contiene este documento forma parte del
+        sistema de datos personales bajo la responsabilidad de la Dirección de Docencia de El Colegio de San
+        Luis, A.C. y queda protegida por la Ley de Transparencia y Acceso a la
+        Información Pública Gubernamental, con fundamento en lo que establecen los artículos 13, 14 y 20 de la
+        Ley y 26 y 37 de su
+        Reglamento.</label>
+    </div>
+  </div>
+</form>

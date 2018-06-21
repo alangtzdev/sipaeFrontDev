@@ -1,0 +1,102 @@
+<div class="note col-md-12 form-group-margin">
+  <div class="row">
+    <div class="col-md-12"><h5 class="note-title">9. ¿Domina la materia?</h5></div>
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-2">
+          <div class="radio" style="margin-bottom: 0;">
+            <label>
+              <input type="radio" class="px" name="pregunta9" [checked]="verificarPregunta(9,1)"
+                     (change)="cambioRadio9(1)" value="1">
+              <span class="lbl">Excelente</span>
+            </label>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="radio" style="margin-bottom: 0;">
+            <label>
+              <input type="radio" class="px" name="pregunta9" [checked]="verificarPregunta(9,2)"
+                     (change)="cambioRadio9(2)" value="2">
+              <span class="lbl">Muy bien</span>
+            </label>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="radio" style="margin-bottom: 0;">
+            <label>
+              <input type="radio" class="px" name="pregunta9" [checked]="verificarPregunta(9,3)"
+                     (change)="cambioRadio9(3)" value="3">
+              <span class="lbl">Bien</span>
+            </label>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="radio" style="margin-bottom: 0;">
+            <label>
+              <input type="radio" class="px" name="pregunta9" [checked]="verificarPregunta(9,4)"
+                     (change)="cambioRadio9(4)" value="4">
+              <span class="lbl">Regular</span>
+            </label>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="radio" style="margin-bottom: 0;">
+            <label>
+              <input type="radio" class="px" name="pregunta9" [checked]="verificarPregunta(9,5)"
+                     (change)="cambioRadio9(5)" value="5">
+              <span class="lbl">Mal</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="note col-md-12 form-group-margin">
+  <div class="row">
+    <div class="col-md-12"><h5 class="note-title">10. ¿Le gustaría volver a tomar el curso con el profesor?</h5></div>
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-2">
+          <div class="radio" style="margin-bottom: 0;">
+            <label>
+              <input type="radio" class="px"  name="pregunta10" [checked]="verificarPregunta(10,6)" (change)="cambioRadio10(6)" value="6">
+              <span class="lbl">S&iacute;</span>
+            </label>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="radio" style="margin-bottom: 0;">
+            <label>
+              <input type="radio" class="px"  name="pregunta10" [checked]="verificarPregunta(10,7)" (change)="cambioRadio10(7)" value="7">
+              <span class="lbl">No</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="note col-md-12 form-group-margin">
+  <div class="row">
+    <div class="col-md-12"><h5 class="note-title">Comentarios adicionales</h5></div>
+    <div class="col-md-12">
+      <div class="row">
+        <form [formGroup]="formulario">
+          <div class="col-md-12" [ngClass]="{'has-error': getControlErrors('comentarios')}">
+            <textarea formControlName="comentarios" placeholder="Comentarios adicionales" ngControl="comentarios" class="form-control" rows="3" cols="200" maxlength="1000"></textarea>
+            <span style="float: right">
+                            (M&aacute;ximo 1000 caracteres)
+                    </span>
+            <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('comentarios'))">
+	        			{{errorMessage(getControl('comentarios'))}}
+	        		</span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

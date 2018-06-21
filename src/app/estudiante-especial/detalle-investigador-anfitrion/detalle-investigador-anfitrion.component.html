@@ -1,0 +1,95 @@
+<div class="panel">
+  <div class="tab-content tab-content-bordered">
+    <div class="tab-pane fade active in" id="tab1">
+      <div class="row">
+
+        <div class="col-md-12">
+          <h6 class="form-heading text-muted text-semibold text-sm">Investigador anfitri&oacute;n</h6>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Nombre:</dt>
+                  <dd class="col-md-6">{{entidadEstudianteMovilidad?.investigadorAnfitrion?.profesor?.nombre}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Primer
+                    apellido:
+                  </dt>
+                  <dd class="col-md-6">{{entidadEstudianteMovilidad?.investigadorAnfitrion?.profesor?.primerApellido}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Segundo
+                    apellido:
+                  </dt>
+                  <dd class="col-md-6">{{entidadEstudianteMovilidad?.investigadorAnfitrion?.profesor?.segundoApellido}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Programa docente:</dt>
+                  <dd class="col-md-6">{{entidadEstudianteMovilidad?.investigadorAnfitrion?.programaDocente?.descripcion}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha de inicio de la estancia:
+                  </dt>
+                  <dd class="col-md-6">{{obtenerFecha(entidadEstudianteMovilidad?.investigadorAnfitrion?.fechaInicio)}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Fecha de termin&oacute; de la estancia:</dt>
+                  <dd class="col-md-6">{{obtenerFecha(entidadEstudianteMovilidad?.investigadorAnfitrion?.fechaFin)}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6 form-group-margin">
+              <div class="row">
+                <dl class="form-horizontal">
+                  <dt class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs">Vinculaci&oacute;n:
+                  </dt>
+                  <dd class="col-md-6">
+                    {{entidadEstudianteMovilidad?.investigadorAnfitrion?.tipoVinculacion}}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+

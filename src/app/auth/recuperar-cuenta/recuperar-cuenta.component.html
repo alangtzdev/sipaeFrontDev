@@ -1,0 +1,91 @@
+<!-- Page background -->
+<div id="page-signin-bg" style="z-index: -1">
+  <!-- Replace this with your bg image -->
+  <img src="assets/images/login/background_colsan.png" alt="">
+</div>
+<!-- / Page background -->
+
+<!-- Container -->
+
+<div class="col-md-12 center-block text-center logo-colsan-login">
+  <img src="assets/images/login/colsan_logo.png">
+</div>
+
+<div class="signin-container">
+
+  <!-- Left side -->
+  <div class="signin-info">
+    <div class="colsan-logo-login">
+      <img class="img-responsive" src="assets/images/SIPAE_LOGO.png">
+    </div>
+    <div class="slogan text-center">
+      Sistema Integral de Planeación y Administración Escolar
+    </div> <!-- / .slogan -->
+  </div>
+
+  <div class="signin-form">
+
+    <div class="password-reset-form" id="password-reset-form">
+
+      <div class="header">
+        <div class="signin-text">
+          <span >Restaurar Contraseña</span>
+          <div class="close" type="button" [routerLink]="['/login']">×</div>
+        </div> <!-- / .signin-text -->
+      </div>
+
+      <form role="form" data-toggle="validator" [formGroup]="formularioCorreo" (ngSubmit)="verificarUsuarioReset()">
+        <p class="text-default text-center">Escribe la dirección de correo electrónico usada al registrarte y te enviaremos una nueva contraseña dicha dirección </p>
+
+        <div class="form-group-login w-icon">
+          <input id="usuario"
+                 name="usuario"
+                 type="text"
+                 #usuario
+                 class="form-control input-lg"
+                 required
+                 formControlName="usuario"
+                 placeholder="correo electr&oacute;nico">
+          <span class="fa fa-envelope signin-form-icon"></span>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit"
+                  class="btn btn-primary btn-block">
+            Enviar
+          </button>
+        </div>
+      </form>
+
+      <alert
+        *ngFor="let alerta of alertas;let i = index"
+        [type]="alerta.type"
+        dismissible="true"
+        (close)="cerrarAlerta(i)">
+        {{alerta?.msg}}
+      </alert>
+    </div>
+  </div>
+</div>
+
+<div class="not-a-member">
+  <a [routerLink]="['/PreguntasFrecuentes']">Preguntas Frecuentes</a>
+
+</div>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop"  class="modal-alert modal-success" #modalConfirmarRegistro  >
+  <modal-header>
+    <i class="fa fa-check-circle"></i>
+    <div class="col-md-12 col-sm-12 col-xs-12 modal-title">Se realizó correctamente el registro.</div>
+    <br><br>
+  </modal-header>
+  <modal-body>
+    <p>En un momento te llegará un correo electrónico.</p>
+  </modal-body>
+  <modal-footer>
+    <div class="col-md-12 text-center">
+      <button type="button" (click)="cerrarModalResetPass()" class="btn btn-default">Aceptar</button>
+    </div>
+  </modal-footer>
+</modal>
+

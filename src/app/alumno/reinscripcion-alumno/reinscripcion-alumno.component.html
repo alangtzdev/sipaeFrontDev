@@ -1,0 +1,328 @@
+
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12 text-center text-left-sm">
+      <h1>Reinscripciones</h1>
+      <p><small>Lista de estudiantes para reinscripciones</small></p>
+    </div>
+  </div>
+</div>
+
+<!--<form [formGroup]="formularioCheck" >-->
+  <div class="panel">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+              <label >Programa docente:</label>
+              <select  class="form-control"  #programaDocente
+                       (change)="cambioProgramaDocenteFiltro(programaDocente.value)">
+                <option value="" disabled selected> Selecciona... </option>
+                <option *ngFor="let programa of opcionSelectProgramaDocente" value="{{programa.id}}">{{programa.descripcion}}</option>
+              </select>
+            </div>
+
+            <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+              <label >Promoción:</label>
+              <select #promocion  ngControl="seteador" id="idPromocion" class="form-control" (change)="getPeriodosEscolares(promocion.value)">
+                <option value=""  disabled selected> Selecciona... </option>
+                <option *ngFor="let programa of opcionSelectPromocion" value="{{programa.id}}">{{programa.getClavePromocion()}}</option>
+              </select>
+            </div>
+
+            <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+              <label >Del periodo escolar</label>
+              <select #periodoInicio ngControl="seteadorPeriodo" id="idPeriodoActual" class="form-control" (change)="almacenarPeriodoActual(periodoInicio.value)">
+                <option value="" disabled selected> Selecciona... </option>
+                <option *ngFor="let programa of opcionSelectPeriodoEscolar" value="{{programa?.idPeriodoEscolar?.id}}">{{programa?.idPeriodoEscolar?.anio +' - '+ programa?.idPeriodoEscolar?.periodo}}</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+        <div *ngIf="mostrarBoton" class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+          <button  class="btn" (click)="buscarCriteriosCabezera(
+          programaDocente.value,
+          promocion.value,
+          periodoInicio.value)">Buscar <span class="fa fa-search"></span>
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+<!--</form>-->
+<div class="panel">
+  <div class="panel-body">
+    <div *ngIf="!gestionAcademicaFinalizada">
+      <alert type="danger" dismissible="true">
+        La gestión académica para el siguiente semestre aún no está completa,
+        aún no se pueden realizar reinscripciones.
+      </alert>
+    </div>
+    <h5 class="form-heading text-muted text-semibold text-sm">Procesos</h5>
+    <div class="row">
+      <div class="col-md-12" *ngIf="mostrarCampos">
+        <div class="row">
+          <form role="form" [formGroup]="formulario">
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                  <div [ngClass]="{'has-error': getControlErrors('idPeriodoNuevo')}">
+                    <label >Per&iacute;odo escolar al que se reinscribe:</label>
+                    <select #periodotermino id="idPeriodoNuevo" class="form-control" name="idPeriodoNuevo"
+                      (change)="almacenarPeriodoNuevo(periodotermino.value)" ngControl="idPeriodoNuevo" formControlName="idPeriodoNuevo">
+                      <option value="" disabled selected> Selecciona... </option>
+                      <option *ngFor="let programa of periodoReinscripcion" value="{{programa.id}}">{{programa?.idPeriodoEscolar?.anio +' - '+ programa?.idPeriodoEscolar?.periodo}}</option>
+                    </select>
+                    <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('idPeriodoNuevo'))" >
+                                              {{errorMessage(getControl('idPeriodoNuevo'))}}
+                                      </span>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                  <label >Fecha de procedimiento:</label>
+                  <input value="{{fechaReinscripcionEstudiante}}" type="text" class="form-control" disabled>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12 "><!-- cont-botones-->
+      <br>
+      <div class="row text-right">
+        <button class="btn btn-labeled btn-default form-group-margin" (click)="abriModalHistorico()"><span class="btn-label icon fa fa-retweet"></span>Histórico</button>
+        <div class="btn-group" *ngIf="mostrarCampos">
+          <button type="button" [disabled]="!ocultarBotonReinscripcion()" class="btn btn-labeled btn-success form-group-margin" (click)="modalConfirmarTraspaso()"><span class="btn-label icon fa fa-share-square"></span>Reinscripciones</button>
+        </div>
+      </div>
+    </div>
+    <!-- cont-buscar-->
+
+
+    <div class="col-md-12">
+      <div class="row">
+        <div role="grid" class="dataTables_wrapper form-inline" id="jq-datatables-example_wrapper">
+          <div class="table-header clearfix">
+            <div class="table-caption">Lista de traspaso de estudiantes</div>
+          </div>
+          <div class="table-responsive">
+            <table cellpadding="0" cellspacing="0" border="0"
+              class="table table-striped table-bordered dataTable no-footer"
+                id="jq-datatables-example"
+                aria-describedby="jq-datatables-example_info">
+              <thead>
+              <tr role="row">
+                <th
+                  *ngFor="let columna of columnas" style="text-align: center;"
+                >
+                  <span *ngIf="columna.titulo !== 'Seleccionar'">{{columna.titulo}}</span>
+                  <span *ngIf="columna.titulo === '' && registros.length !== 0"><input #seleccionGrupo type="checkbox" [disabled] ="deshabilitarCampoGrupal()" (click)="validarGrupo(seleccionGrupo.checked)"/></span>
+                </th>
+              </tr>
+              </thead>
+              <tbody *ngIf = "registros.length === 0">
+              <tr class="gradeA odd">
+                <th class="text-center" colspan="7">
+                  Cambie sus criterios de b&uacute;squeda
+                </th>
+              </tr>
+              </tbody>
+              <tbody *ngIf = "registros.length !== 0">
+
+              <tr class="gradeA odd" *ngFor="let registro of registros"
+
+              >
+                <td class="text-center">{{registro?.datosPersonales?.getNombreCompleto()}}</td>
+                <td class="text-center">{{registro?.estatus?.valor}}</td>
+                <td class="text-center">{{registro?.matricula?.matriculaCompleta}}</td>
+                <td class="text-center">{{registro?.periodoActual?.getPeriodoAnioConsecutivo()}}</td>
+                <td class="text-center">{{cambiarEstatusPago(profesor[registro?.id])}}</td>
+                <td class="text-center">{{mostrarEstatusSemestre(registro?.id)}}</td>
+                <td class="text-center">
+                  <input #valor type="checkbox"
+                         (click) = "rowSeleccion(registro)"
+                         [checked]="marcarCampos()"
+                         [disabled]="deshabilitarCampos(profesor[registro?.id], registro?.id)"
+                         (change)="enviarReinscripcionEstudianteTabla(valor.checked)"
+                  >
+                </td>
+              </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL HISTORICO -->
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" #modalHistorico>
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalHistorico()" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Hist&oacute;ricos de reinscripciones</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+      <div class="col-md-12">
+        <h5 class="form-heading text-muted text-semibold text-sm">REINSCRIPCIONES</h5>
+          <div class="row">
+            <div class="col-md-12">
+              <br>
+              <div class="col-md-12 padding-sm-vr no-padding-t">
+                <div class="row">
+                  <div role="grid" class="dataTables_wrapper form-inline " id="jq-datatables-example_wrapper">
+                    <div class="table-header clearfix">
+                      <div class="table-caption">
+                        Lista de procesos de alumnos
+                      </div>
+                      <div class="DT-lf-right">
+                        <div class="DT-per-page">
+                          <div class="dataTables_length" id="jq-datatables-example_length">
+                            <label>Registros por p&aacute;gina: &nbsp;
+                              <select name="jq-datatables-example_length"
+                                aria-controls="jq-datatables-example"
+                                class="form-control input-sm"
+                                #limiteControl name="jq-datatables-example_length"
+                                aria-controls="jq-datatables-example"
+                                class="form-control input-sm"
+                                (change) = "setLimiteHistorico(limiteControl.value)"
+                              >
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="table-responsive">
+                      <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example" aria-describedby="jq-datatables-example_info">
+                        <thead>
+                          <tr role="row">
+                            <th
+                            *ngFor="let columna of columnasHistorico"
+                            [ngClass]="{
+                              'sorting_desc': columna.sort === 'desc',
+                              'sorting_asc': columna.sort === 'asc',
+                              'sorting': columna.sort !== false
+                            }"
+                            (click)="sortChangedHistorico(columna)"
+                            >
+                                {{columna.titulo}}
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody *ngIf = "registrosHistoricos.length === 0">
+                          <tr class="gradeA odd">
+                            <th class="text-center" colspan="5">
+                                No hay Registros
+                            </th>
+                          </tr>
+                        </tbody>
+                        <tbody *ngIf = "registrosHistoricos.length !== 0">
+                          <tr class="gradeA odd" *ngFor="let registro of registrosHistoricos">
+                              <td class="text-center">{{registro?.id}}  </td>
+                              <td class="text-center">{{registro?.periodoActual.getPeriodoAnioConsecutivo()}} - {{registro?.periodoNuevo.getPeriodoAnioConsecutivo()}}</td>
+                              <td class="text-center">{{registro?.promocion?.abreviatura}} - {{registro?.promocion.consecutivo}}</td>
+                              <td class="text-center">{{registro?.estudiantesProcesados}}</td>
+                              <td class="text-center">{{registro?.totalEstudiantes}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="table-footer clearfix">
+                      <div class="DT-pagination" *ngIf="isSetPaginacionHistorico()">
+                        <div class="dataTables_paginate paging_simple_numbers">
+                            <pagination
+                              class="pagination"
+                              [totalItems] = "paginacionHistorico.registrosTotales"
+                              [itemsPerPage] = "limite"
+                              [maxSize] = "maxSizePags"
+                              [rotate]="false"
+                              [(ngModel)] = "paginaActualHistorico"
+                              (pageChanged) = "cambiarPaginaHistorico($event)"
+                              previousText = "Anterior"
+                              nextText = "Siguiente"
+                            >
+                            </pagination>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" (click)="cerrarModalHistorico()"
+      class="btn btn-default" data-dismiss="modal">
+      <i class="fa fa-times"></i>&nbsp;&nbsp;Cerrar
+    </button>
+  </modal-footer>
+</modal>
+<!-- FIN DEL MODAL HISTORICO-->
+
+<!-- MODAL MENSAJE ADEUDO -->
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop"
+  #modalAdeudo class="modal-alert modal-danger">
+  <modal-header>
+    <i class="fa fa-times-circle"></i>
+  </modal-header>
+  <modal-body>
+    <div>
+      No se puede realizar una reinscripcion grupal, existen alumnos con adeudos o
+        existen alumnos con calificaciones no aprobatorias
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button (click)="cerrarModalAdeudo()" type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
+  </modal-footer>
+</modal>
+<!-- FIN DEL MODAL MENSAJE ADEUDO -->
+
+<!-- MODAL CONFIRMACION -->
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop"
+  #modalConfirmacion class="modal-alert modal-success">
+  <modal-header>
+    <i class="fa fa-check-circle"></i>
+  </modal-header>
+  <modal-body>
+    ¿Est&aacute;s seguro que deseas continuar con el proceso de reinscripci&oacute;n del periodo {{periodoAcutalModalTrapaso?.anio}} - {{periodoAcutalModalTrapaso?.periodo}} al periodo {{periodoNuevoModalTraspaso?.anio}} - {{periodoNuevoModalTraspaso?.periodo}}?
+  </modal-body>
+  <modal-footer>
+    <button (click)="cerrarModalConfirmacionTraspaso()" type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+    <button (click)="gurdarRegistros()" type="button" class="btn btn-success" data-dismiss="modal">Sí</button>
+  </modal-footer>
+</modal>
+<!-- FIN DEL MODAL CONFIRMACION -->
+
+<!-- MODAL ADEUDO ALUMNO -->
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop"
+  #modalAudeudoAlumno class="modal-alert modal-danger">
+  <modal-header>
+    <i class="fa fa-times-circle"></i>
+  </modal-header>
+  <modal-body>
+    No se puede reinscribir al alumno debido a que no acredit&oacute; sus materias o no han sido evaluadas
+  </modal-body>
+  <modal-footer>
+    <button (click)="cerrarModalAdeudoAlumno()" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+  </modal-footer>
+</modal>
+<!-- FIN DEL MODAL ADEUDO ALUMNO -->

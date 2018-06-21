@@ -1,0 +1,303 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center text-left-sm">
+      <h1>Aspirantes/estudiantes en movilidad externa</h1>
+      <p><small>Lista de aspirantes/estudiantes para movilidad externa.</small></p>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="row">
+
+          <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+            <label> Programa docente: </label>
+            <select #programaDocenteSelection class="form-control">
+              <option value="" selected> Selecciona...</option>
+              <option *ngFor="let programaDocenteItem of programasDocentesSelect" [value]="programaDocenteItem.id">
+                {{programaDocenteItem.text}}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+
+            <label  for="fechaBusqueda">Desde: </label>
+
+            <div class="dropdown" dropdown autoClose="disabled">
+
+              <div class="input-group">
+                <input #fechaDB class="form-control" type="text" value="{{ getDate()}}" disabled>
+                <span class="input-group-btn">
+				  <button class="btn dropdown-toggle fa fa-calendar" type="button" id="menu" data-toggle="dropdown" dropdownToggle></button>
+				</span>
+              </div>
+
+              <ul class="dropdown-menu" role="menu" aria-labelledby="menu" dropdownMenu >
+                <li>
+                  <div style="display:inline-block;">
+                    <datepicker [(ngModel)]="dt" [minDate]="minDate" [maxDate]="maxDate" [showWeeks]="true"></datepicker>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+
+          </div>
+
+          <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+            <label> Nacionalidad:</label>
+            <select #nacionalidad class="form-control">
+              <option value="" selected> Selecciona...</option>
+              <option *ngFor="let nacionalidadItem of opcionSelectNacionalidad" [value]="nacionalidadItem.id">
+                {{nacionalidadItem.text}}
+              </option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-4 col-sm-12 text-right padding-sm-vr no-padding-b">
+        <button
+          class="btn" (click)="buscarCriteriosCabezera(
+										programaDocenteSelection.value,
+										fechaDB.value,
+										nacionalidad.value
+									)"
+        >
+          Buscar <span class="fa fa-search"></span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="col-md-10"><!-- cont-botones-->
+          <div class="text-right">
+            <button class="btn btn-success form-group-margin" *ngIf="!conPromocion && registroSeleccionado" type="button" (click)="generarFormatoFormalizacion()">
+              <i class="fa fa-download"></i> Formato de formalizaci&oacute;n
+            </button>
+            <button *ngIf="conPromocion && hasRol('DOCENCIA') && registroSeleccionado?.estatus?.id == 1002" class="btn btn-labeled btn-success form-group-margin" (click)="modalAgregarPromocion()">
+              <span class="btn-label icon fa fa-check"></span> Asignar promoción
+            </button>
+            <button [disabled]="!registroSeleccionado" class="btn btn-labeled btn-default form-group-margin" (click)="detalle()">
+              <span class="btn-label icon fa fa-eye"></span>Detalle
+            </button>
+
+            <div class="btn-group form-group-margin" dropdown>
+              <button class="btn btn-conacyt dropdown-toggle" type="button" data-toggle="dropdown">
+               <span class="btn-label icon fa fa-download"></span> Exportar </button>
+               <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                    <i class="fa fa-caret-down"></i>
+                  </button>
+
+               <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+                <li role="menuitem">
+                  <a
+                    class="dropdown-item"
+                    (click)="exportar('Excel')"
+                  >
+                    Exportar a Excel
+                  </a>
+                </li>
+                <li class="divider dropdown-divider"></li>
+                <li role="menuitem">
+                  <a
+                    class="dropdown-item"
+                    (click)="exportar('PDF')"
+                  >
+                    Exportar a PDF
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!--<div class="btn-group form-group-margin" dropdown>
+              <button id="split-button" type="button" class="btn btn-labeled btn-conacyt"><span class="btn-label icon fa fa-download"></span> Exportar</button>
+              <button type="button" class="btn btn-conacyt dropdown-toggle" dropdownToggle>
+                <i class="fa fa-caret-down"></i>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+                <li role="menuitem">
+                  <a
+                    class="dropdown-item"
+                    (click)="exportar('Excel')"
+                  >
+                    Exportar a Excel
+                  </a>
+                </li>
+                <li class="divider dropdown-divider"></li>
+                <li role="menuitem">
+                  <a
+                    class="dropdown-item"
+                    (click)="exportar('PDF')"
+                  >
+                    Exportar a PDF
+                  </a>
+                </li>
+              </ul>
+            </div>-->
+          </div>
+        </div> <!-- cont-botones-->
+        ​
+        <div class="col-md-2 form-group-margin"> <!-- cont-buscar-->
+          <div class="row">
+            <div class="col-md-12 pull-right text-right">
+              <div class="row">
+                <input
+                  #filtro
+                  type="text"
+                  class="form-control"
+                  id="buscar"
+                  placeholder="Buscar..."
+                  (keyup.enter)="filtroChanged(filtro.value)"
+                >
+              </div>
+            </div>
+          </div>
+        </div> <!-- cont-buscar-->
+      </div>
+    </div>
+
+    <div role="grid" id="jq-datatables-example_wrapper"
+         class="dataTables_wrapper form-inline no-footer table-responsive">
+      <div class="table-header clearfix">
+        <div class="table-caption">Lista de aspirantes/estudiantes</div>
+        <div class="DT-lf-right">
+          <div class="DT-per-page">
+            <div class="dataTables_length" id="jq-datatables-example_length">
+              <label>Registros por página:
+                <select
+                  #limiteControl
+                  name="jq-datatables-example_length"
+                  aria-controls="jq-datatables-example"
+                  class="form-control input-sm"
+                  (change)="setLimite(limiteControl.value)"
+                >
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table cellpadding="0" cellspacing="0" border="0"
+               class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example"
+               aria-describedby="jq-datatables-example_info">
+          <thead>
+          <tr role="row">
+            <th
+              *ngFor="let columna of columnas"
+              [ngClass]="{
+											'sorting_desc': columna.sort === 'desc',
+											'sorting_asc': columna.sort === 'asc',
+											'sorting': columna.sort !== false
+										}"
+              (click)="sortChanged(columna)"
+            >
+              {{columna.titulo}}
+            </th>
+          </tr>
+          </thead>
+          <tbody *ngIf = "registros.length === 0">
+          <tr class="gradeA odd">
+            <th class="text-center" colspan="6">
+              Cambie sus criterios de búsqueda
+            </th>
+          </tr>
+          </tbody>
+          <tbody *ngIf = "registros.length !== 0">
+
+          <tr class="gradeA odd" *ngFor="let registro of registros"
+              [ngClass]="{
+									'seleccionado': rowSeleccionado(registro)}"
+              (click) = "rowSeleccion(registro)"
+          >
+            <td class="center">{{registro?.getNombreCompletoOpcional()}}</td>
+            <td class="center">{{registro?.datosPersonales?.email}}</td>
+            <td class="center">{{registro?.idProgramaDocente?.descripcion}}</td>
+            <td class="center">{{registro?.idPromocion?.getAbreviatura()}}</td>
+            <td class="center">{{registro?.getUltimaActualizacionFormato()}}</td>
+            <td class="center">{{registro.estatus?.valor}}</td>
+          </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="table-footer clearfix">
+        <div class="DT-pagination" *ngIf="isSetPaginacion()">
+          <div class="dataTables_paginate paging_simple_numbers">
+            <pagination
+              class="pagination"
+              [totalItems]="paginacion.registrosTotales"
+              [itemsPerPage]="limite"
+              [maxSize]="maxSizePags"
+              [rotate]="false"
+              [(ngModel)]="paginaActual"
+              (pageChanged)="cambiarPagina($event)"
+              previousText="Anterior"
+              nextText="Siguiente"
+            >
+            </pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<modal [animation]="animation" [keyboard]="keyboard" [backdrop]="backdrop" class="modal-alert modal-success" #modalPromocion  >
+  <modal-header>
+    <button type="button" class="close" (click)="cerrarModalAgregarPromo()">×</button>
+    <i class="fa fa-check-circle"></i>
+  </modal-header>
+  <modal-body>
+    <div class="col-md-12 text-center">
+      <br>
+            <span><strong>{{registroSeleccionado?.getNombreCompletoOpcional()}}
+            </strong></span>
+      <br>
+      <form [formGroup]="asignarPromocion">
+        <div class="col-md-12 padding-xs-vr">
+          <div class="row">
+            <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs" for="promocion">Promoción:</label>
+          </div>
+          <div class="row">
+            <div class="col-md-12" [ngClass]="{ 'has-error': getControlErrorsAgregarPromo('idPromocion')}">
+              <select class="form-control" ngControl='idPromocion' #idPromocion formControlName="idPromocion">
+                <option value="" selected>Selecciona...</option>
+                <option *ngFor="let catalogoItem of opcionesPromociones"
+                        value="{{catalogoItem.id}}">
+                  {{catalogoItem.getClavePromocion()}}
+                </option>
+              </select>
+              <span id="helpBlockProgramaDocente" class="help-block" *ngIf="(getControlErrorsAgregarPromo('idPromocion'))">
+                  {{errorMessage(getControlAgregarPromo('idPromocion'))}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </form>
+      <br>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button data-dismiss="modal" class="btn btn-danger" type="button"  (click)="cerrarModalAgregarPromo()">&nbsp;&nbsp;No</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <button class="btn btn-success" type="submit" (click)="enviarFormularioPromoAgregar()">&nbsp;&nbsp;Sí</button>
+  </modal-footer>
+</modal>
