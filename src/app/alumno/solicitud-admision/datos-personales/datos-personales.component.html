@@ -236,20 +236,20 @@
           <!---->
 
           <div *ngIf="esNacional" class="col-md-6 padding-xs-vr">
-            <div
+            <!-- <div
               [ngClass]="{
                                 'has-error': getControlErrors('curp')
                               }"
-            >
-
+            > -->
+<div>
               <div class="row">
                 <label class="col-md-6">CURP: *</label>
                 <div class="col-md-6">
                   <input class="form-control text-uppercase" type="text" placeholder="CURP"
                          ngControl="curp" formControlName="curp" maxlength="18">
-                  <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('curp'))">
+                  <!-- <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('curp'))">
                                             {{errorMessage(getControl('curp'))}}
-                                    </span>
+                                    </span> -->
                  
                 </div>
               </div>

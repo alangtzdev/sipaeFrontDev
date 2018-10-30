@@ -15,7 +15,19 @@
         <div class="row">
           <div class=" col-md-8 col-sm-12">
             <div class="row">
-              <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                <!-- <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
+                    <label>Programa Docente:</label>
+                    <select #programaDocenteSelection class="form-control" ngControl="idProgramaDocente" formControlName="idProgramaDocente"
+                            (change)="cambioProgramaDocenteFiltro(programaDocenteSelection.value)"
+                            (change)="activarBotonBuscar(2)" [disabled]="desahabilitarSelectorCoordiancion">
+                      <option value="" disabled selected> Selecciona...</option>
+                      <option *ngFor="let programaDocenteItem of opcionesProgramaDocente"
+                              [value]="programaDocenteItem.id">
+                        {{programaDocenteItem.text}}
+                      </option>
+                    </select>
+                  </div> -->
+            <div class="col-md-4 col-sm-6 padding-sm-vr no-padding-b">
                 <label class=" text-left" for="idProgramaDocente">
                   Programa docente:
                 </label>

@@ -78,9 +78,9 @@ export class DependientesContactoComponent implements OnInit {
     this.prepareServices();
     this.formulario = new FormGroup({
       padecimiento: new FormControl('',
-        Validators.compose([Validators.required, Validacion.parrafos])),
+        Validators.compose([Validacion.parrafos])),
       nombreCompleto: new FormControl('',
-        Validators.compose([Validators.required, Validacion.parrafos])),
+        Validators.compose([Validacion.parrafos])),
       idParentesco: new FormControl(''),
       calleNumero: new FormControl('',
         Validators.compose([Validacion.parrafos])), // val
@@ -94,7 +94,7 @@ export class DependientesContactoComponent implements OnInit {
       telefono: new FormControl('',
         Validators.compose([Validacion.telefonoValidator])), // val
       celular: new FormControl('',
-        Validators.compose([Validators.required, Validacion.celularValidator])), // val
+        Validators.compose([Validacion.celularValidator])), // val
       correoElectronico: new FormControl('',
         Validators.compose([Validacion.emailValidatorOptional])),
       idEstudiante: new FormControl(this.idEstudiante),

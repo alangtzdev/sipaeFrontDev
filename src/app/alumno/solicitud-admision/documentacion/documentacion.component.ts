@@ -181,7 +181,7 @@ export class DocumentacionComponent implements OnInit {
   }
 
   aceptaDatos(valido: boolean, numeroDoc: number): void {
-    if (numeroDoc > this.noDocConvocatoria) {
+    if (numeroDoc >= this.noDocConvocatoria) {
       this.habilitarBotonEnviar = valido;
     }
   }
@@ -300,3 +300,4 @@ dialog = this.modal.open(
 );
 }
 */
+// http://192.168.192.71:8000/api/v1/archivovisualizacion/2240?ticket=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJ0aWNrZXQiOiIkMnkkMTIkNEZBeGlQeVp0aDBkTFh3a1ZITzF1ZXVNZDA4ZVA4VlFWbTFoYUtYbDJtMzRjLlRidWFaT20iLCJpYXQiOiIxNTMwODA3MDAyIiwiZXhwIjoiMTUzMDgwNzMwMiJ9.

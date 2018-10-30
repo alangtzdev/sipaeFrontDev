@@ -32,10 +32,12 @@ export class ModalRegistroExperienciaComponent implements OnInit {
   estatusCatalogoService;
 
   // variables para rango de fechas
-  minDate: Date;
+  public dt: Date;
+  public minDate: Date;
+  dt2: Date;
   finCurso: Date;
   contador: number = 0;
-  fi: Date;
+  public fi: Date;
   ff: Date;
   fechaVisible: boolean = false;
 
@@ -55,9 +57,9 @@ export class ModalRegistroExperienciaComponent implements OnInit {
     moment.locale('es');
     this.minDate = new Date();
     this.finCurso = new Date();
-    this.fi = new Date();
+    // this.fi = new Date();
     this.fechaMaxima = new Date();
-    this.ff = new Date();
+    // this.ff = new Date();
     this.fechaMinima = new Date();
 
     // this.fechaMaxima = new Date(this.fechaMaxima.valueOf());
@@ -95,7 +97,7 @@ export class ModalRegistroExperienciaComponent implements OnInit {
     if (this.fi) {
       let fechaInicioFormato =  moment(this.fi).format('DD/MM/YYYY');
       (<FormControl>this.formularioExperienciaProfesional.controls['fechaInicio'])
-        .setValue(fechaInicioFormato + ' 10:30am');
+        .patchValue(fechaInicioFormato + ' 10:30am');
       return fechaInicioFormato;
     } else {
       return  moment(new Date()).format('DD/MM/YYYY');
@@ -104,20 +106,20 @@ export class ModalRegistroExperienciaComponent implements OnInit {
 
   getFechaFin(): string {
     if (this.ff) {
-      if ( this.contador === 0 ) {
-        this.fechaMinima = this.fi;
-        this.ff = this.fi;
+      // if ( this.contador === 0 ) {
+      //   this.fechaMinima = this.fi;
+      //   this.ff = this.fi;
         // this.ff = new Date(this.fechaMinima.valueOf());
         let fechaConFormato =  moment(this.ff).format('DD/MM/YYYY');
         (<FormControl>this.formularioExperienciaProfesional.controls['fechaFin'])
           .setValue(fechaConFormato + ' 10:30am');
         return fechaConFormato;
-      } else {
-        let fechaConFormato =  moment(this.ff).format('DD/MM/YYYY');
-        (<FormControl>this.formularioExperienciaProfesional.controls['fechaFin'])
-          .setValue(fechaConFormato + ' 10:30am');
-        return fechaConFormato;
-      }
+      // } else {
+      //   let fechaConFormato =  moment(this.ff).format('DD/MM/YYYY');
+      //   (<FormControl>this.formularioExperienciaProfesional.controls['fechaFin'])
+      //     .setValue(fechaConFormato + ' 10:30am');
+      //   return fechaConFormato;
+      // }
     } else {
       return  moment(new Date()).format('DD/MM/YYYY');
     }
@@ -222,6 +224,8 @@ export class ModalRegistroExperienciaComponent implements OnInit {
   }
 
   validarFormulario(): boolean {
+     let fechaInicio = moment(this.fi).format('YYYY/MM/DD'); //'DD/MM/YYYY'
+    let fechaFin = moment(this.ff).format('YYYY/MM/DD');
     if (this.fechaVisible) {
       (<FormControl>this.formularioExperienciaProfesional.
         controls['fechaFin']).setValue('12/12/2012 12:12 am');

@@ -61,11 +61,10 @@ export class InfoComplementariaComponent implements OnInit {
       idMedioDifusion: new FormControl(''),
       otro: new FormControl('',
         Validators.compose([
-          Validators.required,
           Validacion.textoValidator,
         ])
       ),
-      nombreAnteproyecto: new FormControl('', Validators.required)
+      nombreAnteproyecto: new FormControl('')
     });
 
     this.formularioLgac = new FormGroup({
