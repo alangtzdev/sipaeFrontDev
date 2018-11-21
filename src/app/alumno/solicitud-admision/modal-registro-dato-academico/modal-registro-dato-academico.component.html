@@ -117,7 +117,7 @@
                   <label class="col-md-6 control-label text-left">Grado o t&iacute;tulo:*</label>
                   <div class="col-md-6">
                     <input type="text" class="form-control" name="grado" id="grado"
-                           placeholder="Grado o T&iacute;tulo" required ngControl="grado" formControlName="grado" maxlength="50">
+                           placeholder="Grado o T&iacute;tulo" required ngControl="grado" formControlName="grado" maxlength="100">
                     <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('grado'))" >
                                        {{errorMessage(getControl('grado'))}}
                                 </span>
@@ -187,7 +187,7 @@
                   <label class="col-md-6 control-label text-left">Otro: *</label>
                   <div class="col-md-6">
                     <input type="text" class="form-control" name="otroTipoTrabajo" id="otroTipoTrabajo"
-                           placeholder="Tipo de trabajo con el que se obtuvo el grado" ngControl="otroTipoTrabajo" formControlName="otroTipoTrabajo" maxlength="50">
+                           placeholder="Tipo de trabajo con el que se obtuvo el grado" ngControl="otroTipoTrabajo" formControlName="otroTipoTrabajo" maxlength="100">
                     <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('otroTipoTrabajo'))" >
                                               {{errorMessage(getControl('otroTipoTrabajo'))}}
                                        </span>

@@ -118,10 +118,73 @@
             <div class="col-md-12 text-right-lg text-right-md text-left-sm text-left-xs">
               <div class="row">
 
-                <div class="col-md-6 padding-xs-vr" (click)="$event.preventDefault()">
+                <!-- inicio fechas nuevas -->
+                <div class="col-md-6 padding-xs-vr">
+                  <div class="row">
+                    <label for="" class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs control-label">Desde:</label>
+                    <div class="col-md-6">
+                      <div class="dropdown" dropdown autoClose="outsideClick">
+                        <div class="input-group">
+                            <input type="text" class="form-control" value="{{getFechaInicio()}}" disabled>
+                          <span class="input-group-btn">
+                            <button  class="btn dropdown-toggle fa fa-calendar"
+                            (click)="elegirFechaInicio()"
+                            type="button" id="menu1" data-toggle="dropdown"
+                            dropdownToggle></button>
+                          </span>
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu"
+                            aria-labelledby="menu1" dropdownMenu>
+                          <li>
+                              <div style="display:inline-block;">
+                                <!-- [minDate]="minDate" -->
+                                  <datepicker [(ngModel)]="fi"  [ngModelOptions]="{standalone: true}" [showWeeks]="true"></datepicker>
+                                </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 padding-xs-vr">
+                    <div class="row">
+                        <label class="col-md-6 text-right-lg text-right-md text-left-sm text-left-xs control-label">Hasta:
+                           </label>
+                        <div class="col-md-6">
+                          <div class="dropdown" dropdown autoClose="outsideClick">
+                            <div class="input-group">
+                              <input type="text" class="form-control" value="{{getFechaFin()}}"
+                                     disabled>
+                              <span class="input-group-btn">
+                                <button class="btn dropdown-toggle fa fa-calendar"
+                                        (click)="elegirFechaFin()"
+                                        type="button" id="menu2" data-toggle="dropdown"
+                                        dropdownToggle>
+                                </button>
+                              </span>
+                            </div>
+                            ​
+                            <ul class="dropdown-menu dropdown-menu-right" role="menu"
+                                aria-labelledby="menu1" dropdownMenu>
+                              <li>
+                                <div style="display:inline-block;">
+                                  <!-- [minDate]="minDate" -->
+                                  <datepicker [(ngModel)]="ff" [ngModelOptions]="{standalone: true}" 
+                                              [showWeeks]="true"></datepicker>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+                <!-- fin fechas viejas -->
+
+                <!-- <div class="col-md-6 padding-xs-vr" (click)="$event.preventDefault()">
                   <div class="row">
                     <label class="col-md-6" >Desde: </label>
-                    <div dropdown autoClose="outsideClick" class="col-md-6" keyboardNav="true">
+                    keyboardNav="true"
+                    <div dropdown autoClose="outsideClick" class="col-md-6" >
                       <div class="input-group text-right">
                         <input type="text" class="form-control" disabled
                                value="{{ getFechaInicio()}}" id="fi">
@@ -138,9 +201,9 @@
                       </ul>
                     </div>
                   </div>
-                </div>
+                </div> -->
 
-                <div *ngIf="ocultarFechaFin()" class="col-md-6 padding-xs-vr" (click)="$event.preventDefault()">
+                <!-- <div *ngIf="ocultarFechaFin()" class="col-md-6 padding-xs-vr" (click)="$event.preventDefault()">
                   <div class="row">
                     <label class="col-md-6">Hasta: </label>
                     <div dropdown autoClose="outsideClick" class="col-md-6" keyboardNav="true">
@@ -159,31 +222,19 @@
                       </ul>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
 
-            <div class="col-md-12 text-right-lg text-right-md text-left-sm text-left-xs ">
+            <div class="col-md-12 ">
               <div class="row">
-                <div class="col-md-6 padding-xs-vr">
-                  <div class="row">
-                    <div class="col-md-6"></div>
-                    <div class="col-md-6"></div>
-                  </div>
-                </div>
 
                 <div class="col-md-6 padding-xs-vr">
                   <div class="row">
-                    <label for="actualmente" class="col-md-6">Actualmente:</label>
-                    <div class="col-md-6">
-                      <div class="checkbox text-right" style="width:20px;height:20px;">
-                        <input id="actualmente" type="checkbox"
-                               placeholder=""
-                               value="" #valorActividad
-                               ngControl="actualmente" formControlName="actualmente" (change)="cambiaActividad(valorActividad.checked)" style="position: absolute; top: 0px;"
-                        >
-                        <!--control-mensaje control="actualmente"></control-mensaje-->
-                      </div>
+                    <div class="checkbox">
+                      <label for="actualmente" class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs" style="font-weight: 600;">Actualmente:</label>
+                      <input class="col-md-6" id="actualmente" type="checkbox" #actualmente formControlName="actualmente">
+ <!--                     <control-mensaje control="actualmente"></control-mensaje>-->
                     </div>
                   </div>
                 </div>

@@ -6,17 +6,16 @@
 
     <div class="col-md-12" *ngIf="capturarDependientesEconomicos()">
       <div class="text-right">
-        <button *ngIf="mostarBotones()" type="button" class="btn btn-danger form-group-margin"
-                (click)="eliminarDependiente()"><i class="fa fa-times"></i>&nbsp;&nbsp;Eliminar
+        <button *ngIf="mostarBotones()" type="button" class="btn btn-danger form-group-margin" (click)="eliminarDependiente()">
+          <i class="fa fa-times"></i>&nbsp;&nbsp;Eliminar
         </button>
-        <button *ngIf="mostarBotones()" type="submit" class="btn btn-default form-group-margin"
-                (click)="modalDetalleDependiente()"><i class="fa fa-eye"></i>&nbsp;&nbsp;Detalle
+        <button *ngIf="mostarBotones()" type="submit" class="btn btn-default form-group-margin" (click)="modalDetalleDependiente()">
+          <i class="fa fa-eye"></i>&nbsp;&nbsp;Detalle
         </button>
         <button type="button" class="btn btn-success form-group-margin" (click)="modalDependientesEconomicos('agregar')">
           <i class="fa fa-plus"></i>&nbsp;&nbsp;Agregar
         </button>
-        <button type="button" class="btn btn-warning form-group-margin" *ngIf="registroSeleccionado"
-                (click)="modalDependientesEconomicos('editar')">
+        <button type="button" class="btn btn-warning form-group-margin" *ngIf="registroSeleccionado" (click)="modalDependientesEconomicos('editar')">
           <i class="fa fa-pencil"></i>&nbsp;&nbsp;Editar
         </button>
       </div>
@@ -25,37 +24,31 @@
     <div class="col-md-12" *ngIf="capturarDependientesEconomicos()">
       <div class="table-default">
         <div class="table-responsive">
-          <table cellpadding="0" cellspacing="0" border="0"
-                 class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example"
-                 aria-describedby="jq-datatables-example_info">
+          <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable no-footer" id="jq-datatables-example"
+            aria-describedby="jq-datatables-example_info">
             <thead>
-            <tr role="row">
-              <th *ngFor="let columna of columnas" class="text-center">
-                {{columna.titulo}}
-              </th>
-            </tr>
+              <tr role="row">
+                <th *ngFor="let columna of columnas" class="text-center">
+                  {{columna.titulo}}
+                </th>
+              </tr>
             </thead>
             <tbody *ngIf="registros.length === 0">
-            <tr class="gradeA odd">
-              <th class="text-center" colspan="4">
-                No hay Registros
-              </th>
-            </tr>
+              <tr class="gradeA odd">
+                <th class="text-center" colspan="4">
+                  No hay Registros
+                </th>
+              </tr>
             </tbody>
             <tbody *ngIf="registros.length !== 0">
-            <tr
-              *ngFor="let registro of registros"
-              class="gradeA odd"
-              [ngClass]="{
+              <tr *ngFor="let registro of registros" class="gradeA odd" [ngClass]="{
                              'seleccionado': rowSeleccionado(registro)
-                           }"
-              (click)="rowSeleccion(registro)"
-            >
-              <td class="text-center">{{registro.nombreCompleto}}</td>
-              <td class="text-center">{{registro.parentesco.valor}}</td>
-              <td class="text-center">{{registro.getFechaNacimientoConFormato()}}</td>
-              <td class="text-center">{{registro.sexo.valor}}</td>
-            </tr>
+                           }" (click)="rowSeleccion(registro)">
+                <td class="text-center">{{registro.nombreCompleto}}</td>
+                <td class="text-center">{{registro.parentesco.valor}}</td>
+                <td class="text-center">{{registro.getFechaNacimientoConFormato()}}</td>
+                <td class="text-center">{{registro.sexo.valor}}</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -76,21 +69,19 @@
           <div class="row">
             <div class="col-md-12">
               <div class="row">
-                <div
-                  [ngClass]="{
+                <!-- <div [ngClass]="{
                                    'has-error': getControlErrors('nombreCompleto')
-                                 }"
-                >
+                                 }"> -->
+                                 <div>
                   <div class="col-md-6 padding-xs-vr">
                     <div class="row">
                       <label class="col-md-6" for="nombre">Nombre completo: *</label>
                       <div class="col-md-6">
-                        <input type="text" placeholder="Nombre" name="nombre" id="nombre"
-                               class="form-control" ngControl="nombreCompleto" formControlName="nombreCompleto" maxlength="100">
-                        <span id="helpBlock2" class="help-block"
-                              *ngIf="(getControlErrors('nombreCompleto'))">
-                                                    {{errorMessage(getControl('nombreCompleto'))}}
-                                            </span>
+                        <input type="text" placeholder="Nombre" name="nombre" id="nombre" class="form-control" ngControl="nombreCompleto" formControlName="nombreCompleto"
+                          maxlength="100">
+                        <!-- <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('nombreCompleto'))">
+                          {{errorMessage(getControl('nombreCompleto'))}}
+                        </span> -->
                       </div>
                     </div>
                   </div>
@@ -99,11 +90,9 @@
                   <div class="row">
                     <label class="col-md-6" for="parentesco">Parentesco:</label>
                     <div class="col-md-6">
-                      <select name="parentesco" id="parentesco" class="form-control"
-                              ngControl="idParentesco" formControlName="idParentesco">
+                      <select name="parentesco" id="parentesco" class="form-control" ngControl="idParentesco" formControlName="idParentesco">
                         <option value="" disabled selected>Selecciona...</option>
-                        <option *ngFor="let opcionCatalogoParentesco of opcionesCatalogoParentesco"
-                                value="{{opcionCatalogoParentesco.id}}">
+                        <option *ngFor="let opcionCatalogoParentesco of opcionesCatalogoParentesco" value="{{opcionCatalogoParentesco.id}}">
                           {{opcionCatalogoParentesco.text}}
                         </option>
                       </select>
@@ -119,45 +108,37 @@
                   <div class="row">
                     <label class="col-md-6 control-label" for="pais">Pa&iacute;s:</label>
                     <div class="col-md-6">
-                      <select name="pais" id="pais" class="form-control" #idSelectPais
-                              ngControl="idPais" formControlName="idPais" (change)="getSelectPais(idSelectPais.value)">
+                      <select name="pais" id="pais" class="form-control" #idSelectPais ngControl="idPais" formControlName="idPais" (change)="getSelectPais(idSelectPais.value)">
                         <option value="" disabled selected>Selecciona...</option>
-                        <option *ngFor="let opcionCatalogoPais of opcionesCatalogoPais"
-                                value="{{opcionCatalogoPais.id}}">{{opcionCatalogoPais.text}}
+                        <option *ngFor="let opcionCatalogoPais of opcionesCatalogoPais" value="{{opcionCatalogoPais.id}}">{{opcionCatalogoPais.text}}
                         </option>
                       </select>
                     </div>
                   </div>
                 </div>
                 <div *ngIf="!ocultarDireccionMexico()" class="col-md-6 padding-xs-vr">
-                  <div
-                    [ngClass]="{
+                  <div [ngClass]="{
                                       'has-error': getControlErrors('calleNumero')
-                                    }"
-                  >
+                                    }">
                     <div class="row">
                       <label class="col-md-6" for="calleNum">Direcci&oacute;n:</label>
                       <div class="col-md-6">
-                                                <textarea placeholder="Ingrese su dirección" name="calleNum"
-                                                          id="calleNum" class="form-control"
-                                                          ngControl="calleNumero" formControlName="calleNumero" maxlength="50"></textarea>
-                        <span id="helpBlock2" class="help-block"
-                              *ngIf="(getControlErrors('calleNumero'))">
-                                                  {{errorMessage(getControl('calleNumero'))}}
-                                          </span>
+                        <textarea placeholder="Ingrese su dirección" name="calleNum" id="calleNum" class="form-control" ngControl="calleNumero" formControlName="calleNumero"
+                          maxlength="50"></textarea>
+                        <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('calleNumero'))">
+                          {{errorMessage(getControl('calleNumero'))}}
+                        </span>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div *ngIf="ocultarDireccionMexico()" class="col-md-6 padding-xs-vr">
                   <div class="row">
-                    <label class="col-md-6 control-label" >Estado:</label>
+                    <label class="col-md-6 control-label">Estado:</label>
                     <div class="col-md-6">
-                      <select #estado class="form-control" ngControl="idEntidadFederativa" formControlName="idEntidadFederativa"
-                              (change)="cargarMunicipios(estado.value)">
+                      <select #estado class="form-control" ngControl="idEntidadFederativa" formControlName="idEntidadFederativa" (change)="cargarMunicipios(estado.value)">
                         <option value="" disabled selected>Selecciona...</option>
-                        <option *ngFor="let opcionCatalogoEstado of opcionesCatalogoEstado"
-                                value="{{opcionCatalogoEstado.id}}">
+                        <option *ngFor="let opcionCatalogoEstado of opcionesCatalogoEstado" value="{{opcionCatalogoEstado.id}}">
                           {{opcionCatalogoEstado.text}}
                         </option>
                       </select>
@@ -173,11 +154,9 @@
                   <div class="row">
                     <label class="col-md-6 control-label" for="municipio">Municipio:</label>
                     <div class="col-md-6">
-                      <select name="municipio" id="municipio" class="form-control"
-                              ngControl="idMunicipio" formControlName="idMunicipio">
+                      <select name="municipio" id="municipio" class="form-control" ngControl="idMunicipio" formControlName="idMunicipio">
                         <option value="" disabled selected>Selecciona...</option>
-                        <option *ngFor="let opcionCatalogoMunicipio of opcionesCatalogoMunicipio"
-                                value="{{opcionCatalogoMunicipio.id}}">
+                        <option *ngFor="let opcionCatalogoMunicipio of opcionesCatalogoMunicipio" value="{{opcionCatalogoMunicipio.id}}">
                           {{opcionCatalogoMunicipio.valor}}
                         </option>
                       </select>
@@ -185,21 +164,17 @@
                   </div>
                 </div>
                 <div *ngIf="ocultarDireccionMexico()" class="col-md-6 padding-xs-vr">
-                  <div
-                    [ngClass]="{
+                  <div [ngClass]="{
                                       'has-error': getControlErrors('colonia')
-                                    }"
-                  >
+                                    }">
                     <div class="row">
                       <label class="col-md-6" for="colonia">Colonia:</label>
                       <div class="col-md-6">
-                        <input type="text" placeholder="Colonia" name="colonia" id="colonia"
-                               class="form-control" ngControl="colonia" formControlName="colonia"
-                               maxlength="50">
-                        <span id="helpBlock2" class="help-block"
-                              *ngIf="(getControlErrors('colonia'))">
-                                                  {{errorMessage(getControl('colonia'))}}
-                                          </span>
+                        <input type="text" placeholder="Colonia" name="colonia" id="colonia" class="form-control" ngControl="colonia" formControlName="colonia"
+                          maxlength="50">
+                        <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('colonia'))">
+                          {{errorMessage(getControl('colonia'))}}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -211,41 +186,33 @@
             <div class="col-md-12">
               <div class="row">
                 <div *ngIf="ocultarDireccionMexico()" class="col-md-6 padding-xs-vr">
-                  <div
-                    [ngClass]="{
+                  <div [ngClass]="{
                                       'has-error': getControlErrors('codigoPostal')
-                                    }"
-                  >
+                                    }">
                     <div class="row">
                       <label class="col-md-6 control-label" for="codigoP">C.P.:</label>
                       <div class="col-md-6">
-                        <input type="text" placeholder="Código Postal" name="codigoP"
-                               id="codigoP" class="form-control" ngControl="codigoPostal" formControlName="codigoPostal"
-                               maxlength="10">
-                        <span id="helpBlock2" class="help-block"
-                              *ngIf="(getControlErrors('codigoPostal'))">
-                                                  {{errorMessage(getControl('codigoPostal'))}}
-                                          </span>
+                        <input type="text" placeholder="Código Postal" name="codigoP" id="codigoP" class="form-control" ngControl="codigoPostal"
+                          formControlName="codigoPostal" maxlength="10">
+                        <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('codigoPostal'))">
+                          {{errorMessage(getControl('codigoPostal'))}}
+                        </span>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div *ngIf="ocultarDireccionMexico()" class="col-md-6 padding-xs-vr">
-                  <div
-                    [ngClass]="{
+                  <div [ngClass]="{
                                       'has-error': getControlErrors('calleNumero')
-                                    }"
-                  >
+                                    }">
                     <div class="row">
                       <label class="col-md-6" for="calleNum">Calle y n&uacute;mero:</label>
                       <div class="col-md-6">
-                        <input type="text" placeholder="Calle y número" name="calleNum"
-                               id="calleNum" class="form-control" ngControl="calleNumero" formControlName="calleNumero"
-                               maxlength="50">
-                        <span id="helpBlock2" class="help-block"
-                              *ngIf="(getControlErrors('calleNumero'))">
-                                                  {{errorMessage(getControl('calleNumero'))}}
-                                          </span>
+                        <input type="text" placeholder="Calle y número" name="calleNum" id="calleNum" class="form-control" ngControl="calleNumero"
+                          formControlName="calleNumero" maxlength="50">
+                        <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('calleNumero'))">
+                          {{errorMessage(getControl('calleNumero'))}}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -256,42 +223,34 @@
             <div class="col-md-12">
               <div class="row">
                 <div class="col-md-6 padding-xs-vr">
-                  <div
-                    [ngClass]="{
+                  <div [ngClass]="{
                                       'has-error': getControlErrors('telefono')
-                                    }"
-                  >
+                                    }">
                     <div class="row">
-                      <label class="col-md-6 control-label"
-                             for="telefono">Tel&eacute;fono:</label>
+                      <label class="col-md-6 control-label" for="telefono">Tel&eacute;fono:</label>
                       <div class="col-md-6">
-                        <input type="text" placeholder="(LADA)000-0000" name="telefono"
-                               id="telefono" class="form-control" ngControl="telefono" formControlName="telefono"
-                               maxlength="25">
-                        <span id="helpBlock2" class="help-block"
-                              *ngIf="(getControlErrors('telefono'))">
-                                                  {{errorMessage(getControl('telefono'))}}
-                                          </span>
+                        <input type="text" placeholder="10 Digitos" name="telefono" id="telefono" class="form-control" ngControl="telefono" formControlName="telefono"
+                          maxlength="25">
+                        <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('telefono'))">
+                          {{errorMessage(getControl('telefono'))}}
+                        </span>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-6 padding-xs-vr">
-                  <div
-                    [ngClass]="{
+                  <!-- <div [ngClass]="{
                                       'has-error': getControlErrors('celular')
-                                    }"
-                  >
+                                    }"> -->
+                                    <div>
                     <div class="row">
                       <label class="col-md-6 control-label" for="celular">Celular:*</label>
                       <div class="col-md-6">
-                        <input type="text" placeholder="(LADA)000-0000" name="celular"
-                               id="celular" class="form-control" ngControl="celular" formControlName="celular"
-                               maxlength="30">
-                        <span id="helpBlock2" class="help-block"
-                              *ngIf="(getControlErrors('celular'))">
-                                                  {{errorMessage(getControl('celular'))}}
-                                          </span>
+                        <input type="text" placeholder="10 Digitos" name="celular" id="celular" class="form-control" ngControl="celular" formControlName="celular"
+                          maxlength="30">
+                        <!-- <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('celular'))">
+                          {{errorMessage(getControl('celular'))}}
+                        </span> -->
                       </div>
                     </div>
                   </div>
@@ -301,23 +260,19 @@
 
             <div class="col-md-12">
               <div class="row">
-                <div
-                  [ngClass]="{
+                <div [ngClass]="{
                                   'has-error': getControlErrors('correoElectronico')
-                                }"
-                >
+                                }">
                   <div class="col-md-6 padding-xs-vr">
                     <div class="row">
-                      <label class="col-md-6 control-label" for="email">Correo
-                        electr&oacute;nico:</label>
+                      <label class="col-md-6 control-label" for="email">Correo electr&oacute;nico:
+                      </label>
                       <div class="col-md-6">
-                        <input type="text" placeholder="Correo electr&oacute;nico" name="email"
-                               id="email" class="form-control" ngControl="correoElectronico" formControlName="correoElectronico"
-                               maxlength="100">
-                        <span id="helpBlock2" class="help-block"
-                              *ngIf="(getControlErrors('correoElectronico'))">
-                                                  {{errorMessage(getControl('correoElectronico'))}}
-                                          </span>
+                        <input type="text" placeholder="Correo electr&oacute;nico" name="email" id="email" class="form-control" ngControl="correoElectronico"
+                          formControlName="correoElectronico" maxlength="100">
+                        <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('correoElectronico'))">
+                          {{errorMessage(getControl('correoElectronico'))}}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -333,32 +288,28 @@
       <div class="row">
         <div class="col-md-12">
           <h6 class="control-label text-center">
-            Indique si tiene alg&uacute;n padecimiento o enfermedad cr&oacute;nica que considere importante
-            y que debemos conocer para cualquier emergencia o eventualidad. (En caso de no tener
-            padecimiento, indicarlo): *
+            Indique si tiene alg&uacute;n padecimiento o enfermedad cr&oacute;nica que considere importante y que debemos conocer para
+            cualquier emergencia o eventualidad. (En caso de no tener padecimiento, indicarlo): *
           </h6>
         </div>
-        <div
-          [ngClass]="{
+        <!-- <div [ngClass]="{
                                       'has-error': getControlErrors('padecimiento')
-                                    }"
-        >
+                                    }"> -->
+                                    <div>
           <div class="col-md-12">
-                        <textarea class="form-control" placeholder="Describe tu padecimiento o enfermedad"
-                                  ngControl="padecimiento" formControlName="padecimiento" name="padecimiento" id="padecimiento" maxlength="100"></textarea>
-            <span id="helpBlock6" class="help-block" *ngIf="(getControlErrors('padecimiento'))">
-                                                        {{errorMessage(getControl('padecimiento'))}}
-                                                    </span>
+            <textarea class="form-control" placeholder="Describe tu padecimiento o enfermedad" ngControl="padecimiento" formControlName="padecimiento"
+              name="padecimiento" id="padecimiento" maxlength="100"></textarea>
+            <!-- <span id="helpBlock6" class="help-block" *ngIf="(getControlErrors('padecimiento'))">
+              {{errorMessage(getControl('padecimiento'))}}
+            </span> -->
           </div>
         </div>
       </div>
     </div>
     <div class="col-md-12 padding-xs-vr">
-      <label class="fat-commentarios">La información que usted proporcione forma
-        parte del sistema de datos personales bajo la responsabilidad de la Dirección de
-        Docencia de El Colegio de San Luis, A.C. y queda protegida por la Ley de Transparencia y
-        Acceso a la Información Pública Gubernamental, con fundamento en lo que establecen los
-        artículos 13, 14 y 20 de la Ley y 26 y 37 de su Reglamento.</label>
+      <label class="fat-commentarios">La información que usted proporcione forma parte del sistema de datos personales bajo la responsabilidad de la Dirección
+        de Docencia de El Colegio de San Luis, A.C. y queda protegida por la Ley de Transparencia y Acceso a la Información
+        Pública Gubernamental, con fundamento en lo que establecen los artículos 13, 14 y 20 de la Ley y 26 y 37 de su Reglamento.</label>
     </div>
   </div>
 </form>

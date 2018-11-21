@@ -4,17 +4,19 @@ import {Http} from "@angular/http";
 
 export class ConfigService {
 
-  private static localEnv: string = 'http://localhost:8000';
-  private static devEnv: string = 'https://sipae1.colsan.edu.mx:8002';
-  private static testEnv: string = 'https://sipae1.colsan.edu.mx:8001';
-  private static prodEnv = 'https://sipae1.colsan.edu.mx:8006';
+  private static localEnv: string = 'http://localhost:8003';
+  // private static devEnv: string = 'https://sipae1.colsan.edu.mx:8002';
+  // private static testEnv: string = 'https://sipae1.colsan.edu.mx:8001';
+  // private static prodEnv = 'https://sipae1.colsan.edu.mx:8006';
    private static prodEnvOpt: string = 'http://192.168.192.71:8000';
+   private static verBackeProd: string = 'http://192.168.192.71:8003';
+   private static prodAntSipaeUno: string = 'http://192.168.192.53:8004';
   private static authHttp: AuthHttp;
   private static http: Http;
   private static router: Router;
   public static getUrlBaseAPI(): string {
     // #TODO funcion para determinar el tipo de ambiente de trabajo, dev esta por defailt
-    return this.prodEnvOpt;
+    return this.verBackeProd;
   }
 
   public static setAuthHttp(http: Http): void {

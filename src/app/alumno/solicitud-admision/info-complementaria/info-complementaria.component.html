@@ -93,18 +93,19 @@
             </label>
             <div class="col-md-12">
               <div class="row">
-                <div class="col-md-12" [ngClass]="{'has-error': getControlErrors('nombreAnteproyecto')}">
+                <!-- <div class="col-md-12" [ngClass]="{'has-error': getControlErrors('nombreAnteproyecto')}"> -->
+                    <div class="col-md-12">
                   <textarea class="text-left" rows="3" maxlength="1500" formControlName="nombreAnteproyecto" style="width:100%;">
                   </textarea>
                   <!--<input type="text" class="form-control" formControlName="nombreAnteproyecto" maxlength="1500">-->
-                  <span id="helpBlock3" class="help-block" *ngIf="(getControlErrors('nombreAnteproyecto'))">
+                  <!-- <span id="helpBlock3" class="help-block" *ngIf="(getControlErrors('nombreAnteproyecto'))">
                     {{errorMessage(getControl('nombreAnteproyecto'))}}
-                  </span>
+                  </span> -->
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </div> 
       </div>
 
       </form>
@@ -163,6 +164,9 @@
                         [ngClass]="{'seleccionado': rowSeleccionado(registro)}"
                         (click) = "rowSeleccion(registro)"
                       >
+                      <!-- <tr
+                      *ngFor="let registro of registrosAspiranteLgac"
+                      class="gradeA odd" (click) = "rowSeleccion(registro)" > -->
                         <td class="center">{{registro?.lgac?.denominacion}}</td>
                       </tr>
                     </tbody>

@@ -205,7 +205,7 @@
                         <div class="row">
                           <label class="col-md-6 control-label text-right-lg text-right-md text-left-sm text-left-xs" for="telefono">Tel&eacute;fono:*</label>
                           <div class="col-md-6">
-                            <input id="telefono" class="form-control" #telefono formControlName="telefono" type="text" placeholder="(LADA)000-0000" maxlength="50">
+                            <input id="telefono" class="form-control" #telefono formControlName="telefono" type="text" placeholder="10 Digitos" maxlength="50">
                             <span id="helpBlock2" class="help-block" *ngIf="(getControlErrors('telefono'))">
                                                         {{errorMessage(getControl('telefono'))}}
                                                     </span>
