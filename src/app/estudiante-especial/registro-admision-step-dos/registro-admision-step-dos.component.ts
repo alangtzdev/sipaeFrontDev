@@ -125,7 +125,7 @@ export class RegistroAdmisionStepDosComponent implements OnInit {
                   .setValue(estudianteActual.datosAcademicos.semestre);
               (<FormControl>this.formulario.controls[stringPromedioGeneral])
                   .setValue(estudianteActual.datosAcademicos.promedioGeneral);
-              //console.log(this.formulario);
+              console.log(this.formulario);
             }
           }
         }
@@ -204,7 +204,7 @@ export class RegistroAdmisionStepDosComponent implements OnInit {
             ).subscribe(
             response => {
               let json = '{"idDatosAcademicos": "' + response.json().id + '"}';
-              ////console.log(json);
+              console.log(json);
               this.estudianteMovilidadService.putEstudianteMovilidadExterna(
                   this.idEstudiante,
                   json,

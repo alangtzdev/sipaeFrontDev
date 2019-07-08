@@ -18,15 +18,15 @@
 
         <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador,authService.roles.profesor])" #solicitante [isOpen]="false" class="panel-body">
             <div accordion-heading>
-                Selección
+                Selección de aspirantes
                 <i class="pull-right glyphicon" [ngClass]="{'glyphicon-chevron-down': solicitante?.isOpen, 'glyphicon-chevron-right': !solicitante?.isOpen}"></i>
             </div>
             <ul>
-                <li><a [routerLink]="['/seleccion/solicitante']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Solicitantes</a></li>
-                <li><a [routerLink]="['/seleccion/aspirante']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Aspirantes</a></li>
-                <li><a [routerLink]="['/seleccion/comite-evaluacion']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Comités de evaluación</a></li>
+                <li><a [routerLink]="['/seleccion/solicitante']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Validar solicitud</a></li>
+                <li><a [routerLink]="['/seleccion/aspirante']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Estatus de aspirantes</a></li>
+                <li><a [routerLink]="['/seleccion/comite-evaluacion']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Comité de evaluación</a></li>
                 <li><a [routerLink]="['/seleccion/evaluacion-aspirante']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.profesor,authService.roles.coordinador,authService.roles.docencia])">Evaluación de aspirantes</a></li>
-                <li><a [routerLink]="['/seleccion/aspirante-aceptado']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Aspirantes aceptados</a></li>
+                <li><a [routerLink]="['/seleccion/aspirante-aceptado']" (click)="subirPantalla()" *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.coordinador])">Asignar tutor y prioridad</a></li>
             </ul>
         </accordion-group>
         <accordion-group *ngIf="authService.hasAnyRol([authService.roles.administrador,authService.roles.docencia,authService.roles.finanzas])" #inscripciones [isOpen]="false" class="panel-body">

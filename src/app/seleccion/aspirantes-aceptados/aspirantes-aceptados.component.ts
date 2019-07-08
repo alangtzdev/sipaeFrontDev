@@ -345,17 +345,23 @@ export class AspirantesAceptadosComponent implements OnInit{
           paginacionInfoJson.registrosPagina
         );
         paginacionInfoJson.lista.forEach((item) => {
-          this.auxiliar.push(new EvaluacionAspirante(item));
-          estudianteEvaluacion = new EvaluacionAspirante(item);
+          console.log(item);     
+          if (item.id_estudiante.id_estatus.valor ===  'Aspirante-Aceptado'
+             || item.id_estudiante.id_estatus.valor === 'Estudiante'
+             || item.id_estudiante.id_estatus.valor === 'Titulado'
+             || item.id_estudiante.id_estatus.valor === 'Egresado') {
+            this.auxiliar.push(new EvaluacionAspirante(item));
+            estudianteEvaluacion = new EvaluacionAspirante(item);
 
-          if (this.listaLicenciatura && !auxiliarMostrarBoton) {
-            ////console.log(auxiliarMostrarBoton);
-            if (estudianteEvaluacion.calificacionFinal !== 0 &&
-              estudianteEvaluacion.calificacionFinal !== undefined) {
-              auxiliarMostrarBoton = true;
-              this.estadoBotonGenerarResultados = false;
+            if (this.listaLicenciatura && !auxiliarMostrarBoton) {
+              ////console.log(auxiliarMostrarBoton);
+              if (estudianteEvaluacion.calificacionFinal !== 0 &&
+                estudianteEvaluacion.calificacionFinal !== undefined) {
+                auxiliarMostrarBoton = true;
+                this.estadoBotonGenerarResultados = false;
+              }
+  
             }
-
           }
         });
 
@@ -364,6 +370,8 @@ export class AspirantesAceptadosComponent implements OnInit{
         if (this.criteriosCabezera2 !== '') {
           criterios = criterios + ',' + this.criteriosCabezera2;
           urlSearch.set('criterios', criterios);
+          console.log("test");
+          
         }
         urlSearch.set('criterios', criterios);
         this.estudianteService.getListaEstudianteOpcional(
@@ -372,11 +380,12 @@ export class AspirantesAceptadosComponent implements OnInit{
         ).subscribe(
           response => {
             response.json().lista.forEach((item) => {
-              this.estudiantesAceptados.push(new Estudiante(item));
+              if (item.id_estatus.valor ===  'Aspirante-Aceptado' || item.id_estatus.valor === 'Estudiante' || 'Titulado' || 'Egresado') {
+                this.estudiantesAceptados.push(new Estudiante(item));
+              }
             });
             // //console.log(this.estudiantesAceptados);
             //this.registros = [];
-
 
             for (let i = 0; i < this.auxiliar.length; i++) {
               for (let j = 0; j < this.estudiantesAceptados.length; j++) {
@@ -1077,8 +1086,14 @@ export class AspirantesAceptadosComponent implements OnInit{
 
     //  1002 AspiranteAceptado, 1006 Estudiante
     // Solo es
-    let criterios = 'idEstatus.id~1002:IGUAL;OR,idEstatus.id~1006:IGUAL;ORGROUPAND,' +
-      'idPromocion.idProgramaDocente.idNivelEstudios.id~'+
+    let aspiranteAcep = 'Aspirante-Aceptado';
+    let estudiante_ = 'Estudiante';
+    let titulado_ = 'Titulado';
+    let egresado_ = 'Egresado';
+    let criterios = 'idEstatus.valor~' + aspiranteAcep + ':IGUAL;OR,idEstatus.valor~' + estudiante_ + ':IGUAL;' +
+    'OR,idEstatus.valor~' + titulado_ + ':IGUAL' +
+    'OR,idEstatus.valor~' + egresado_ + ':IGUAL;ORGROUPAND,' +
+      'idPromocion.idProgramaDocente.idNivelEstudios.id~' +
       this.registroSeleccionado.estudiante.promocion.programaDocente.nivelEstudios.id +
       ':IGUAL;AND,idTutor.idProfesor~'+ idProfesorSeleccionado +
       ':IGUAL;AND,id~' + this.registroSeleccionado.estudiante.id + ':NOT';

@@ -95,6 +95,7 @@ export class CalificacionesComponent {
   periodoSeleccionado: number;
   promocionSeleccionada: number;
   idProfesor: number;
+  idEstatus: number;
   idProfesorMateria: number;
   idUsuario: number;
   edicion: boolean;
@@ -111,6 +112,7 @@ export class CalificacionesComponent {
   mostrarMensaje: boolean = true;
   calificacionModalConfirmacion: number;
   incompletaModalConfirmacion: number;
+  i = 0;
 
   // No se va ordenar por ninguna columna, porque son dos tablas diferentes
   columnas: Array<any> = [
@@ -373,7 +375,7 @@ if (sessionStorage.getItem('calificacionCriterios')) {
             if (materiasTutorialesIds.length > 0) {
               materiasTutorialesIds.forEach((id) => {
                 if (!flag) {
-                  if (id == item.id_materia_impartida.id) {
+                  if (id == item.id_materia_impartida.id && item.id_estudiante.id_estatus.id !== 1105) {
                     flag = true;
                   }
                 }
@@ -545,7 +547,7 @@ if (sessionStorage.getItem('calificacionCriterios')) {
     let urlSearch: URLSearchParams = new URLSearchParams();
     let criterios = '';
     let sinCalificacion: number = 0;
-    let idMateriaImpartidaElegida = undefined;
+    let idMateriaImpartidaElegida = null;
 
     this.registroSeleccionado = null;
     let ordenamiento = '';
@@ -597,7 +599,7 @@ if (sessionStorage.getItem('calificacionCriterios')) {
 
           paginacionInfoJson.lista.forEach((item) => {
 
-            if (item.id_estudiante) {
+            if (item.id_estudiante && item.id_estudiante.id_estatus.id !== 1105) {
               if (item.id_estudiante.id_matricula) {
                 this.registros.push(new EstudianteMateriaImpartida(item));
 
@@ -674,24 +676,26 @@ if (sessionStorage.getItem('calificacionCriterios')) {
           let paginacionInfoJson = response.json();
 
           paginacionInfoJson.lista.forEach((item) => {
-            if (item.id_estudiante && item.id_estudiante.id_matricula) {
-              if (item.calificacion_ordinaria === undefined) {
-                  sinCalificacion++;
-              }
-            }
 
-            if (item.id_estudiante_movilidad_externa) {
-              if (item.id_estudiante_movilidad_externa.id_matricula) {
+              if (item.id_estudiante && item.id_estudiante.id_matricula && item.id_estudiante.id_estatus.id !== 1105) {
                 if (item.calificacion_ordinaria === undefined) {
-                  sinCalificacion++;
+                    sinCalificacion++;
                 }
               }
-            }
+  
+              if (item.id_estudiante_movilidad_externa) {
+                if (item.id_estudiante_movilidad_externa.id_matricula) {
+                  if (item.calificacion_ordinaria === undefined) {
+                    sinCalificacion++;
+                  }
+                }
+              }
           });
 
           if (this.configuracion.filtrado.textoFiltro === '') {
             if (paginacionInfoJson.registrosTotales === 0 || sinCalificacion > 0) {
               this.constancia = false;
+              console.log(sinCalificacion + 'if');
             } else if (sinCalificacion === 0 && paginacionInfoJson.registrosPagina !== 0) {
               this.constancia = true;
             }
@@ -736,8 +740,8 @@ if (sessionStorage.getItem('calificacionCriterios')) {
 
   mostrarBotonConstancia(): boolean {
     //console.log(this.constancia);
-    if (this.materiaImpartida &&
-      (this.materiaImpartida.actaCalificacion.profesor || this.usuarioFirmoActa)
+    if (this.materiaImpartida && 
+      (this.materiaImpartida.actaCalificacion.profesor || this.usuarioFirmoActa) 
       && this.hayTemarioParticular && this.constancia) {
       return true;
     } else {
@@ -916,13 +920,19 @@ if (sessionStorage.getItem('calificacionCriterios')) {
       response => {
         if (response.json().firmas) {
           let idMateriaImpartidaResponse = response.json().idMateriaImpartida;
+          let llenadoUsuarioFirma = {};
           console.log('response', response.json());
           response.json().firmas.forEach((item) => {
+            llenadoUsuarioFirma = {igual: item.idUsuario === idUsuario,
+              igual_: idMateriaImpartida === idMateriaImpartidaResponse};
               if (item.idUsuario === idUsuario &&
                   idMateriaImpartida === idMateriaImpartidaResponse) {
                   this.usuarioFirmoActa = true;
+                  
               }
           });
+          console.log(llenadoUsuarioFirma);
+          
         }
       },
       error => {
@@ -935,7 +945,7 @@ if (sessionStorage.getItem('calificacionCriterios')) {
 
   }
 
-  private validarActaTutorial(): boolean {
+  private validarActaTutorial(): boolean { 
     let habilitarBoton: boolean = false;
     if (!this.usuarioFirmoActa && this.constancia) {
       habilitarBoton = true;
@@ -944,8 +954,12 @@ if (sessionStorage.getItem('calificacionCriterios')) {
     return habilitarBoton;
   }
 
-  private  validarActaMateriaNormal() {
+  private  validarActaMateriaNormal(): boolean {
     let habilitarBoton: boolean = false;
+    // let detalles = {actaCalificacion_: this.materiaImpartida.actaCalificacion,
+    //                 actaCalNegada: !this.materiaImpartida.actaCalificacion,
+    //                 constancia_: this.constancia   };
+    let detallesIf = {};
     if (this.materiaImpartida.actaCalificacion) {
       if (!this.materiaImpartida.actaCalificacion.profesor && this.constancia) {
         habilitarBoton = true;
@@ -953,6 +967,7 @@ if (sessionStorage.getItem('calificacionCriterios')) {
     } else if (!this.materiaImpartida.actaCalificacion && this.constancia) {
       habilitarBoton = true;
     }
+    // console.log(detalles);
 
     return habilitarBoton;
   }

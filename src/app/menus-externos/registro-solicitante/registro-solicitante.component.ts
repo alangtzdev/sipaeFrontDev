@@ -132,7 +132,7 @@ export class RegistroSolicitanteComponent implements OnInit {
 
   enviarFormulario(): void {
     event.preventDefault();
-    console.log(this.formulario)
+    console.log(this.formulario);
     if (this.validacionConvocatoria) {
       if (this.validarFormulario()) {
         this._spinner.start("registrosolicitante1");

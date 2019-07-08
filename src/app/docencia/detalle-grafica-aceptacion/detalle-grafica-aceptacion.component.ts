@@ -17,7 +17,7 @@ export class DetalleGraficaAceptacionComponent implements OnInit {
   constructor(private _estudianteMateriaImpartida: EstudianteMateriaImpartidaService,
               private spinner: SpinnerService) { }
 
-  private pieChartLabels: string[] =  ['Sí', 'No', 'No contesto'];
+  private pieChartLabels: string[] =  ['Sí', 'No'];
   private pieChartData = [/*50, 50*/];
   private pieChartType: string = 'pie';
   private porcentajeSi: number = 0;
@@ -29,7 +29,7 @@ export class DetalleGraficaAceptacionComponent implements OnInit {
   public barPietOptions: any = {
     responsive: true,
   };
-  public pieChartColors: any[] = [{ backgroundColor: ["#106E1B", "#D60C16", "#808080"] }];
+  public pieChartColors: any[] = [{ backgroundColor: ["#106E1B", "#D60C16"] }];
   private errorConsulta: Array<ErrorCatalogo> = [];
   // eventos grafica
   chartClicked(e: any): any {

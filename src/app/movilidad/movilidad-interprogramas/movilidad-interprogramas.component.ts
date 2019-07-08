@@ -383,7 +383,7 @@ export class MovilidadInterprogramasComponent {
     let paramUrl: URLSearchParams = new URLSearchParams;
     let idEstudiante = this.estudiante.id;
     let idPeriodoEscolar = this.estudiante.periodoActual.id;
-    paramUrl.set('criterios', 'idMateriaImpartida.idCursoOptativo.idTipo.id~5:IGUAL,' +
+    paramUrl.set('criterios', 'idMateriaImpartida.idCursoOptativo.idTipo.id~7:IGUAL,' +
         'idEstudiante.id~' + idEstudiante + ':IGUAL,idMateriaImpartida.idPeriodoEscolar.id~' +
         idPeriodoEscolar + ':IGUAL');
     //console.log('para',paramUrl);

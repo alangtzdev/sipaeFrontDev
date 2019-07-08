@@ -65,8 +65,7 @@ export class ModalRegistroExperienciaComponent implements OnInit {
     // this.fechaMaxima = new Date(this.fechaMaxima.valueOf());
 
     this.formularioExperienciaProfesional = new FormGroup({
-      titulo: new FormControl('',
-        Validators.compose([Validacion.parrafos])),
+      titulo: new FormControl(''),
       institucion: new FormControl('',
         Validators.compose([Validators.required, Validacion.parrafos])),
       responsabilidad: new FormControl('',

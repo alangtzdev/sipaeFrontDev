@@ -632,7 +632,7 @@ li.dropdown.user {
     float: right;
 }
 .theme-colsan #main-navbar .toggle-boton{
-    background: #a02a28;
+    background: #2f4c79;
     color: #ffffff;
     position: fixed!important;
 }
@@ -770,7 +770,7 @@ a.thumbnail {
 }
 .theme-colsan #main-navbar .navbar-header,
 .theme-colsan #main-navbar .navbar-collapse {
-  background: #c13734;
+  background: #1c51a2;
   -webkit-box-shadow: none;
   box-shadow: none;
 }
@@ -788,7 +788,7 @@ a.thumbnail {
   color: #555555;
 }
 .theme-colsan #main-navbar .main-menu-toggle {
-    background: #a02a28;
+    background: #2f4c79;
     color: #ffffff;
   }
 .theme-colsan #main-navbar .main-menu-toggle .fa:before {
@@ -818,17 +818,17 @@ a.thumbnail {
 }
 .theme-colsan #main-navbar form.navbar-form .form-control:focus {
   background: #fff;
-  border-color: #a02a28;
+  border-color: #2f4c79;
 }
 @media (min-width: 768px) {
   .theme-colsan #main-navbar .navbar-header {
-    background: #C13734;
+    background: #4067a2;
   }
   .theme-colsan #main-navbar .navbar-header a {
     color: #fff;
   }
   .theme-colsan #main-navbar .navbar-collapse {
-    background: #c13734;
+    background: #4067a2;
     border: none;
   }
 
@@ -860,7 +860,7 @@ a.thumbnail {
 }
 
   .theme-colsan #main-navbar .main-menu-toggle {
-    background: #a02a28;
+    background: #2f4c79;
   }
   .theme-colsan #main-navbar li + li,
   .theme-colsan #main-navbar .nav + .nav,
@@ -869,14 +869,14 @@ a.thumbnail {
   }
 
     .theme-colsan #main-navbar .nav > li > a:hover {
-    background: #a02a28;
+    background: #2f4c79;
   }
 
     .theme-colsan #main-navbar .dropdown.open > a {
     border-top: none;
     border-bottom: none;
     margin-top: 0;
-    background: #a02a28;
+    background: #2f4c79;
   }
 
   .theme-colsan #main-navbar .dropdown-menu {
@@ -922,7 +922,7 @@ a.thumbnail {
     background: #f1f1f1;
   }
   .theme-colsan #main-navbar .widget-messages-alt a {
-    color: !important;
+    color:  #a02a28 !important;
   }
   .theme-colsan #main-navbar .widget-messages-alt .message,
   .theme-colsan #main-navbar .widget-messages-alt .messages-link {
@@ -1763,7 +1763,8 @@ a.thumbnail {
     border-bottom: 1px solid #dfe4e6;
 }
 .sidebar a:hover, .sidebar a:active, .sidebar a:focus{
-    background-color: #fafafa !important;
+    /* background-color: #fafafa !important; */
+    background-color: #5d9bd5 !important;
 }
 .sidebar li a:hover, .sidebar li a:active, .sidebar li a:focus{
     color: #004fa2;
@@ -1784,7 +1785,7 @@ a.thumbnail {
 
 
 .sidebar .panel-body {
-    background-color: #edf0f1;
+    background-color: #d9edf7;
     padding: 0;
     border: none !important;
 }
