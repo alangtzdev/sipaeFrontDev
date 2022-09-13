@@ -133,7 +133,7 @@ export class ProfesorStepsDatosAcademicosComponent implements OnInit {
     this.formularioExperienciaProfesional = new FormGroup({
       idTipoExperiencia: new FormControl('', Validators.required),
       titulo: new FormControl('',
-        Validators.compose([Validators.required, Validacion.parrafos])),
+        Validators.compose([Validators.required])),
       institucion: new FormControl('',
         Validators.compose([Validators.required, Validacion.parrafos])),
       responsabilidad: new FormControl('',

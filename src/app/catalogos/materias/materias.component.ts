@@ -106,14 +106,14 @@ export class MateriasComponent implements OnInit {
   private inicializarFormulario(): void {
     this.formularioMateria = new FormGroup({
       clave: new FormControl('', Validators.compose([Validacion.parrafos, Validators.required])),
-      descripcion: new FormControl('', Validators.compose([Validacion.parrafos, Validators.required])),
+      descripcion: new FormControl('', Validators.compose([Validators.required])),
       creditos: new FormControl('', Validators.compose([Validacion.numerosValidator, Validators.required])),
       idSeriacion: new FormControl(''),
       horasDocente: new FormControl('', Validators.compose([Validacion.numerosValidator, Validators.required])),
       horasIndependiente: new FormControl('', Validators.compose([Validacion.numerosValidator, Validators.required])),
       totalHoras: new FormControl('', Validators.compose([Validacion.numerosValidator, Validators.required])),
       modalidad: new FormControl('', Validators.compose([Validacion.parrafos, Validators.required])),
-      objectivo: new FormControl('', Validators.compose([Validacion.parrafos])),
+      objectivo: new FormControl(''),
       sesiones: new FormControl('', Validators.compose([Validacion.numerosValidator, Validators.required])),
       idTipo: new FormControl('', Validators.required),
       idProgramaDocente: new FormControl('', Validators.required),

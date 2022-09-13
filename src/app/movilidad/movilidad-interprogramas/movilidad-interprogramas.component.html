@@ -180,7 +180,7 @@
                   <label class="col-md-6 control-label">Materia que desea convalidar:*</label>
                   <div class="col-md-6">
                     <select id="idMateriaCambiar" class="form-control" formControlName="idMateriaCambiar" ngControl="idMateriaCambiar">
-                      <option value="" disabled selected> Selecciona...</option>
+                      <option value=""  selected> Selecciona...</option>
                       <option *ngFor="let materia of opcionSelectMateria" value="{{materia.id}}">
                         {{materia.text}}
                       </option>

@@ -399,6 +399,8 @@
         <div *ngIf="entrega" class="col-md-12 padding-xs-vr text-right">
           <!-- <form [formGroup]="formularioInscripcion"> -->
           <label class="checkbox-inline">
+            <span class="lbl">Nota:  La carga académica del 1er semestre debe estar completa para poder inscribir al alumno de nuevo ingreso</span>
+            <br>
             <span class="lbl">¿Desea inscribir a este aspirante?</span>
           </label>
           <input [checked]="entidadPagoEstudiante?.estudiante?.estatus?.id === 1006" [disabled]="entidadPagoEstudiante?.estudiante?.estatus?.id === 1006" id="inscrito" name="radioss" type="radio" (change)="cambioRadioInscrito(true)"> S&iacute;

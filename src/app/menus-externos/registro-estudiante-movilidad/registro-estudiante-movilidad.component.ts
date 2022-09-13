@@ -258,7 +258,7 @@ export class RegistroEstudianteMovilidadComponent implements OnInit {
     return false;
   }
 
-  enviarFormulario(event): void {
+  enviarFormulario(): void {
     event.preventDefault();
     if (this.validarFormulario()) {
       if (this.validarContrasenia()) {

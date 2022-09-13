@@ -1,5 +1,5 @@
 <div>
-  <div class="text-bg"><span class="text-slim">PRE-PRODUCCION {{usuarioLogueado?.nombreCompleto ? usuarioLogueado?.nombreCompleto : usuarioLogueado.email}}</span></div>
+  <div class="text-bg"><span class="text-slim">{{usuarioLogueado?.nombreCompleto ? usuarioLogueado?.nombreCompleto : usuarioLogueado.email}}</span></div>
   <div class="text-sm"><span class="text-normal">{{roles}} </span></div>
   <img *ngIf=usuarioLogueado.imagenUrl src='{{usuarioLogueado.imagenUrl}}' alt="">
   <img *ngIf=!usuarioLogueado.imagenUrl src="assets/images/usuario.png" alt="">

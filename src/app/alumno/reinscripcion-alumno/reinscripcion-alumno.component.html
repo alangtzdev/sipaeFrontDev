@@ -123,7 +123,7 @@
                   *ngFor="let columna of columnas" style="text-align: center;"
                 >
                   <span *ngIf="columna.titulo !== 'Seleccionar'">{{columna.titulo}}</span>
-                  <span *ngIf="columna.titulo === '' && registros.length !== 0"><input #seleccionGrupo type="checkbox" [disabled] ="deshabilitarCampoGrupal()" (click)="validarGrupo(seleccionGrupo.checked)"/></span>
+                  <span hidden *ngIf="columna.titulo === '' && registros.length !== 0"><input #seleccionGrupo type="checkbox" [disabled] ="deshabilitarCampoGrupal()" (click)="validarGrupo(seleccionGrupo.checked)"/></span>
                 </th>
               </tr>
               </thead>
